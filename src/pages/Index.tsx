@@ -14,9 +14,10 @@ const Index = () => {
     const handleParallax = () => {
       const parallaxElements = document.querySelectorAll('[class*="parallax"]');
       parallaxElements.forEach((element) => {
-        const speed = element.getAttribute('data-speed') || '0.1';
+        const htmlElement = element as HTMLElement; // Type assertion here
+        const speed = htmlElement.getAttribute('data-speed') || '0.1';
         const y = (window.scrollY * Number(speed));
-        element.style.setProperty('--parallax-y', `${y}px`);
+        htmlElement.style.setProperty('--parallax-y', `${y}px`);
       });
     };
 
@@ -47,4 +48,3 @@ const Index = () => {
 };
 
 export default Index;
-

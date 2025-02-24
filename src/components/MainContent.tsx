@@ -17,7 +17,7 @@ interface MainContentProps {
 
 const MainContent = ({ videoJobs }: MainContentProps) => {
   return (
-    <div className="flex-1 glass-panel p-6 hover-glow">
+    <div className="flex-1 glass-panel p-6 hover-glow transition-all">
       <VideoPreview />
       <VideoJobsList jobs={videoJobs} />
     </div>

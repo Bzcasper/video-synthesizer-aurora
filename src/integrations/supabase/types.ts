@@ -306,6 +306,41 @@ export type Database = {
         }
         Relationships: []
       }
+      job_assets: {
+        Row: {
+          created_at: string | null
+          id: string
+          job_id: string | null
+          metadata: Json | null
+          type: string
+          url: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          job_id?: string | null
+          metadata?: Json | null
+          type: string
+          url: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          job_id?: string | null
+          metadata?: Json | null
+          type?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_assets_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       modal_docs: {
         Row: {
           content: string
@@ -491,6 +526,57 @@ export type Database = {
           platform?: string
           title?: string
           url?: string
+        }
+        Relationships: []
+      }
+      video_jobs: {
+        Row: {
+          created_at: string | null
+          duration: number
+          error_message: string | null
+          id: string
+          output_url: string | null
+          processing_completed_at: string | null
+          processing_started_at: string | null
+          prompt: string
+          resolution: Json
+          status: Database["public"]["Enums"]["video_job_status"] | null
+          style: string | null
+          updated_at: string | null
+          user_id: string | null
+          webhook_url: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          duration: number
+          error_message?: string | null
+          id?: string
+          output_url?: string | null
+          processing_completed_at?: string | null
+          processing_started_at?: string | null
+          prompt: string
+          resolution: Json
+          status?: Database["public"]["Enums"]["video_job_status"] | null
+          style?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          webhook_url?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          duration?: number
+          error_message?: string | null
+          id?: string
+          output_url?: string | null
+          processing_completed_at?: string | null
+          processing_started_at?: string | null
+          prompt?: string
+          resolution?: Json
+          status?: Database["public"]["Enums"]["video_job_status"] | null
+          style?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          webhook_url?: string | null
         }
         Relationships: []
       }
@@ -1017,7 +1103,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      video_job_status: "pending" | "processing" | "completed" | "failed"
     }
     CompositeTypes: {
       http_header: {

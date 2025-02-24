@@ -5,7 +5,7 @@ import {
   Wand2, 
   Languages, 
   Workflow, 
-  AspectRatio, 
+  LayoutGrid, 
   Code 
 } from 'lucide-react';
 
@@ -31,7 +31,7 @@ const features = [
     description: "Seamless content automation with n8n & Supabase."
   },
   {
-    icon: <AspectRatio className="w-6 h-6 text-aurora-purple" />,
+    icon: <LayoutGrid className="w-6 h-6 text-aurora-purple" />,
     title: "Instant Social Media Formatting",
     description: "Auto-resizes for TikTok, YouTube, Instagram."
   },

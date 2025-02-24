@@ -394,6 +394,33 @@ export type Database = {
           },
         ]
       }
+      monthly_usage: {
+        Row: {
+          created_at: string
+          id: string
+          month: string
+          updated_at: string
+          user_id: string
+          video_count: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          month: string
+          updated_at?: string
+          user_id: string
+          video_count?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          month?: string
+          updated_at?: string
+          user_id?: string
+          video_count?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -475,6 +502,45 @@ export type Database = {
           snapshot_hash?: string | null
           title?: string
           url?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          tier: Database["public"]["Enums"]["subscription_tier"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier?: Database["public"]["Enums"]["subscription_tier"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier?: Database["public"]["Enums"]["subscription_tier"]
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -792,6 +858,12 @@ export type Database = {
         }
         Returns: string
       }
+      check_free_tier_limits: {
+        Args: {
+          user_id: string
+        }
+        Returns: boolean
+      }
       embedding_input: {
         Args: {
           doc: unknown
@@ -1106,6 +1178,7 @@ export type Database = {
       }
     }
     Enums: {
+      subscription_tier: "free" | "pro" | "enterprise"
       video_job_status: "pending" | "processing" | "completed" | "failed"
     }
     CompositeTypes: {

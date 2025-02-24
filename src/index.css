@@ -30,17 +30,46 @@
     --ring: 180 100% 50%;
     --radius: 0.5rem;
   }
-}
 
-@layer base {
   * {
     @apply border-border selection:bg-aurora-blue/20;
   }
+
   body {
-    @apply bg-aurora-black text-aurora-white font-inter antialiased;
+    @apply bg-aurora-black text-aurora-white font-inter antialiased min-h-screen overflow-x-hidden;
   }
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-orbitron;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-lg 
+           hover:border-aurora-blue/30 hover:bg-white/10 
+           transition-all duration-300;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-lg 
+           hover:shadow-aurora-blue/20 hover:border-aurora-blue/50;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+  }
+
+  .bg-gradient-glow {
+    @apply bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green;
+  }
+
+  .neon-border {
+    @apply border border-aurora-blue/50 shadow-[0_0_15px_rgba(0,166,255,0.3)];
+  }
+
+  .aurora-glow {
+    @apply shadow-[0_0_30px_rgba(138,43,226,0.3)];
   }
 }
 
@@ -114,39 +143,25 @@
   }
 }
 
-/* Glassmorphism Utilities */
-.glass-panel {
-  @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-lg 
-         hover:border-aurora-blue/30 hover:bg-white/10 
-         transition-all duration-300;
-}
-
-.hover-glow {
-  @apply transition-all duration-300 hover:shadow-lg 
-         hover:shadow-aurora-blue/20 hover:border-aurora-blue/50;
-}
-
 /* Particle Effect */
 .particle-background {
-  background-image: radial-gradient(circle at center,
-    rgba(138, 43, 226, 0.1) 0%,
-    rgba(0, 166, 255, 0.1) 25%,
-    rgba(0, 255, 170, 0.1) 50%,
-    transparent 75%
-  );
+  background-image: 
+    radial-gradient(circle at center,
+      rgba(138, 43, 226, 0.1) 0%,
+      rgba(0, 166, 255, 0.1) 25%,
+      rgba(0, 255, 170, 0.1) 50%,
+      transparent 75%
+    );
   background-size: 4px 4px;
-  mask-image: radial-gradient(ellipse at center,
+  mask-image: radial-gradient(
+    ellipse at center,
     rgba(0, 0, 0, 0.8) 0%,
     rgba(0, 0, 0, 0.5) 50%,
     transparent 100%
   );
 }
 
-/* Gradient Text */
-.text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r;
-}
-
+/* Fix for animations */
 [style*="animation-delay"] {
   animation-fill-mode: backwards;
 }
@@ -157,5 +172,17 @@
     transform: translateY(var(--parallax-y, 0));
     transition: transform 0.1s ease-out;
   }
+}
+
+/* Z-index layers */
+.z-overlay { z-index: 10; }
+.z-content { z-index: 20; }
+.z-floating { z-index: 30; }
+.z-modal { z-index: 40; }
+.z-toast { z-index: 50; }
+
+/* Force dark mode */
+:root {
+  color-scheme: dark;
 }
 

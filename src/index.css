@@ -32,15 +32,16 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border selection:bg-cyan-500/20;
   }
   body {
-    @apply bg-background text-foreground font-inter;
+    @apply bg-background text-foreground font-inter antialiased;
   }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.5s ease-out forwards;
+  opacity: 0;
 }
 
 .animate-slide-up {
@@ -50,15 +51,17 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
 @keyframes slideUp {
   from {
-    transform: translateY(20px);
+    transform: translateY(100%);
     opacity: 0;
   }
   to {
@@ -68,9 +71,22 @@
 }
 
 .glass-panel {
-  @apply bg-secondary/30 backdrop-blur-lg border border-white/10 rounded-lg;
+  @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-lg;
 }
 
 .hover-glow {
-  @apply transition-shadow hover:shadow-lg hover:shadow-primary/20;
+  @apply transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20 hover:border-cyan-500/50;
 }
+
+[style*="animation-delay"] {
+  animation-fill-mode: backwards;
+}
+
+/* Parallax effect */
+@media (prefers-reduced-motion: no-preference) {
+  [class*="parallax"] {
+    transform: translateY(var(--parallax-y, 0));
+    transition: transform 0.1s ease-out;
+  }
+}
+

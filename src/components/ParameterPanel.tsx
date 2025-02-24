@@ -21,10 +21,15 @@ export interface VideoParams {
   duration: number;
   fps: number;
   stylePrompt: string;
+  prompt: string;
+  style: string;
   model: 'sdxl' | 'modelscope' | 'llava';
   enhanceFrames: boolean;
   lipSync: boolean;
-  resolution: 'sd' | 'hd' | '4k';
+  resolution: {
+    width: number;
+    height: number;
+  };
   quality: 'draft' | 'standard' | 'high';
 }
 
@@ -33,10 +38,15 @@ const ParameterPanel: React.FC<ParameterPanelProps> = ({ onParamsChange }) => {
     duration: 10,
     fps: 30,
     stylePrompt: '',
+    prompt: '',
+    style: '',
     model: 'sdxl',
     enhanceFrames: true,
     lipSync: false,
-    resolution: 'hd',
+    resolution: {
+      width: 1920,
+      height: 1080
+    },
     quality: 'standard'
   });
 
@@ -47,6 +57,15 @@ const ParameterPanel: React.FC<ParameterPanelProps> = ({ onParamsChange }) => {
     const newParams = { ...params, [key]: value };
     setParams(newParams);
     onParamsChange?.(newParams);
+  };
+
+  const handleResolutionChange = (value: 'sd' | 'hd' | '4k') => {
+    const resolutions = {
+      sd: { width: 1280, height: 720 },
+      hd: { width: 1920, height: 1080 },
+      '4k': { width: 3840, height: 2160 }
+    };
+    handleParamChange('resolution', resolutions[value]);
   };
 
   return (
@@ -79,8 +98,11 @@ const ParameterPanel: React.FC<ParameterPanelProps> = ({ onParamsChange }) => {
         <div className="space-y-2">
           <Label>Resolution</Label>
           <Select 
-            value={params.resolution}
-            onValueChange={(value) => handleParamChange('resolution', value as VideoParams['resolution'])}
+            value={
+              params.resolution.width === 1280 ? 'sd' :
+              params.resolution.width === 1920 ? 'hd' : '4k'
+            }
+            onValueChange={handleResolutionChange}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select resolution" />
@@ -111,6 +133,36 @@ const ParameterPanel: React.FC<ParameterPanelProps> = ({ onParamsChange }) => {
         </div>
 
         <div className="space-y-2">
+          <Label>Style</Label>
+          <Input 
+            placeholder="Enter style..."
+            className="bg-background/50"
+            value={params.style}
+            onChange={(e) => handleParamChange('style', e.target.value)}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label>Prompt</Label>
+          <Input 
+            placeholder="Enter prompt..."
+            className="bg-background/50"
+            value={params.prompt}
+            onChange={(e) => handleParamChange('prompt', e.target.value)}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label>Style Prompt</Label>
+          <Input 
+            placeholder="Enter style description..."
+            className="bg-background/50"
+            value={params.stylePrompt}
+            onChange={(e) => handleParamChange('stylePrompt', e.target.value)}
+          />
+        </div>
+
+        <div className="space-y-2">
           <Label>Duration (seconds)</Label>
           <Slider
             value={[params.duration]}
@@ -132,16 +184,6 @@ const ParameterPanel: React.FC<ParameterPanelProps> = ({ onParamsChange }) => {
             step={1}
           />
           <p className="text-sm text-muted-foreground">{params.fps} FPS</p>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Style Prompt</Label>
-          <Input 
-            placeholder="Enter style description..."
-            className="bg-background/50"
-            value={params.stylePrompt}
-            onChange={(e) => handleParamChange('stylePrompt', e.target.value)}
-          />
         </div>
 
         <div className="space-y-4">

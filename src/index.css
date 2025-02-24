@@ -1,4 +1,7 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -36,8 +39,12 @@
   body {
     @apply bg-aurora-black text-aurora-white font-inter antialiased;
   }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-orbitron;
+  }
 }
 
+/* Base Animations */
 .animate-fade-in {
   animation: fadeIn 0.5s ease-out forwards;
   opacity: 0;
@@ -47,6 +54,19 @@
   animation: slideUp 0.3s ease-out;
 }
 
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-aurora-wave {
+  animation: auroraWave 15s ease-in-out infinite;
+}
+
+/* Keyframes */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -69,6 +89,32 @@
   }
 }
 
+@keyframes glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px rgba(0, 166, 255, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(138, 43, 226, 0.7));
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes auroraWave {
+  0%, 100% {
+    transform: rotate(-3deg) scale(1.05);
+    opacity: 0.8;
+  }
+  50% {
+    transform: rotate(3deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Glassmorphism Utilities */
 .glass-panel {
   @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-lg 
          hover:border-aurora-blue/30 hover:bg-white/10 
@@ -78,6 +124,27 @@
 .hover-glow {
   @apply transition-all duration-300 hover:shadow-lg 
          hover:shadow-aurora-blue/20 hover:border-aurora-blue/50;
+}
+
+/* Particle Effect */
+.particle-background {
+  background-image: radial-gradient(circle at center,
+    rgba(138, 43, 226, 0.1) 0%,
+    rgba(0, 166, 255, 0.1) 25%,
+    rgba(0, 255, 170, 0.1) 50%,
+    transparent 75%
+  );
+  background-size: 4px 4px;
+  mask-image: radial-gradient(ellipse at center,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.5) 50%,
+    transparent 100%
+  );
+}
+
+/* Gradient Text */
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r;
 }
 
 [style*="animation-delay"] {
@@ -91,3 +158,4 @@
     transition: transform 0.1s ease-out;
   }
 }
+

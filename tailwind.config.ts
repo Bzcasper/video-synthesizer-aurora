@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -20,6 +21,8 @@ export default {
     extend: {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
+        orbitron: ['Orbitron', 'sans-serif'],
+        spaceGrotesk: ['Space Grotesk', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -83,6 +86,16 @@ export default {
         "float": {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-20px)" },
+        },
+        "particle-float": {
+          "0%, 100%": { 
+            transform: "translate(0px, 0px) rotate(0deg)",
+            opacity: "0.8"
+          },
+          "50%": { 
+            transform: "translate(10px, -10px) rotate(180deg)",
+            opacity: "1"
+          }
         }
       },
       animation: {
@@ -91,8 +104,15 @@ export default {
         "aurora-wave": "aurora-wave 15s ease-in-out infinite",
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",
         "float": "float 6s ease-in-out infinite",
+        "particle-float": "particle-float 8s ease-in-out infinite",
+      },
+      boxShadow: {
+        'neon-blue': '0 0 20px rgba(0, 166, 255, 0.5)',
+        'neon-purple': '0 0 20px rgba(138, 43, 226, 0.5)',
+        'neon-green': '0 0 20px rgba(0, 255, 170, 0.5)',
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+

@@ -531,6 +531,7 @@ export type Database = {
       }
       video_jobs: {
         Row: {
+          callback_metadata: Json | null
           created_at: string | null
           duration: number
           error_message: string | null
@@ -547,6 +548,7 @@ export type Database = {
           webhook_url: string | null
         }
         Insert: {
+          callback_metadata?: Json | null
           created_at?: string | null
           duration: number
           error_message?: string | null
@@ -563,6 +565,7 @@ export type Database = {
           webhook_url?: string | null
         }
         Update: {
+          callback_metadata?: Json | null
           created_at?: string | null
           duration?: number
           error_message?: string | null

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import NavigationBar from '@/components/landing/NavigationBar';
 import HeroSection from '@/components/landing/HeroSection';
@@ -12,6 +13,23 @@ const Index = () => {
   const mainRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Fix height and transition issues
+    const setElementStyles = (element: Element | null, styles: Partial<CSSStyleDeclaration>) => {
+      if (element && element instanceof HTMLElement) {
+        Object.assign(element.style, styles);
+      }
+    };
+
+    const rootDiv = document.querySelector('div#root');
+    if (rootDiv) {
+      setElementStyles(rootDiv.querySelector('div:nth-child(1)'), { height: 'auto', transition: 'none' });
+      setElementStyles(rootDiv, { transition: 'none' });
+      setElementStyles(rootDiv.querySelector('div:nth-child(2)'), { transition: 'none' });
+      setElementStyles(rootDiv.querySelector('div:nth-child(3)'), { transition: 'none' });
+      setElementStyles(rootDiv.querySelector('div:nth-child(4)'), { transition: 'none' });
+      setElementStyles(rootDiv.querySelector('div:nth-child(5)'), { transition: 'none' });
+    }
+
     // Ensure the root div maintains its height
     if (mainRef.current) {
       mainRef.current.style.minHeight = '100vh';

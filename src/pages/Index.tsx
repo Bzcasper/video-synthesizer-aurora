@@ -34,28 +34,38 @@ const Index = () => {
     if (mainRef.current) {
       mainRef.current.style.minHeight = '100vh';
       mainRef.current.style.height = 'auto';
+      mainRef.current.style.overflow = 'visible';
     }
 
-    // Simple parallax that won't interfere with content visibility
-    const handleParallax = () => {
-      const parallaxElements = document.querySelectorAll('[class*="parallax"]');
-      parallaxElements.forEach((element) => {
-        const htmlElement = element as HTMLElement;
-        const speed = htmlElement.getAttribute('data-speed') || '0.1';
-        const y = (window.scrollY * Number(speed));
-        htmlElement.style.setProperty('--parallax-y', `${y}px`);
+    // Simplified parallax that won't interfere with content visibility
+    const handleScroll = () => {
+      requestAnimationFrame(() => {
+        const sections = document.querySelectorAll('section');
+        sections.forEach((section) => {
+          const rect = section.getBoundingClientRect();
+          const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+          if (isVisible) {
+            section.style.opacity = '1';
+            section.style.transform = 'translateY(0)';
+          }
+        });
       });
     };
 
-    window.addEventListener('scroll', handleParallax, { passive: true });
-    return () => window.removeEventListener('scroll', handleParallax);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial check
+
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <div 
       ref={mainRef}
-      className="relative min-h-screen bg-aurora-black overflow-x-hidden"
-      style={{ height: 'auto' }}
+      className="relative min-h-screen bg-aurora-black"
+      style={{ 
+        height: 'auto',
+        overflow: 'visible'
+      }}
     >
       {/* Background gradients */}
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -64,33 +74,16 @@ const Index = () => {
       </div>
       
       {/* Main content container */}
-      <div className="relative z-10 flex flex-col min-h-screen">
+      <div className="relative z-10">
         <NavigationBar />
         
-        <main className="flex-1 flex flex-col" style={{ minHeight: '100vh' }}>
-          {/* Hero section */}
-          <div className="relative w-full">
-            <HeroSection />
-          </div>
-          
-          {/* Other sections with explicit height and visibility */}
-          <div className="relative flex flex-col w-full" style={{ minHeight: 'max-content' }}>
-            <div className="w-full" style={{ minHeight: 'max-content' }}>
-              <FeaturesSection />
-            </div>
-            <div className="w-full" style={{ minHeight: 'max-content' }}>
-              <DemoSection />
-            </div>
-            <div className="w-full" style={{ minHeight: 'max-content' }}>
-              <UseCasesSection />
-            </div>
-            <div className="w-full" style={{ minHeight: 'max-content' }}>
-              <TestimonialsSection />
-            </div>
-            <div className="w-full" style={{ minHeight: 'max-content' }}>
-              <PricingSection />
-            </div>
-          </div>
+        <main className="relative">
+          <HeroSection />
+          <FeaturesSection />
+          <DemoSection />
+          <UseCasesSection />
+          <TestimonialsSection />
+          <PricingSection />
         </main>
         
         <StickyCTA />

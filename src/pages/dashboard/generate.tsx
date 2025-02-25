@@ -21,19 +21,39 @@ const Generate = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
-      const { data, error } = await supabase
+      const currentMonth = new Date().toISOString().slice(0, 7) + '-01';
+
+      // First try to get existing usage
+      const { data: existingUsage, error: selectError } = await supabase
         .from('monthly_usage')
         .select('video_count')
         .eq('user_id', user.id)
-        .eq('month', new Date().toISOString().slice(0, 7) + '-01')
+        .eq('month', currentMonth)
         .single();
 
-      if (error) {
-        console.error('Error fetching usage:', error);
+      if (!selectError && existingUsage) {
+        return existingUsage;
+      }
+
+      // If no usage exists, create a new record
+      const { data: newUsage, error: insertError } = await supabase
+        .from('monthly_usage')
+        .insert([
+          {
+            user_id: user.id,
+            month: currentMonth,
+            video_count: 0
+          }
+        ])
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error('Error creating usage record:', insertError);
         return { video_count: 0 };
       }
 
-      return data || { video_count: 0 };
+      return newUsage || { video_count: 0 };
     }
   });
 

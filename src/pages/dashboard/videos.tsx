@@ -1,12 +1,19 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Clock, Calendar, Edit2, Loader2, Filter } from "lucide-react";
+import { Clock, Calendar, Edit2, Loader2, Filter, ArrowUpDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { Database } from "@/integrations/supabase/types";
 
 type VideoJobStatus = Database["public"]["Enums"]["video_job_status"];
@@ -19,6 +26,9 @@ interface Video {
   prompt: string;
   status: VideoJobStatus;
 }
+
+type SortOption = 'date-desc' | 'date-asc' | 'duration-desc' | 'duration-asc';
+type StatusFilter = 'all' | VideoJobStatus;
 
 const StatusBadge = ({ status }: { status: VideoJobStatus }) => {
   const getStatusColor = () => {
@@ -107,13 +117,37 @@ const VideoCard = ({ video }: { video: Video }) => {
 };
 
 const VideosPage = () => {
+  const [sortBy, setSortBy] = useState<SortOption>('date-desc');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+
   const { data: videos, isLoading, error } = useQuery({
-    queryKey: ['videos'],
+    queryKey: ['videos', sortBy, statusFilter],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from('video_jobs')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select('*');
+
+      if (statusFilter !== 'all') {
+        query = query.eq('status', statusFilter);
+      }
+
+      // Apply sorting
+      switch (sortBy) {
+        case 'date-desc':
+          query = query.order('created_at', { ascending: false });
+          break;
+        case 'date-asc':
+          query = query.order('created_at', { ascending: true });
+          break;
+        case 'duration-desc':
+          query = query.order('duration', { ascending: false });
+          break;
+        case 'duration-asc':
+          query = query.order('duration', { ascending: true });
+          break;
+      }
+
+      const { data, error } = await query;
       
       if (error) {
         toast({
@@ -163,6 +197,40 @@ const VideosPage = () => {
         </Button>
       </div>
 
+      {/* Filters and Sorting */}
+      <div className="flex flex-col sm:flex-row gap-4 glassmorphism rounded-lg p-4">
+        <div className="flex items-center gap-2">
+          <Filter className="w-4 h-4 text-aurora-blue" />
+          <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as StatusFilter)}>
+            <SelectTrigger className="w-[180px] bg-black/50 border-white/10">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="processing">Processing</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="failed">Failed</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <ArrowUpDown className="w-4 h-4 text-aurora-blue" />
+          <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortOption)}>
+            <SelectTrigger className="w-[180px] bg-black/50 border-white/10">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="date-desc">Newest First</SelectItem>
+              <SelectItem value="date-asc">Oldest First</SelectItem>
+              <SelectItem value="duration-desc">Longest First</SelectItem>
+              <SelectItem value="duration-asc">Shortest First</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
       {videos && videos.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {videos.map((video) => (
@@ -172,9 +240,11 @@ const VideosPage = () => {
       ) : (
         <Card className="p-12 bg-black/50 border-white/10">
           <div className="text-center space-y-4">
-            <p className="text-xl text-gray-400">No videos generated yet</p>
+            <p className="text-xl text-gray-400">No videos found</p>
             <p className="text-sm text-gray-500">
-              Start by generating a new video or uploading one to edit
+              {statusFilter !== 'all' 
+                ? `No videos with status "${statusFilter}". Try changing the filter.`
+                : 'Start by generating a new video or uploading one to edit'}
             </p>
             <Button
               onClick={() => navigate('/dashboard/generate')}
@@ -190,4 +260,3 @@ const VideosPage = () => {
 };
 
 export default VideosPage;
-

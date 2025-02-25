@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
 import { AnimatePresence, motion } from 'framer-motion';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -51,14 +52,7 @@ const AuthLayout = ({ children, requireAuth = false }: AuthLayoutProps) => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-aurora-black flex items-center justify-center">
-        <div className="relative">
-          <img
-            src="/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png"
-            alt="Loading..."
-            className="w-16 h-16 animate-spin-slow"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green opacity-50 blur-lg -z-10" />
-        </div>
+        <LoadingSpinner mode="loading" />
       </div>
     );
   }

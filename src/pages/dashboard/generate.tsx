@@ -6,6 +6,21 @@ import { VideoEnhancementSelector } from "@/components/video/VideoEnhancementSel
 import { Card } from "@/components/ui/card";
 
 const Generate = () => {
+  // State management for the generate form
+  const [prompt, setPrompt] = useState('');
+  const [duration, setDuration] = useState(5); // Default duration of 5 seconds
+  const [style, setStyle] = useState('cinematic'); // Default style
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsGenerating(true);
+    
+    // TODO: Implement video generation logic here
+    
+    setIsGenerating(false);
+  };
+
   return (
     <div className="container mx-auto p-6 space-y-8">
       <h1 className="text-4xl font-orbitron font-bold text-gradient bg-gradient-glow">
@@ -30,7 +45,16 @@ const Generate = () => {
           </TabsList>
 
           <TabsContent value="generate" className="space-y-6">
-            <GenerateForm />
+            <GenerateForm
+              prompt={prompt}
+              setPrompt={setPrompt}
+              duration={duration}
+              setDuration={setDuration}
+              style={style}
+              setStyle={setStyle}
+              isGenerating={isGenerating}
+              onSubmit={handleSubmit}
+            />
           </TabsContent>
 
           <TabsContent value="enhance" className="space-y-6">

@@ -8,11 +8,10 @@ const corsHeaders = {
 }
 
 interface VideoGenerationRequest {
+  job_id: string;
   prompt: string;
   duration: number;
-  resolution: { width: number; height: number };
   style?: string;
-  webhookUrl?: string;
 }
 
 serve(async (req) => {
@@ -27,94 +26,59 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Get user ID from request if authenticated
-    const authHeader = req.headers.get('Authorization');
-    let userId = null;
-    
-    if (authHeader) {
-      const { data: { user }, error } = await supabase.auth.getUser(authHeader.split(' ')[1]);
-      if (!error && user) {
-        userId = user.id;
-      }
-    }
-
     // Parse and validate request body
-    const { prompt, duration, resolution, style, webhookUrl }: VideoGenerationRequest = await req.json();
+    const { job_id, prompt, duration, style }: VideoGenerationRequest = await req.json();
 
-    if (!prompt || !duration || !resolution) {
+    if (!job_id || !prompt || !duration) {
       throw new Error('Missing required parameters');
     }
 
-    // Create a new job in the database
-    const { data: job, error: jobError } = await supabase
-      .from('video_jobs')
-      .insert({
-        prompt,
-        duration,
-        resolution,
-        style,
-        webhook_url: webhookUrl,
-        user_id: userId,
-        status: 'pending',
-        created_at: new Date().toISOString(),
-      })
-      .select()
-      .single();
-
-    if (jobError) {
-      throw new Error(`Failed to create job: ${jobError.message}`);
-    }
-
-    // Trigger Modal Labs video generation (you'll need to implement this part)
-    const modalApiUrl = Deno.env.get('MODAL_API_URL')!;
-    const modalApiKey = Deno.env.get('MODAL_API_KEY')!;
-
-    const modalResponse = await fetch(`${modalApiUrl}/trigger`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${modalApiKey}`,
-      },
-      body: JSON.stringify({
-        jobId: job.id,
-        prompt,
-        duration,
-        resolution,
-        style,
-        webhookUrl,
-      }),
-    });
-
-    if (!modalResponse.ok) {
-      // If Modal request fails, update job status to failed
-      await supabase
-        .from('video_jobs')
-        .update({ 
-          status: 'failed',
-          error_message: 'Failed to start video generation process',
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', job.id);
-
-      throw new Error('Failed to start video generation process');
-    }
-
     // Update job status to processing
-    await supabase
+    const { error: updateError } = await supabase
       .from('video_jobs')
       .update({ 
         status: 'processing',
         processing_started_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
       })
-      .eq('id', job.id);
+      .eq('id', job_id);
 
-    // Return the job ID and status
+    if (updateError) {
+      throw new Error(`Failed to update job status: ${updateError.message}`);
+    }
+
+    // Initialize AI video generation (simulated for now)
+    // TODO: Replace with actual AI model integration
+    setTimeout(async () => {
+      try {
+        // Simulate video generation completion
+        const { error: completionError } = await supabase
+          .from('video_jobs')
+          .update({ 
+            status: 'completed',
+            processing_completed_at: new Date().toISOString(),
+            output_url: `https://example.com/generated-videos/${job_id}.mp4`, // Replace with actual URL
+          })
+          .eq('id', job_id);
+
+        if (completionError) {
+          throw completionError;
+        }
+      } catch (error) {
+        console.error('Error completing video job:', error);
+        await supabase
+          .from('video_jobs')
+          .update({ 
+            status: 'failed',
+            error_message: error.message,
+          })
+          .eq('id', job_id);
+      }
+    }, 5000); // Simulated 5-second processing time
+
     return new Response(
       JSON.stringify({
-        jobId: job.id,
-        status: 'processing',
-        message: 'Video generation started successfully'
+        message: 'Video generation started successfully',
+        job_id
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

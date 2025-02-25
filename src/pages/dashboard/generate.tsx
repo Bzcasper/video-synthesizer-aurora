@@ -8,6 +8,7 @@ import GenerateForm from "@/components/generate/GenerateForm";
 import { VideoEnhancementSelector } from "@/components/video/VideoEnhancementSelector";
 import { type Database } from "@/integrations/supabase/types";
 import type { Video } from "@/hooks/use-video-enhancements";
+import { ChevronLeft } from "lucide-react";
 
 type SceneType = Database["public"]["Enums"]["scene_type"];
 type CameraMotion = Database["public"]["Enums"]["camera_motion_type"];
@@ -28,17 +29,15 @@ const Generate = () => {
   const [style, setStyle] = useState('cinematic');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedVideos, setGeneratedVideos] = useState<Video[]>([]);
-  
-  // New state for scene customization
   const [scenes, setScenes] = useState<Scene[]>([]);
   const [activeTab, setActiveTab] = useState('generate');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsGenerating(true);
 
     try {
-      // First, create the main video job
       const response = await fetch('/api/video/generate', {
         method: 'POST',
         headers: {
@@ -50,7 +49,7 @@ const Generate = () => {
           style,
           resolution: [1920, 1080],
           fps: 30,
-          scenes: scenes, // Pass the scenes data to the API
+          scenes: scenes,
         }),
       });
 
@@ -65,7 +64,6 @@ const Generate = () => {
         description: "Your video is being generated. You'll be notified when it's ready.",
       });
 
-      // Add the new video to the list
       setGeneratedVideos(prev => [...prev, {
         id: data.id,
         prompt,
@@ -86,74 +84,60 @@ const Generate = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+    <div className="min-h-screen bg-aurora-black flex">
+      {/* Collapsible Sidebar */}
+      <motion.aside
+        initial={{ width: '64px' }}
+        animate={{ width: isSidebarCollapsed ? '64px' : '240px' }}
+        transition={{ duration: 0.3 }}
+        className="border-r border-white/10 bg-black/20 backdrop-blur-xl flex flex-col overflow-hidden"
       >
-        <h1 className="text-4xl font-orbitron font-bold text-gradient bg-gradient-glow mb-8">
-          Create & Enhance
-        </h1>
-
-        <Card className="glass-panel">
-          <Tabs 
-            value={activeTab} 
-            onValueChange={setActiveTab}
-            className="space-y-6"
+        {/* Logo and Toggle Button */}
+        <div className="p-4 flex items-center justify-center">
+          <motion.button
+            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            className="relative"
+            whileHover={{ scale: 1.1 }}
           >
-            <TabsList className="grid w-full grid-cols-2 bg-white/5">
-              <TabsTrigger
-                value="generate"
-                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-aurora-purple data-[state=active]:to-aurora-blue"
-              >
-                Generate Video
-              </TabsTrigger>
-              <TabsTrigger
-                value="enhance"
-                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-aurora-purple data-[state=active]:to-aurora-blue"
-              >
-                Enhance Video
-              </TabsTrigger>
-            </TabsList>
+            <img
+              src="/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png"
+              alt="Aurora"
+              className="h-8 w-8 animate-pulse"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green opacity-50 blur-lg -z-10" />
+          </motion.button>
+        </div>
+      </motion.aside>
 
-            <AnimatePresence mode="wait">
-              <TabsContent value="generate">
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <GenerateForm
-                    prompt={prompt}
-                    setPrompt={setPrompt}
-                    duration={duration}
-                    setDuration={setDuration}
-                    style={style}
-                    setStyle={setStyle}
-                    isGenerating={isGenerating}
-                    onSubmit={handleSubmit}
-                    scenes={scenes}
-                    setScenes={setScenes}
-                  />
-                </motion.div>
-              </TabsContent>
+      {/* Main Content */}
+      <main className="flex-1 overflow-x-hidden">
+        <div className="container mx-auto p-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1 className="text-4xl font-orbitron font-bold text-gradient bg-gradient-glow mb-8">
+              Generate Your Imagination
+            </h1>
 
-              <TabsContent value="enhance">
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <VideoEnhancementSelector />
-                </motion.div>
-              </TabsContent>
-            </AnimatePresence>
-          </Tabs>
-        </Card>
-      </motion.div>
+            <Card className="glass-panel">
+              <GenerateForm
+                prompt={prompt}
+                setPrompt={setPrompt}
+                duration={duration}
+                setDuration={setDuration}
+                style={style}
+                setStyle={setStyle}
+                isGenerating={isGenerating}
+                onSubmit={handleSubmit}
+                scenes={scenes}
+                setScenes={setScenes}
+              />
+            </Card>
+          </motion.div>
+        </div>
+      </main>
     </div>
   );
 };

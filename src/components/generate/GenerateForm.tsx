@@ -6,6 +6,20 @@ import { Video, Loader2, Sparkles } from "lucide-react";
 import VideoStyleOption from './VideoStyleOption';
 import DurationSlider from './DurationSlider';
 import { Card } from "@/components/ui/card";
+import { SceneEditor } from './SceneEditor';
+import { type Database } from "@/integrations/supabase/types";
+
+type SceneType = Database["public"]["Enums"]["scene_type"];
+type CameraMotion = Database["public"]["Enums"]["camera_motion_type"];
+
+interface Scene {
+  prompt: string;
+  sceneType: SceneType;
+  cameraMotion: CameraMotion;
+  duration: number;
+  sequenceOrder: number;
+  transitionType?: string;
+}
 
 export const videoStyles = [
   {
@@ -39,6 +53,8 @@ interface GenerateFormProps {
   setStyle: (style: string) => void;
   isGenerating: boolean;
   onSubmit: (e: React.FormEvent) => void;
+  scenes: Scene[];
+  setScenes: (scenes: Scene[]) => void;
 }
 
 const GenerateForm = ({
@@ -50,6 +66,8 @@ const GenerateForm = ({
   setStyle,
   isGenerating,
   onSubmit,
+  scenes,
+  setScenes,
 }: GenerateFormProps) => {
   return (
     <Card className="p-fib-4 glass-panel hover-glow">
@@ -71,13 +89,15 @@ const GenerateForm = ({
           </p>
         </div>
 
+        <SceneEditor scenes={scenes} setScenes={setScenes} />
+
         <DurationSlider 
           duration={duration}
           onDurationChange={setDuration}
         />
 
         <div className="space-y-fib-2">
-          <label className="text-fib-base font-medium text-gray-200">Video Style</label>
+          <label className="text-fib-base font-medium text-gray-200">Overall Style</label>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-fib-3">
             {videoStyles.map((styleOption) => (
               <VideoStyleOption

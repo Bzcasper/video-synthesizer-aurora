@@ -6,7 +6,20 @@ import { Card } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import GenerateForm from "@/components/generate/GenerateForm";
 import { VideoEnhancementSelector } from "@/components/video/VideoEnhancementSelector";
+import { type Database } from "@/integrations/supabase/types";
 import type { Video } from "@/hooks/use-video-enhancements";
+
+type SceneType = Database["public"]["Enums"]["scene_type"];
+type CameraMotion = Database["public"]["Enums"]["camera_motion_type"];
+
+interface Scene {
+  prompt: string;
+  sceneType: SceneType;
+  cameraMotion: CameraMotion;
+  duration: number;
+  sequenceOrder: number;
+  transitionType?: string;
+}
 
 const Generate = () => {
   // State for video generation
@@ -15,12 +28,17 @@ const Generate = () => {
   const [style, setStyle] = useState('cinematic');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedVideos, setGeneratedVideos] = useState<Video[]>([]);
+  
+  // New state for scene customization
+  const [scenes, setScenes] = useState<Scene[]>([]);
+  const [activeTab, setActiveTab] = useState('generate');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsGenerating(true);
 
     try {
+      // First, create the main video job
       const response = await fetch('/api/video/generate', {
         method: 'POST',
         headers: {
@@ -32,6 +50,7 @@ const Generate = () => {
           style,
           resolution: [1920, 1080],
           fps: 30,
+          scenes: scenes, // Pass the scenes data to the API
         }),
       });
 
@@ -78,7 +97,11 @@ const Generate = () => {
         </h1>
 
         <Card className="glass-panel">
-          <Tabs defaultValue="generate" className="space-y-6">
+          <Tabs 
+            value={activeTab} 
+            onValueChange={setActiveTab}
+            className="space-y-6"
+          >
             <TabsList className="grid w-full grid-cols-2 bg-white/5">
               <TabsTrigger
                 value="generate"
@@ -111,6 +134,8 @@ const Generate = () => {
                     setStyle={setStyle}
                     isGenerating={isGenerating}
                     onSubmit={handleSubmit}
+                    scenes={scenes}
+                    setScenes={setScenes}
                   />
                 </motion.div>
               </TabsContent>

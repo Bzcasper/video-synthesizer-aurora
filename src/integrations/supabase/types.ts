@@ -1203,6 +1203,62 @@ export type Database = {
         }
         Relationships: []
       }
+      video_scenes: {
+        Row: {
+          camera_motion:
+            | Database["public"]["Enums"]["camera_motion_type"]
+            | null
+          created_at: string | null
+          duration: number | null
+          id: string
+          prompt: string
+          scene_type: Database["public"]["Enums"]["scene_type"]
+          sequence_order: number
+          transition_type: string | null
+          updated_at: string | null
+          user_id: string | null
+          video_job_id: string | null
+        }
+        Insert: {
+          camera_motion?:
+            | Database["public"]["Enums"]["camera_motion_type"]
+            | null
+          created_at?: string | null
+          duration?: number | null
+          id?: string
+          prompt: string
+          scene_type: Database["public"]["Enums"]["scene_type"]
+          sequence_order: number
+          transition_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          video_job_id?: string | null
+        }
+        Update: {
+          camera_motion?:
+            | Database["public"]["Enums"]["camera_motion_type"]
+            | null
+          created_at?: string | null
+          duration?: number | null
+          id?: string
+          prompt?: string
+          scene_type?: Database["public"]["Enums"]["scene_type"]
+          sequence_order?: number
+          transition_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          video_job_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_scenes_video_job_id_fkey"
+            columns: ["video_job_id"]
+            isOneToOne: false
+            referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       videos: {
         Row: {
           actionable: string[] | null
@@ -1732,7 +1788,19 @@ export type Database = {
       }
     }
     Enums: {
+      camera_motion_type:
+        | "static"
+        | "pan_left"
+        | "pan_right"
+        | "zoom_in"
+        | "zoom_out"
+        | "tracking"
       edit_type: "trim" | "filter" | "speed" | "subtitle"
+      scene_type:
+        | "cyberpunk"
+        | "fantasy"
+        | "realistic_outdoor"
+        | "scifi_interior"
       subscription_tier: "free" | "pro" | "enterprise"
       task_status: "pending" | "in_progress" | "completed" | "failed"
       user_role: "free" | "pro" | "admin"

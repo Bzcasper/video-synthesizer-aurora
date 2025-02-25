@@ -7,18 +7,25 @@ import { ScissorsIcon } from "lucide-react";
 
 interface TrimVideoControlProps {
   videoId: string;
+  startTime: number;
+  endTime: number;
+  duration: number;
+  onStartTimeChange: (value: number) => void;
+  onEndTimeChange: (value: number) => void;
   onSubmit: (params: { startTime: number; endTime: number }) => void;
   isProcessing?: boolean;
 }
 
 const TrimVideoControl = ({
   videoId,
+  startTime,
+  endTime,
+  duration,
+  onStartTimeChange,
+  onEndTimeChange,
   onSubmit,
   isProcessing = false,
 }: TrimVideoControlProps) => {
-  const [startTime, setStartTime] = React.useState(0);
-  const [endTime, setEndTime] = React.useState(60); // Default duration
-  
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
@@ -34,7 +41,7 @@ const TrimVideoControl = ({
           min={0}
           max={endTime}
           step={0.1}
-          onValueChange={([value]) => setStartTime(value)}
+          onValueChange={([value]) => onStartTimeChange(value)}
           className="my-4"
         />
       </div>
@@ -44,9 +51,9 @@ const TrimVideoControl = ({
         <Slider
           value={[endTime]}
           min={startTime}
-          max={60}
+          max={duration}
           step={0.1}
-          onValueChange={([value]) => setEndTime(value)}
+          onValueChange={([value]) => onEndTimeChange(value)}
           className="my-4"
         />
       </div>

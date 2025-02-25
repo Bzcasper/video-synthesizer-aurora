@@ -48,7 +48,7 @@ const VideoEditPage = () => {
     }
   }, [video_id]);
 
-  const handleApplyTrim = async () => {
+  const handleApplyTrim = async ({ startTime, endTime }: { startTime: number; endTime: number }) => {
     if (!video) return;
 
     setIsProcessingTrim(true);
@@ -88,7 +88,7 @@ const VideoEditPage = () => {
     }
   };
 
-  const handleApplyFilter = async (selectedFilter: string) => {
+  const handleFilterChange = async (selectedFilter: string) => {
     if (!video || selectedFilter === 'none') return;
 
     setIsProcessingFilter(true);
@@ -151,7 +151,6 @@ const VideoEditPage = () => {
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Video Preview - Takes up 2 columns on larger screens */}
         <div className="lg:col-span-2">
           <VideoPreviewPanel
             videoUrl={video.output_url}
@@ -161,21 +160,21 @@ const VideoEditPage = () => {
           />
         </div>
 
-        {/* Editing Controls - Takes up 1 column */}
         <div className="space-y-6">
           <TrimVideoControl
-            video={video}
+            videoId={video.id}
             startTime={startTime}
             endTime={endTime}
             duration={video.duration}
             onStartTimeChange={setStartTime}
             onEndTimeChange={setEndTime}
-            onApplyTrim={handleApplyTrim}
+            onSubmit={handleApplyTrim}
             isProcessing={isProcessingTrim}
           />
 
           <FilterVideoControl
-            onApplyFilter={handleApplyFilter}
+            currentFilter={filter}
+            onChange={handleFilterChange}
             isProcessing={isProcessingFilter}
           />
         </div>

@@ -1,3 +1,4 @@
+
 /* Reset default styles */
 #root {
   width: 100%;
@@ -6,6 +7,7 @@
   padding: 0;
   background-color: #0A0A0A;
   text-align: left;
+  overflow-x: hidden;
 }
 
 .logo {

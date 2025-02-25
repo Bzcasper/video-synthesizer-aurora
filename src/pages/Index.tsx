@@ -27,25 +27,25 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-aurora-black text-aurora-white overflow-x-hidden">
-      {/* Background gradient */}
-      <div className="fixed inset-0 bg-gradient-to-b from-aurora-purple/5 via-aurora-blue/5 to-aurora-green/5 pointer-events-none" />
+    <main className="relative min-h-screen bg-aurora-black text-aurora-white">
+      {/* Fixed background gradients */}
+      <div className="fixed inset-0 bg-gradient-to-b from-aurora-purple/5 via-aurora-blue/5 to-aurora-green/5 pointer-events-none z-0" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-aurora-purple/10 via-aurora-blue/10 to-aurora-green/10 opacity-30 pointer-events-none z-0" />
       
-      {/* Particle effect overlay */}
-      <div className="fixed inset-0 particle-background opacity-20 pointer-events-none" />
-      
-      {/* Content */}
-      <div className="relative">
+      {/* Content wrapper */}
+      <div className="relative z-10">
         <NavigationBar />
-        <HeroSection />
-        <FeaturesSection />
-        <DemoSection />
-        <UseCasesSection />
-        <TestimonialsSection />
-        <PricingSection />
-        <StickyCTA />
+        <div className="flex flex-col">
+          <HeroSection />
+          <FeaturesSection />
+          <DemoSection />
+          <UseCasesSection />
+          <TestimonialsSection />
+          <PricingSection />
+          <StickyCTA />
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
 

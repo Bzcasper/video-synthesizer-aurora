@@ -5,7 +5,7 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 
 const useCases = [
   {
-    icon: <Video className="w-6 h-6 text-purple-400" />,
+    icon: <Video className="w-6 h-6 text-cyan-400" />,
     title: "Content Creators",
     description: "Automate & scale video production with AI-powered tools",
     gradient: "from-purple-500/20 to-purple-800/20"
@@ -47,16 +47,18 @@ const UseCasesSection = () => {
           }}
           className="w-full"
         >
-          <CarouselContent className="-ml-4">
+          <CarouselContent className="gap-4">
             {useCases.map((useCase, index) => (
-              <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
+              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                 <div 
                   className="glass-panel p-6 rounded-xl border border-white/10
                            bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-xl
                            hover:border-white/20 transition-all duration-500 
                            hover:shadow-[0_0_30px_10px_rgba(0,0,0,0.2)]
                            animate-fade-in group"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  style={{ 
+                    animationDelay: `${index * 100}ms` 
+                  }}
                 >
                   <div className="flex items-start space-x-4">
                     <div className={`p-3 rounded-full bg-gradient-to-br ${useCase.gradient}
@@ -70,6 +72,7 @@ const UseCasesSection = () => {
                                    group-hover:text-white transition-colors">
                         {useCase.title}
                       </h3>
+                      
                       <p className="text-gray-400 group-hover:text-gray-300
                                   transition-colors">
                         {useCase.description}

@@ -6,6 +6,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { ErrorMessage } from "@/components/ui/error-message";
 import GenerateForm from '@/components/generate/GenerateForm';
 import { useQuery } from '@tanstack/react-query';
+import { Database } from "@/integrations/supabase/types";
+
+type VideoJob = {
+  prompt: string;
+  duration: number;
+  style: string;
+  resolution: { width: number; height: number };
+  status: Database['public']['Enums']['video_job_status'];
+  user_id: string;
+  metadata: {
+    source: string;
+    browser: string;
+    timestamp: string;
+  };
+};
 
 const Generate = () => {
   const navigate = useNavigate();
@@ -85,23 +100,23 @@ const Generate = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
+      const videoJob: VideoJob = {
+        prompt,
+        duration,
+        style,
+        resolution: { width: 1920, height: 1080 },
+        status: 'pending',
+        user_id: user.id,
+        metadata: {
+          source: 'web_app',
+          browser: navigator.userAgent,
+          timestamp: new Date().toISOString()
+        }
+      };
+
       const { data, error } = await supabase
         .from('video_jobs')
-        .insert([
-          {
-            prompt,
-            duration,
-            style,
-            resolution: { width: 1920, height: 1080 },
-            status: 'pending',
-            user_id: user.id,
-            metadata: {
-              source: 'web_app',
-              browser: navigator.userAgent,
-              timestamp: new Date().toISOString()
-            }
-          }
-        ])
+        .insert([videoJob])
         .select()
         .single();
 

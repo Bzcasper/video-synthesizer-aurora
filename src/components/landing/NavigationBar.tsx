@@ -2,29 +2,42 @@
 import React, { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from "@/integrations/supabase/client";
 
 const NavigationBar = () => {
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [session, setSession] = useState<null | any>(null);
 
   useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setIsLoading(false);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
 
     window.addEventListener('scroll', handleScroll);
     
-    // Simulate loading completion
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
     return () => {
+      subscription.unsubscribe();
       window.removeEventListener('scroll', handleScroll);
-      clearTimeout(timer);
     };
   }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/login');
+  };
 
   const navLinks = [
     { href: '#', label: 'Home' },
@@ -42,21 +55,23 @@ const NavigationBar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <div className={`relative transition-all duration-700 ${
-              isLoading ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-            }`}>
-              <img
-                src="/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png"
-                alt="Aurora Video Synth"
-                className={`h-10 w-10 object-contain animate-spin-slow hover:animate-pulse transition-transform duration-300 hover:scale-110
-                          ${isLoading ? 'animate-spin' : ''}`}
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green opacity-50 blur-lg -z-10" />
-            </div>
-            <span className="ml-2 text-2xl font-orbitron font-bold bg-clip-text text-transparent 
-                           bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green">
-              Aurora
-            </span>
+            <Link to="/" className="flex items-center space-x-3 group">
+              <div className={`relative transition-all duration-700 ${
+                isLoading ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+              }`}>
+                <img
+                  src="/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png"
+                  alt="Aurora Video Synth"
+                  className={`h-10 w-10 object-contain logo-hover
+                            ${isLoading ? 'logo-preloader' : ''}`}
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green opacity-50 blur-lg -z-10" />
+              </div>
+              <span className="ml-2 text-2xl font-orbitron font-bold bg-clip-text text-transparent 
+                             bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green">
+                Aurora
+              </span>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -75,14 +90,27 @@ const NavigationBar = () => {
                 {link.label}
               </a>
             ))}
-            <Button 
-              className="bg-gradient-to-r from-aurora-purple to-aurora-blue
-                       hover:from-aurora-blue hover:to-aurora-purple
-                       shadow-lg hover:shadow-aurora-blue/50
-                       transition-all duration-300 scale-100 hover:scale-105"
-            >
-              Sign Up
-            </Button>
+            {session ? (
+              <Button 
+                onClick={handleSignOut}
+                className="bg-gradient-to-r from-aurora-purple to-aurora-blue
+                         hover:from-aurora-blue hover:to-aurora-purple
+                         shadow-lg hover:shadow-aurora-blue/50
+                         transition-all duration-300 scale-100 hover:scale-105"
+              >
+                Sign Out
+              </Button>
+            ) : (
+              <Button 
+                onClick={() => navigate('/login')}
+                className="bg-gradient-to-r from-aurora-purple to-aurora-blue
+                         hover:from-aurora-blue hover:to-aurora-purple
+                         shadow-lg hover:shadow-aurora-blue/50
+                         transition-all duration-300 scale-100 hover:scale-105"
+              >
+                Sign In
+              </Button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -124,14 +152,30 @@ const NavigationBar = () => {
               </a>
             ))}
             <div className="px-4">
-              <Button 
-                className="w-full bg-gradient-to-r from-aurora-purple to-aurora-blue
-                         hover:from-aurora-blue hover:to-aurora-purple
-                         shadow-lg hover:shadow-aurora-blue/50
-                         transition-all duration-300"
-              >
-                Sign Up
-              </Button>
+              {session ? (
+                <Button 
+                  onClick={handleSignOut}
+                  className="w-full bg-gradient-to-r from-aurora-purple to-aurora-blue
+                           hover:from-aurora-blue hover:to-aurora-purple
+                           shadow-lg hover:shadow-aurora-blue/50
+                           transition-all duration-300"
+                >
+                  Sign Out
+                </Button>
+              ) : (
+                <Button 
+                  onClick={() => { 
+                    navigate('/login');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full bg-gradient-to-r from-aurora-purple to-aurora-blue
+                           hover:from-aurora-blue hover:to-aurora-purple
+                           shadow-lg hover:shadow-aurora-blue/50
+                           transition-all duration-300"
+                >
+                  Sign In
+                </Button>
+              )}
             </div>
           </div>
         </div>

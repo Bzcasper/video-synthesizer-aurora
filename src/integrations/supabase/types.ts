@@ -674,39 +674,36 @@ export type Database = {
       tasks: {
         Row: {
           completed_at: string | null
-          created_at: string | null
+          created_at: string
           description: string | null
           id: string
-          metadata: Json | null
-          status: Database["public"]["Enums"]["task_status"] | null
-          task_type: string
+          priority: string
+          status: string
+          task_type: string | null
           title: string
-          updated_at: string | null
-          user_id: string
+          updated_at: string
         }
         Insert: {
           completed_at?: string | null
-          created_at?: string | null
+          created_at?: string
           description?: string | null
           id?: string
-          metadata?: Json | null
-          status?: Database["public"]["Enums"]["task_status"] | null
-          task_type: string
+          priority?: string
+          status?: string
+          task_type?: string | null
           title: string
-          updated_at?: string | null
-          user_id: string
+          updated_at?: string
         }
         Update: {
           completed_at?: string | null
-          created_at?: string | null
+          created_at?: string
           description?: string | null
           id?: string
-          metadata?: Json | null
-          status?: Database["public"]["Enums"]["task_status"] | null
-          task_type?: string
+          priority?: string
+          status?: string
+          task_type?: string | null
           title?: string
-          updated_at?: string | null
-          user_id?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -804,8 +801,10 @@ export type Database = {
       }
       video_edits: {
         Row: {
+          color_grading: string | null
           created_at: string | null
           error_message: string | null
+          frame_interpolation: boolean | null
           id: string
           operation: Database["public"]["Enums"]["video_edit_operation"]
           original_video_id: string
@@ -814,12 +813,16 @@ export type Database = {
           processing_completed_at: string | null
           processing_started_at: string | null
           status: Database["public"]["Enums"]["video_job_status"] | null
+          subtitles: boolean | null
+          super_resolution: boolean | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
+          color_grading?: string | null
           created_at?: string | null
           error_message?: string | null
+          frame_interpolation?: boolean | null
           id?: string
           operation: Database["public"]["Enums"]["video_edit_operation"]
           original_video_id: string
@@ -828,12 +831,16 @@ export type Database = {
           processing_completed_at?: string | null
           processing_started_at?: string | null
           status?: Database["public"]["Enums"]["video_job_status"] | null
+          subtitles?: boolean | null
+          super_resolution?: boolean | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
+          color_grading?: string | null
           created_at?: string | null
           error_message?: string | null
+          frame_interpolation?: boolean | null
           id?: string
           operation?: Database["public"]["Enums"]["video_edit_operation"]
           original_video_id?: string
@@ -842,6 +849,8 @@ export type Database = {
           processing_completed_at?: string | null
           processing_started_at?: string | null
           status?: Database["public"]["Enums"]["video_job_status"] | null
+          subtitles?: boolean | null
+          super_resolution?: boolean | null
           updated_at?: string | null
           user_id?: string
         }
@@ -867,17 +876,25 @@ export type Database = {
           callback_metadata: Json | null
           created_at: string | null
           duration: number
+          enhance_frames: boolean | null
           error_message: string | null
+          fps: number | null
           id: string
+          input_audio: string | null
+          input_images: string[] | null
           metadata: Json | null
+          modal_job_id: string | null
           output_url: string | null
           priority: number | null
           processing_completed_at: string | null
           processing_started_at: string | null
+          processing_time: number | null
           prompt: string
           resolution: Json
+          retry_count: number | null
           status: Database["public"]["Enums"]["video_job_status"] | null
           style: string | null
+          thumbnail_url: string | null
           updated_at: string | null
           user_id: string | null
           webhook_url: string | null
@@ -886,17 +903,25 @@ export type Database = {
           callback_metadata?: Json | null
           created_at?: string | null
           duration: number
+          enhance_frames?: boolean | null
           error_message?: string | null
+          fps?: number | null
           id?: string
+          input_audio?: string | null
+          input_images?: string[] | null
           metadata?: Json | null
+          modal_job_id?: string | null
           output_url?: string | null
           priority?: number | null
           processing_completed_at?: string | null
           processing_started_at?: string | null
+          processing_time?: number | null
           prompt: string
           resolution: Json
+          retry_count?: number | null
           status?: Database["public"]["Enums"]["video_job_status"] | null
           style?: string | null
+          thumbnail_url?: string | null
           updated_at?: string | null
           user_id?: string | null
           webhook_url?: string | null
@@ -905,17 +930,25 @@ export type Database = {
           callback_metadata?: Json | null
           created_at?: string | null
           duration?: number
+          enhance_frames?: boolean | null
           error_message?: string | null
+          fps?: number | null
           id?: string
+          input_audio?: string | null
+          input_images?: string[] | null
           metadata?: Json | null
+          modal_job_id?: string | null
           output_url?: string | null
           priority?: number | null
           processing_completed_at?: string | null
           processing_started_at?: string | null
+          processing_time?: number | null
           prompt?: string
           resolution?: Json
+          retry_count?: number | null
           status?: Database["public"]["Enums"]["video_job_status"] | null
           style?: string | null
+          thumbnail_url?: string | null
           updated_at?: string | null
           user_id?: string | null
           webhook_url?: string | null

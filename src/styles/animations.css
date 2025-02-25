@@ -20,6 +20,28 @@
   .animate-aurora-wave {
     animation: auroraWave 15s ease-in-out infinite;
   }
+
+  .logo-preloader {
+    animation: logoSpin 2s linear infinite, logoPulse 2s ease-in-out infinite;
+  }
+
+  .logo-transition {
+    animation: logoTransition 0.6s ease-in-out forwards;
+  }
+
+  .logo-hover {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .logo-hover:hover {
+    filter: drop-shadow(0 0 10px theme('colors.aurora.blue'))
+           drop-shadow(0 0 20px theme('colors.aurora.purple'));
+    transform: scale(1.05);
+  }
+
+  .logo-processing {
+    animation: logoProcessing 1.5s ease-in-out infinite;
+  }
 }
 
 @keyframes fadeIn {
@@ -66,5 +88,50 @@
   50% {
     transform: rotate(3deg) scale(1);
     opacity: 1;
+  }
+}
+
+@keyframes logoSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px theme('colors.aurora.blue'))
+           drop-shadow(0 0 30px theme('colors.aurora.purple'));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px theme('colors.aurora.blue'))
+           drop-shadow(0 0 50px theme('colors.aurora.purple'));
+  }
+}
+
+@keyframes logoTransition {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes logoProcessing {
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 10px theme('colors.aurora.blue'));
+  }
+  50% {
+    transform: scale(1.1) rotate(180deg);
+    filter: drop-shadow(0 0 25px theme('colors.aurora.purple'));
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+    filter: drop-shadow(0 0 10px theme('colors.aurora.blue'));
   }
 }

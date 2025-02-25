@@ -27,7 +27,6 @@ const VideoPreviewPanel = ({
     const handleLoadedMetadata = () => {
       setDuration(video.duration);
       if (!endTime) {
-        // If no end time is set, use the full video duration
         video.currentTime = startTime;
       }
     };
@@ -49,7 +48,6 @@ const VideoPreviewPanel = ({
   useEffect(() => {
     if (!videoRef.current) return;
     
-    // Set video current time when start time changes
     videoRef.current.currentTime = startTime;
   }, [startTime]);
 
@@ -72,13 +70,12 @@ const VideoPreviewPanel = ({
         <video
           ref={videoRef}
           src={videoUrl}
-          className={`w-full h-full object-contain ${getFilterClass()}`}
+          className={`w-full h-full object-contain transition-all duration-300 ${getFilterClass()}`}
           controls
           onTimeUpdate={() => {
             const video = videoRef.current;
             if (!video) return;
             
-            // Loop video between start and end times for preview
             if (endTime && video.currentTime >= endTime) {
               video.currentTime = startTime;
             }

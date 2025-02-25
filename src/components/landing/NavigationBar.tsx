@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 const NavigationBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,7 +14,16 @@ const NavigationBar = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    
+    // Simulate loading completion
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timer);
+    };
   }, []);
 
   const navLinks = [
@@ -32,7 +42,18 @@ const NavigationBar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <span className="text-2xl font-orbitron font-bold bg-clip-text text-transparent 
+            <div className={`relative transition-all duration-700 ${
+              isLoading ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+            }`}>
+              <img
+                src="/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png"
+                alt="Aurora Video Synth"
+                className={`h-10 w-10 object-contain animate-spin-slow hover:animate-pulse transition-transform duration-300 hover:scale-110
+                          ${isLoading ? 'animate-spin' : ''}`}
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green opacity-50 blur-lg -z-10" />
+            </div>
+            <span className="ml-2 text-2xl font-orbitron font-bold bg-clip-text text-transparent 
                            bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green">
               Aurora
             </span>

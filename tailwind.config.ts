@@ -96,6 +96,14 @@ export default {
             transform: "translate(10px, -10px) rotate(180deg)",
             opacity: "1"
           }
+        },
+        "spin-slow": {
+          "from": {
+            transform: "rotate(0deg)"
+          },
+          "to": {
+            transform: "rotate(360deg)"
+          }
         }
       },
       animation: {
@@ -105,6 +113,7 @@ export default {
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",
         "float": "float 6s ease-in-out infinite",
         "particle-float": "particle-float 8s ease-in-out infinite",
+        "spin-slow": "spin-slow 8s linear infinite",
       },
       boxShadow: {
         'neon-blue': '0 0 20px rgba(0, 166, 255, 0.5)',
@@ -115,4 +124,3 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
-

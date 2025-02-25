@@ -2,12 +2,18 @@
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-// Types
+// Define interfaces for type safety
 export interface Metrics {
   processingTime: number;
   gpuUtilization: number;
   queueLength: number;
   successRate: number;
+}
+
+interface MetricMetadata {
+  gpu_utilization?: number;
+  queue_length?: number;
+  success_rate?: number;
 }
 
 export interface VideoJobMetrics {
@@ -18,7 +24,7 @@ export interface VideoJobMetrics {
 }
 
 // Utility functions for metrics tracking
-export const trackMetric = async (name: string, value: number, metadata: any = {}) => {
+export const trackMetric = async (name: string, value: number, metadata: Record<string, unknown> = {}) => {
   try {
     await supabase.from('metrics').insert({
       name,
@@ -30,7 +36,7 @@ export const trackMetric = async (name: string, value: number, metadata: any = {
   }
 };
 
-export const logError = async (error: Error, context: any = {}) => {
+export const logError = async (error: Error, context: Record<string, unknown> = {}) => {
   try {
     await supabase.from('error_logs').insert({
       error_message: error.message,
@@ -42,7 +48,7 @@ export const logError = async (error: Error, context: any = {}) => {
   }
 };
 
-export const createNotification = async (userId: string, jobId: string, type: string, message: string, metadata: any = {}) => {
+export const createNotification = async (userId: string, jobId: string, type: string, message: string, metadata: Record<string, unknown> = {}) => {
   try {
     await supabase.from('notifications').insert({
       user_id: userId,
@@ -90,12 +96,15 @@ export const fetchSystemMetrics = async (timeRange: string = '1h'): Promise<Metr
 
     if (error) throw error;
 
-    return data.map(metric => ({
-      processingTime: metric.value,
-      gpuUtilization: metric.metadata?.gpu_utilization || 0,
-      queueLength: metric.metadata?.queue_length || 0,
-      successRate: metric.metadata?.success_rate || 0
-    }));
+    return data.map(metric => {
+      const metadata = metric.metadata as MetricMetadata;
+      return {
+        processingTime: metric.value,
+        gpuUtilization: metadata?.gpu_utilization ?? 0,
+        queueLength: metadata?.queue_length ?? 0,
+        successRate: metadata?.success_rate ?? 0
+      };
+    });
   } catch (error) {
     logError(error as Error, { context: 'fetchSystemMetrics' });
     throw error;
@@ -139,7 +148,7 @@ export const markNotificationAsRead = async (notificationId: string) => {
 
 // Helper functions
 const getTimeRangeInMs = (range: string): number => {
-  const ranges: { [key: string]: number } = {
+  const ranges: Record<string, number> = {
     '1h': 60 * 60 * 1000,
     '24h': 24 * 60 * 60 * 1000,
     '7d': 7 * 24 * 60 * 60 * 1000,

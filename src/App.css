@@ -5,58 +5,62 @@
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  background-color: #0A0A0A;
+  background-color: var(--color-aurora-black);
   text-align: left;
   overflow-x: hidden;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-/* Fix for content visibility */
-.content-section {
-  background-color: #0A0A0A;
   position: relative;
-  z-index: 10;
+  z-index: 1;
 }
 
-/* Ensure sections remain visible */
+/* Content wrapper styles */
+.content-wrapper {
+  position: relative;
+  z-index: 2;
+  background-color: var(--color-aurora-black);
+  min-height: 100vh;
+}
+
+/* Section styles */
 section {
-  background-color: #0A0A0A;
   position: relative;
-  z-index: 10;
+  z-index: 3;
+  background-color: var(--color-aurora-black);
+}
+
+/* Aurora glow effects */
+.aurora-glow-purple {
+  box-shadow: var(--glow-purple);
+}
+
+.aurora-glow-blue {
+  box-shadow: var(--glow-blue);
+}
+
+.aurora-glow-green {
+  box-shadow: var(--glow-green);
+}
+
+/* Fix for Safari */
+@supports (-webkit-touch-callout: none) {
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* Animation keyframes */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
 }
 

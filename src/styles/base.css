@@ -1,27 +1,65 @@
+
 /* Core styles */
 @layer base {
   :root {
+    /* Aurora theme colors */
     --color-aurora-purple: #8A2BE2;
     --color-aurora-blue: #00A6FF;
-    --color-aurora-green: #6CFA5B;
+    --color-aurora-green: #00FFAA;
     --color-aurora-black: #0A0A0A;
+    --color-aurora-white: #F5F5F5;
 
+    /* Typography */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Orbitron', sans-serif;
+
+    /* Radii */
     --radius-small: 4px;
     --radius-default: 8px;
     --radius-medium: 12px;
     --radius-large: 16px;
 
+    /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-default: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Effects */
+    --glow-purple: 0 0 20px var(--color-aurora-purple);
+    --glow-blue: 0 0 20px var(--color-aurora-blue);
+    --glow-green: 0 0 20px var(--color-aurora-green);
   }
 
   html {
-    @apply bg-aurora-black text-white;
+    @apply bg-aurora-black text-aurora-white scroll-smooth;
+    color-scheme: dark;
   }
 
   body {
+    @apply min-h-screen font-sans antialiased;
+  }
+
+  #root {
     @apply min-h-screen;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+
+  /* Fix for mobile browsers */
+  @supports (-webkit-touch-callout: none) {
+    .min-h-screen {
+      min-height: -webkit-fill-available;
+    }
+  }
+
+  /* Fix scroll-based visibility */
+  [data-scroll] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
+

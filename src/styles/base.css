@@ -1,5 +1,4 @@
 
-/* Core styles */
 @layer base {
   :root {
     /* Aurora theme colors */
@@ -62,4 +61,3 @@
     transition: none !important;
   }
 }
-

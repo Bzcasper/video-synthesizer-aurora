@@ -1,16 +1,18 @@
 
 import React, { useEffect, useRef } from 'react';
-import NavigationBar from '@/components/landing/NavigationBar';
+import BackgroundEffects from '@/components/landing/BackgroundEffects';
+import MainContentWrapper from '@/components/landing/MainContentWrapper';
 import HeroSection from '@/components/landing/HeroSection';
 import FeaturesSection from '@/components/landing/FeaturesSection';
 import DemoSection from '@/components/landing/DemoSection';
 import UseCasesSection from '@/components/landing/UseCasesSection';
 import TestimonialsSection from '@/components/landing/TestimonialsSection';
 import PricingSection from '@/components/landing/PricingSection';
-import StickyCTA from '@/components/landing/StickyCTA';
+import { useScrollVisibility } from '@/hooks/useScrollVisibility';
 
 const Index = () => {
   const mainRef = useRef<HTMLDivElement>(null);
+  useScrollVisibility();
 
   useEffect(() => {
     // Fix height and transition issues
@@ -36,26 +38,6 @@ const Index = () => {
       mainRef.current.style.height = 'auto';
       mainRef.current.style.overflow = 'visible';
     }
-
-    // Simplified parallax that won't interfere with content visibility
-    const handleScroll = () => {
-      requestAnimationFrame(() => {
-        const sections = document.querySelectorAll('section');
-        sections.forEach((section) => {
-          const rect = section.getBoundingClientRect();
-          const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-          if (isVisible) {
-            section.style.opacity = '1';
-            section.style.transform = 'translateY(0)';
-          }
-        });
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial check
-
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
@@ -67,27 +49,15 @@ const Index = () => {
         overflow: 'visible'
       }}
     >
-      {/* Background gradients */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-aurora-purple/5 via-aurora-blue/5 to-aurora-green/5" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-aurora-purple/10 via-aurora-blue/10 to-aurora-green/10 opacity-30" />
-      </div>
-      
-      {/* Main content container */}
-      <div className="relative z-10">
-        <NavigationBar />
-        
-        <main className="relative">
-          <HeroSection />
-          <FeaturesSection />
-          <DemoSection />
-          <UseCasesSection />
-          <TestimonialsSection />
-          <PricingSection />
-        </main>
-        
-        <StickyCTA />
-      </div>
+      <BackgroundEffects />
+      <MainContentWrapper>
+        <HeroSection />
+        <FeaturesSection />
+        <DemoSection />
+        <UseCasesSection />
+        <TestimonialsSection />
+        <PricingSection />
+      </MainContentWrapper>
     </div>
   );
 };

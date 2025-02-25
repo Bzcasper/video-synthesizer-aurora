@@ -1,26 +1,34 @@
 
-import { VideoJobManager } from '@/lib/video/VideoJobManager';
 import { supabase } from "@/integrations/supabase/client";
+import { VideoJobManager } from "@/lib/video/VideoJobManager";
 
-export default async function handler(req: any, res: any) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function GET(req: Request) {
   try {
-    const { jobId } = req.query;
-    const { user } = await supabase.auth.getUser();
-
-    if (!user) {
-      return res.status(401).json({ error: 'Unauthorized' });
+    const { data: { session }, error: authError } = await supabase.auth.getSession();
+    
+    if (authError || !session?.user) {
+      return new Response('Unauthorized', { status: 401 });
     }
 
-    const videoManager = new VideoJobManager();
-    const status = await videoManager.checkJobStatus(jobId);
+    const { searchParams } = new URL(req.url);
+    const taskId = searchParams.get('taskId');
 
-    return res.status(200).json(status);
-  } catch (error) {
-    console.error('Error in check status endpoint:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    if (!taskId) {
+      return new Response(JSON.stringify({ error: 'Task ID is required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const task = await VideoJobManager.getVideoJobStatus(taskId);
+
+    return new Response(JSON.stringify(task), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error: any) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

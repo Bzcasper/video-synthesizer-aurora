@@ -671,6 +671,45 @@ export type Database = {
         }
         Relationships: []
       }
+      tasks: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          metadata: Json | null
+          status: Database["public"]["Enums"]["task_status"] | null
+          task_type: string
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          status?: Database["public"]["Enums"]["task_status"] | null
+          task_type: string
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          status?: Database["public"]["Enums"]["task_status"] | null
+          task_type?: string
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       trending_content: {
         Row: {
           content: string
@@ -1414,6 +1453,7 @@ export type Database = {
     Enums: {
       edit_type: "trim" | "filter" | "speed" | "subtitle"
       subscription_tier: "free" | "pro" | "enterprise"
+      task_status: "pending" | "in_progress" | "completed" | "failed"
       user_role: "free" | "pro" | "admin"
       video_edit_operation: "trim" | "subtitle" | "filter" | "speed"
       video_filter_type: "cinematic" | "vintage" | "anime" | "none"

@@ -1,31 +1,31 @@
 
-import { VideoJobManager, type VideoOptions } from '@/lib/video/VideoJobManager';
 import { supabase } from "@/integrations/supabase/client";
+import { VideoJobManager } from "@/lib/video/VideoJobManager";
 
-export default async function handler(req: any, res: any) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function POST(req: Request) {
   try {
-    const { prompt, options } = req.body;
-    const { user } = await supabase.auth.getUser();
-
-    if (!user) {
-      return res.status(401).json({ error: 'Unauthorized' });
+    const { data: { session }, error: authError } = await supabase.auth.getSession();
+    
+    if (authError || !session?.user) {
+      return new Response('Unauthorized', { status: 401 });
     }
 
-    const videoManager = new VideoJobManager();
-    const job = await videoManager.createJob(user.id, prompt, options);
+    const { prompt, duration, resolution } = await req.json();
+    
+    const task = await VideoJobManager.createVideoJob(
+      session.user.id,
+      prompt,
+      duration,
+      resolution
+    );
 
-    // Trigger Modal Labs API call (implementation in edge function)
-    await supabase.functions.invoke('generate-video', {
-      body: { jobId: job.id, prompt, options }
+    return new Response(JSON.stringify(task), {
+      headers: { 'Content-Type': 'application/json' },
     });
-
-    return res.status(200).json(job);
-  } catch (error) {
-    console.error('Error in generate video endpoint:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+  } catch (error: any) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

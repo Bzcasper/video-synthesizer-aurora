@@ -1,5 +1,8 @@
 
 import { supabase } from "@/integrations/supabase/client";
+import { Database } from "@/integrations/supabase/types";
+
+type Task = Database['public']['Tables']['tasks']['Row'];
 
 export class TaskManager {
   static async getTasks(userId: string, status?: string) {

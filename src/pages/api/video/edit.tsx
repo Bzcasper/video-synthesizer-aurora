@@ -1,45 +1,32 @@
 
-import { VideoEditor } from '@/lib/video/VideoEditor';
 import { supabase } from "@/integrations/supabase/client";
-import { type Database } from "@/integrations/supabase/types";
+import { VideoEditor } from "@/lib/video/VideoEditor";
+import { VideoEditOperation } from "@/types/video";
 
-type FilterType = Database["public"]["Enums"]["video_filter_type"];
-
-export default async function handler(req: any, res: any) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function POST(req: Request) {
   try {
-    const { videoId, operation, parameters } = req.body;
-    const { user } = await supabase.auth.getUser();
-
-    if (!user) {
-      return res.status(401).json({ error: 'Unauthorized' });
+    const { data: { session }, error: authError } = await supabase.auth.getSession();
+    
+    if (authError || !session?.user) {
+      return new Response('Unauthorized', { status: 401 });
     }
 
-    const videoEditor = new VideoEditor();
-    let edit;
+    const { videoId, operation, parameters } = await req.json();
+    
+    const task = await VideoEditor.submitEdit(
+      videoId,
+      session.user.id,
+      operation as VideoEditOperation,
+      parameters
+    );
 
-    switch (operation) {
-      case 'trim':
-        edit = await videoEditor.applyTrim(videoId, user.id, parameters.start, parameters.end);
-        break;
-      case 'filter':
-        edit = await videoEditor.applyFilter(videoId, user.id, parameters.filter as FilterType);
-        break;
-      default:
-        return res.status(400).json({ error: 'Invalid operation' });
-    }
-
-    // Trigger processing in edge function
-    await supabase.functions.invoke('process-video-edit', {
-      body: { editId: edit.id, operation, parameters }
+    return new Response(JSON.stringify(task), {
+      headers: { 'Content-Type': 'application/json' },
     });
-
-    return res.status(200).json(edit);
-  } catch (error) {
-    console.error('Error in video edit endpoint:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+  } catch (error: any) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

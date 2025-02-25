@@ -1,63 +1,70 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+
 @layer base {
   :root {
-    /* Aurora theme colors */
-    --color-aurora-purple: #8A2BE2;
-    --color-aurora-blue: #00A6FF;
-    --color-aurora-green: #00FFAA;
-    --color-aurora-black: #0A0A0A;
-    --color-aurora-white: #F5F5F5;
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 180 100% 50%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 180 100% 50%;
+    --radius: 0.5rem;
+  }
 
-    /* Typography */
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-display: 'Orbitron', sans-serif;
-
-    /* Radii */
-    --radius-small: 4px;
-    --radius-default: 8px;
-    --radius-medium: 12px;
-    --radius-large: 16px;
-
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-default: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-
-    /* Effects */
-    --glow-purple: 0 0 20px var(--color-aurora-purple);
-    --glow-blue: 0 0 20px var(--color-aurora-blue);
-    --glow-green: 0 0 20px var(--color-aurora-green);
+  * {
+    @apply border-border selection:bg-aurora-blue/20;
   }
 
   html {
-    @apply bg-aurora-black text-aurora-white scroll-smooth;
-    color-scheme: dark;
+    @apply bg-aurora-black scroll-smooth;
   }
 
   body {
-    @apply min-h-screen font-sans antialiased;
+    @apply bg-aurora-black text-aurora-white font-inter antialiased min-h-screen;
   }
 
   #root {
-    @apply min-h-screen;
+    @apply min-h-screen bg-aurora-black;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
+    @apply font-orbitron;
   }
 
-  /* Fix for mobile browsers */
+  /* Fix for Safari */
   @supports (-webkit-touch-callout: none) {
     .min-h-screen {
       min-height: -webkit-fill-available;
     }
   }
 
-  /* Fix scroll-based visibility */
-  [data-scroll] {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
+  /* Force dark mode */
+  :root {
+    color-scheme: dark;
+  }
+
+  /* Prevent FOIT */
+  .font-orbitron {
+    font-display: swap;
+  }
+
+  .font-inter {
+    font-display: swap;
   }
 }

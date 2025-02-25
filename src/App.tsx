@@ -22,14 +22,7 @@ const Settings = React.lazy(() => import('./pages/dashboard/settings'));
 const Pricing = React.lazy(() => import('./pages/Pricing'));
 const Checkout = React.lazy(() => import('./pages/Checkout'));
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false, // Disable automatic retrying of failed queries
-      refetchOnWindowFocus: false, // Disable automatic refetching when window gains focus
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

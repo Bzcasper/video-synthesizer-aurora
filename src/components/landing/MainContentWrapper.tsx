@@ -9,9 +9,9 @@ interface MainContentWrapperProps {
 
 const MainContentWrapper = ({ children }: MainContentWrapperProps) => {
   return (
-    <div className="relative z-10">
+    <div className="z-10">
       <NavigationBar />
-      <main className="relative">
+      <main>
         {children}
       </main>
       <StickyCTA />

@@ -15,7 +15,6 @@ const Index = () => {
   useScrollVisibility();
 
   useEffect(() => {
-    // Fix height and transition issues
     const setElementStyles = (element: Element | null, styles: Partial<CSSStyleDeclaration>) => {
       if (element && element instanceof HTMLElement) {
         Object.assign(element.style, styles);
@@ -24,18 +23,29 @@ const Index = () => {
 
     const rootDiv = document.querySelector('div#root');
     if (rootDiv) {
-      setElementStyles(rootDiv.querySelector('div:nth-child(1)'), { height: 'auto', transition: 'none' });
-      setElementStyles(rootDiv, { transition: 'none' });
-      setElementStyles(rootDiv.querySelector('div:nth-child(2)'), { transition: 'none' });
-      setElementStyles(rootDiv.querySelector('div:nth-child(3)'), { transition: 'none' });
-      setElementStyles(rootDiv.querySelector('div:nth-child(4)'), { transition: 'none' });
-      setElementStyles(rootDiv.querySelector('div:nth-child(5)'), { transition: 'none' });
+      setElementStyles(rootDiv, { 
+        height: 'auto',
+        minHeight: '100vh',
+        transition: 'none',
+        position: 'static'
+      });
+
+      // Ensure all direct children have proper stacking
+      const children = rootDiv.children;
+      Array.from(children).forEach(child => {
+        setElementStyles(child, {
+          position: 'static',
+          transition: 'none',
+          height: 'auto'
+        });
+      });
     }
 
-    // Ensure the root div maintains its height
+    // Ensure the main container has proper layout
     if (mainRef.current) {
       mainRef.current.style.minHeight = '100vh';
       mainRef.current.style.height = 'auto';
+      mainRef.current.style.position = 'static';
       mainRef.current.style.overflow = 'visible';
     }
   }, []);
@@ -43,10 +53,11 @@ const Index = () => {
   return (
     <div 
       ref={mainRef}
-      className="relative min-h-screen bg-aurora-black"
+      className="min-h-screen bg-aurora-black"
       style={{ 
         height: 'auto',
-        overflow: 'visible'
+        overflow: 'visible',
+        position: 'static'
       }}
     >
       <BackgroundEffects />

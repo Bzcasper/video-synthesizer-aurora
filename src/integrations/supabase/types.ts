@@ -406,6 +406,41 @@ export type Database = {
           },
         ]
       }
+      job_metrics: {
+        Row: {
+          created_at: string
+          duration_seconds: number | null
+          id: number
+          job_id: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration_seconds?: number | null
+          id?: number
+          job_id?: string | null
+          status: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          duration_seconds?: number | null
+          id?: number
+          job_id?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_metrics_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       metrics: {
         Row: {
           created_at: string | null
@@ -862,6 +897,7 @@ export type Database = {
           created_at: string | null
           file_path: string
           id: string
+          job_id: number[] | null
           metadata: Json | null
           original_video_id: string | null
           updated_at: string | null
@@ -871,6 +907,7 @@ export type Database = {
           created_at?: string | null
           file_path: string
           id?: string
+          job_id?: number[] | null
           metadata?: Json | null
           original_video_id?: string | null
           updated_at?: string | null
@@ -880,6 +917,7 @@ export type Database = {
           created_at?: string | null
           file_path?: string
           id?: string
+          job_id?: number[] | null
           metadata?: Json | null
           original_video_id?: string | null
           updated_at?: string | null
@@ -960,6 +998,44 @@ export type Database = {
           {
             foreignKeyName: "video_edits_video_id_fkey"
             columns: ["original_video_id"]
+            isOneToOne: false
+            referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      video_generation_errors: {
+        Row: {
+          created_at: string
+          error_message: string
+          error_type: string | null
+          id: number
+          job_id: string | null
+          stack_trace: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          error_message: string
+          error_type?: string | null
+          id?: number
+          job_id?: string | null
+          stack_trace?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          error_message?: string
+          error_type?: string | null
+          id?: number
+          job_id?: string | null
+          stack_trace?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_generation_errors_job_id_fkey"
+            columns: ["job_id"]
             isOneToOne: false
             referencedRelation: "video_jobs"
             referencedColumns: ["id"]

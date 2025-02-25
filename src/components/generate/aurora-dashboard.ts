@@ -1,165 +1,100 @@
 
+import { Database } from "@/integrations/supabase/types";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { Json } from "@/integrations/supabase/types";
 
-// Define interfaces for type safety
-export interface Metrics {
-  processingTime: number;
-  gpuUtilization: number;
-  queueLength: number;
-  successRate: number;
-}
-
-interface MetricMetadata {
-  gpu_utilization?: number;
-  queue_length?: number;
-  success_rate?: number;
-}
-
-export interface VideoJobMetrics {
+export interface DashboardMetrics {
   totalJobs: number;
-  completedJobs: number;
-  failedJobs: number;
   averageProcessingTime: number;
+  successRate: number;
+  activeJobs: number;
 }
 
-// Utility functions for metrics tracking
-export const trackMetric = async (name: string, value: number, metadata: Record<string, unknown> = {}) => {
+export async function trackMetric(name: string, value: number, metadata: Record<string, unknown> = {}) {
   try {
+    // Ensure metadata is properly typed as Json
+    const metadataJson: Json = metadata as Json;
+    
     await supabase.from('metrics').insert({
       name,
       value,
-      metadata
+      metadata: metadataJson,
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
-    console.error('Error tracking metric:', error);
+    console.error('Failed to track metric:', error);
   }
-};
+}
 
-export const logError = async (error: Error, context: Record<string, unknown> = {}) => {
+export async function logError(message: string, context: Record<string, unknown> = {}) {
   try {
+    // Ensure context is properly typed as Json
+    const contextJson: Json = context as Json;
+    
     await supabase.from('error_logs').insert({
-      error_message: error.message,
-      error_stack: error.stack,
-      context
+      error_message: message,
+      context: contextJson,
+      timestamp: new Date().toISOString()
     });
-  } catch (err) {
-    console.error('Error logging error:', err);
+  } catch (error) {
+    console.error('Failed to log error:', error);
   }
-};
+}
 
-export const createNotification = async (userId: string, jobId: string, type: string, message: string, metadata: Record<string, unknown> = {}) => {
+export async function notifyUser(userId: string, jobId: string, message: string, type: string, metadata: Record<string, unknown> = {}) {
   try {
+    // Ensure metadata is properly typed as Json
+    const metadataJson: Json = metadata as Json;
+    
     await supabase.from('notifications').insert({
       user_id: userId,
       job_id: jobId,
-      type,
       message,
-      metadata
+      type,
+      metadata: metadataJson
     });
   } catch (error) {
-    console.error('Error creating notification:', error);
+    console.error('Failed to send notification:', error);
   }
-};
+}
 
-// Dashboard metrics functions
-export const fetchVideoMetrics = async (): Promise<VideoJobMetrics> => {
+export async function getDashboardMetrics(): Promise<DashboardMetrics> {
   try {
-    const { data: videoJobs, error } = await supabase
+    const { data: videoJobs } = await supabase
       .from('video_jobs')
       .select('status, processing_time');
 
-    if (error) throw error;
-
-    const metrics: VideoJobMetrics = {
-      totalJobs: videoJobs?.length || 0,
-      completedJobs: videoJobs?.filter(job => job.status === 'completed').length || 0,
-      failedJobs: videoJobs?.filter(job => job.status === 'failed').length || 0,
-      averageProcessingTime: videoJobs?.reduce((acc, job) => acc + (job.processing_time || 0), 0) / (videoJobs?.length || 1)
+    if (!videoJobs) return {
+      totalJobs: 0,
+      averageProcessingTime: 0,
+      successRate: 0,
+      activeJobs: 0
     };
 
-    return metrics;
+    const totalJobs = videoJobs.length;
+    const completedJobs = videoJobs.filter(job => job.status === 'completed').length;
+    const activeJobs = videoJobs.filter(job => job.status === 'processing').length;
+    const processingTimes = videoJobs
+      .filter(job => job.processing_time !== null)
+      .map(job => job.processing_time || 0);
+
+    const averageProcessingTime = processingTimes.length > 0
+      ? processingTimes.reduce((a, b) => a + b, 0) / processingTimes.length
+      : 0;
+
+    return {
+      totalJobs,
+      averageProcessingTime,
+      successRate: totalJobs > 0 ? (completedJobs / totalJobs) * 100 : 0,
+      activeJobs
+    };
   } catch (error) {
-    logError(error as Error, { context: 'fetchVideoMetrics' });
-    throw error;
+    console.error('Failed to fetch dashboard metrics:', error);
+    return {
+      totalJobs: 0,
+      averageProcessingTime: 0,
+      successRate: 0,
+      activeJobs: 0
+    };
   }
-};
-
-// System metrics functions
-export const fetchSystemMetrics = async (timeRange: string = '1h'): Promise<Metrics[]> => {
-  try {
-    const { data, error } = await supabase
-      .from('metrics')
-      .select('*')
-      .gte('timestamp', new Date(Date.now() - getTimeRangeInMs(timeRange)))
-      .order('timestamp', { ascending: true });
-
-    if (error) throw error;
-
-    return data.map(metric => {
-      const metadata = metric.metadata as MetricMetadata;
-      return {
-        processingTime: metric.value,
-        gpuUtilization: metadata?.gpu_utilization ?? 0,
-        queueLength: metadata?.queue_length ?? 0,
-        successRate: metadata?.success_rate ?? 0
-      };
-    });
-  } catch (error) {
-    logError(error as Error, { context: 'fetchSystemMetrics' });
-    throw error;
-  }
-};
-
-// Notifications functions
-export const fetchUserNotifications = async (userId: string) => {
-  try {
-    const { data, error } = await supabase
-      .from('notifications')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('read', false)
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-
-    return data;
-  } catch (error) {
-    console.error('Error fetching notifications:', error);
-    return [];
-  }
-};
-
-export const markNotificationAsRead = async (notificationId: string) => {
-  try {
-    const { error } = await supabase
-      .from('notifications')
-      .update({ read: true })
-      .eq('id', notificationId);
-
-    if (error) throw error;
-
-    toast.success('Notification marked as read');
-  } catch (error) {
-    console.error('Error marking notification as read:', error);
-    toast.error('Failed to mark notification as read');
-  }
-};
-
-// Helper functions
-const getTimeRangeInMs = (range: string): number => {
-  const ranges: Record<string, number> = {
-    '1h': 60 * 60 * 1000,
-    '24h': 24 * 60 * 60 * 1000,
-    '7d': 7 * 24 * 60 * 60 * 1000,
-    '30d': 30 * 24 * 60 * 60 * 1000
-  };
-  return ranges[range] || ranges['1h'];
-};
-
-export const formatBytes = (bytes: number): string => {
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-  if (bytes === 0) return '0 Bytes';
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`;
-};
+}

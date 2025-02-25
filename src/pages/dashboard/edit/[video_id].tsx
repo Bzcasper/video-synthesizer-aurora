@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
@@ -165,6 +164,7 @@ const VideoEditPage = () => {
         {/* Editing Controls - Takes up 1 column */}
         <div className="space-y-6">
           <TrimVideoControl
+            video={video}
             startTime={startTime}
             endTime={endTime}
             duration={video.duration}
@@ -175,7 +175,7 @@ const VideoEditPage = () => {
           />
 
           <FilterVideoControl
-            onFilterApply={handleApplyFilter}
+            onApplyFilter={handleApplyFilter}
             isProcessing={isProcessingFilter}
           />
         </div>

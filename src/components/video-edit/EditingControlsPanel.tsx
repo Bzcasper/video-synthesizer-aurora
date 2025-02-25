@@ -14,13 +14,13 @@ import { supabase } from "@/integrations/supabase/client";
 type VideoJob = Database["public"]["Tables"]["video_jobs"]["Row"];
 type VideoEditOperation = Database["public"]["Enums"]["video_edit_operation"];
 
-interface EditingControlsPanelProps {
-  video: VideoJob;
-}
-
 interface EditOperation {
   operation: VideoEditOperation;
-  parameters: any;
+  parameters: Record<string, any>;
+}
+
+interface EditingControlsPanelProps {
+  video: VideoJob;
 }
 
 const EditingControlsPanel = ({ video }: EditingControlsPanelProps) => {
@@ -79,7 +79,7 @@ const EditingControlsPanel = ({ video }: EditingControlsPanelProps) => {
         .from('edit_batches')
         .insert({
           video_id: video.id,
-          operations: pendingEdits,
+          operations: pendingEdits as unknown as Json[],
           user_id: (await supabase.auth.getUser()).data.user?.id
         })
         .select()
@@ -118,7 +118,7 @@ const EditingControlsPanel = ({ video }: EditingControlsPanelProps) => {
           endTime={video.duration}
           onStartTimeChange={() => {}}
           onEndTimeChange={() => {}}
-          onApplyTrim={handleTrimAdd}
+          onApplyTrim={() => handleTrimAdd(0, video.duration)}
           isProcessing={isProcessing}
         />
 

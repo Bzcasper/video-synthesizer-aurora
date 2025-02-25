@@ -1,8 +1,9 @@
-
 import React, { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Type, Upload, Loader2 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SubtitleVideoControlProps {
   onApplySubtitles: (subtitleUrl: string) => Promise<void>;

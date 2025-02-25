@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useNavigate } from 'react-router-dom'
 import { 
   Camera, Upload, Image as ImageIcon, Film, 
   Sliders, Play, Download, Share2, Clock, 
@@ -45,7 +45,7 @@ const SAMPLE_USER = {
 };
 
 const AuroraVideoSynthDashboard: React.FC = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
   
   // State management
   const [prompt, setPrompt] = useState<string>('');

@@ -704,6 +704,27 @@ export type Database = {
         }
         Relationships: []
       }
+      users: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id: string
+          role?: Database["public"]["Enums"]["user_role"]
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+        }
+        Relationships: []
+      }
       video_assets: {
         Row: {
           asset_type: string
@@ -788,6 +809,13 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "video_edits_original_video_id_fkey"
+            columns: ["original_video_id"]
+            isOneToOne: false
+            referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "video_edits_video_id_fkey"
             columns: ["original_video_id"]
             isOneToOne: false
             referencedRelation: "video_jobs"
@@ -1384,7 +1412,9 @@ export type Database = {
       }
     }
     Enums: {
+      edit_type: "trim" | "filter" | "speed" | "subtitle"
       subscription_tier: "free" | "pro" | "enterprise"
+      user_role: "free" | "pro" | "admin"
       video_edit_operation: "trim" | "subtitle" | "filter" | "speed"
       video_filter_type: "cinematic" | "vintage" | "anime" | "none"
       video_job_status: "pending" | "processing" | "completed" | "failed"
@@ -1395,6 +1425,7 @@ export type Database = {
         | "subtitle"
         | "crop"
         | "rotate"
+      video_status: "pending" | "processing" | "completed" | "failed"
     }
     CompositeTypes: {
       http_header: {

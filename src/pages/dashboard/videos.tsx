@@ -1,20 +1,45 @@
 
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Clock, Calendar, Edit2 } from "lucide-react";
+import { Clock, Calendar, Edit2, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
+import type { Database } from "@/integrations/supabase/types";
+
+type VideoJobStatus = Database["public"]["Enums"]["video_job_status"];
 
 interface Video {
   id: string;
-  output_url: string;
-  created_at: string;
+  output_url: string | null;
+  created_at: string | null;
   duration: number;
   prompt: string;
-  status: 'pending' | 'processing' | 'completed' | 'error';
+  status: VideoJobStatus;
 }
+
+const StatusBadge = ({ status }: { status: VideoJobStatus }) => {
+  const getStatusColor = () => {
+    switch (status) {
+      case 'completed':
+        return 'bg-green-500/20 text-green-400';
+      case 'processing':
+        return 'bg-blue-500/20 text-blue-400';
+      case 'failed':
+        return 'bg-red-500/20 text-red-400';
+      default:
+        return 'bg-gray-500/20 text-gray-400';
+    }
+  };
+
+  return (
+    <span className={`text-sm px-2 py-1 rounded-full ${getStatusColor()}`}>
+      {status.charAt(0).toUpperCase() + status.slice(1)}
+    </span>
+  );
+};
 
 const VideoCard = ({ video }: { video: Video }) => {
   const navigate = useNavigate();
@@ -46,29 +71,34 @@ const VideoCard = ({ video }: { video: Video }) => {
             <Clock className="w-4 h-4" />
             <span>{Math.floor(video.duration / 60)}:{(video.duration % 60).toString().padStart(2, '0')}</span>
           </div>
-          <div className="flex items-center gap-1">
-            <Calendar className="w-4 h-4" />
-            <span>{new Date(video.created_at).toLocaleDateString()}</span>
-          </div>
+          {video.created_at && (
+            <div className="flex items-center gap-1">
+              <Calendar className="w-4 h-4" />
+              <span>{new Date(video.created_at).toLocaleDateString()}</span>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center justify-between">
-          <span className={`text-sm px-2 py-1 rounded-full ${
-            video.status === 'completed' ? 'bg-green-500/20 text-green-400' :
-            video.status === 'processing' ? 'bg-blue-500/20 text-blue-400' :
-            video.status === 'error' ? 'bg-red-500/20 text-red-400' :
-            'bg-gray-500/20 text-gray-400'
-          }`}>
-            {video.status.charAt(0).toUpperCase() + video.status.slice(1)}
-          </span>
+          <StatusBadge status={video.status} />
           
           <Button
             onClick={() => navigate(`/dashboard/edit/${video.id}`)}
             className="bg-aurora-blue hover:bg-aurora-blue/80 text-white"
             size="sm"
+            disabled={video.status === 'processing' || video.status === 'failed'}
           >
-            <Edit2 className="w-4 h-4 mr-2" />
-            Edit Video
+            {video.status === 'processing' ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Processing
+              </>
+            ) : (
+              <>
+                <Edit2 className="w-4 h-4 mr-2" />
+                Edit Video
+              </>
+            )}
           </Button>
         </div>
       </div>
@@ -85,10 +115,19 @@ const VideosPage = () => {
         .select('*')
         .order('created_at', { ascending: false });
       
-      if (error) throw error;
-      return data;
+      if (error) {
+        toast({
+          title: "Error loading videos",
+          description: error.message,
+          variant: "destructive"
+        });
+        throw error;
+      }
+      return data as Video[];
     }
   });
+
+  const navigate = useNavigate();
 
   if (isLoading) {
     return (
@@ -116,6 +155,12 @@ const VideosPage = () => {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <h1 className="text-4xl font-orbitron font-bold text-gradient bg-gradient-glow">My Videos</h1>
+        <Button
+          onClick={() => navigate('/dashboard/generate')}
+          className="bg-gradient-to-r from-aurora-purple to-aurora-blue hover:from-aurora-blue hover:to-aurora-purple text-white shadow-neon"
+        >
+          Generate New Video
+        </Button>
       </div>
 
       {videos && videos.length > 0 ? (
@@ -133,7 +178,7 @@ const VideosPage = () => {
             </p>
             <Button
               onClick={() => navigate('/dashboard/generate')}
-              className="bg-aurora-blue hover:bg-aurora-blue/80 text-white mt-4"
+              className="bg-gradient-to-r from-aurora-purple to-aurora-blue hover:from-aurora-blue hover:to-aurora-purple text-white shadow-neon mt-4"
             >
               Generate New Video
             </Button>

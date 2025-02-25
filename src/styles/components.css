@@ -26,4 +26,21 @@
   .aurora-glow {
     @apply shadow-[0_0_30px_rgba(138,43,226,0.3)];
   }
+
+  .shadow-neon {
+    @apply shadow-[0_0_15px_rgba(0,166,255,0.5)];
+  }
+
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

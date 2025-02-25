@@ -38,7 +38,12 @@ const EditingControlsPanel = ({ video }: EditingControlsPanelProps) => {
       <div className="p-6 space-y-6">
         <TrimVideoControl
           video={video}
-          onTrimApply={handleTrimApply}
+          duration={video.duration}
+          startTime={0}
+          endTime={video.duration}
+          onStartTimeChange={(time) => {}}
+          onEndTimeChange={(time) => {}}
+          onApplyTrim={async () => {}}
         />
       </div>
     </Card>

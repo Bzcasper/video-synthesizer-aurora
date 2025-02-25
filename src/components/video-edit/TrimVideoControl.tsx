@@ -4,6 +4,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { ScissorsIcon } from "lucide-react";
+import type { Database } from "@/integrations/supabase/types";
+
+type VideoJob = Database["public"]["Tables"]["video_jobs"]["Row"];
 
 interface TrimVideoControlProps {
   duration: number;
@@ -13,6 +16,7 @@ interface TrimVideoControlProps {
   onEndTimeChange: (value: number) => void;
   onApplyTrim: () => void;
   isProcessing?: boolean;
+  video: VideoJob;
 }
 
 const TrimVideoControl = ({
@@ -22,7 +26,8 @@ const TrimVideoControl = ({
   onStartTimeChange,
   onEndTimeChange,
   onApplyTrim,
-  isProcessing = false
+  isProcessing = false,
+  video
 }: TrimVideoControlProps) => {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);

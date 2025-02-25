@@ -3,11 +3,11 @@
   .glass-panel {
     @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-lg 
            hover:border-aurora-blue/30 hover:bg-white/10 
-           transition-all duration-300;
+           transition-all duration-golden;
   }
 
   .hover-glow {
-    @apply transition-all duration-300 hover:shadow-lg 
+    @apply transition-all duration-golden hover:shadow-lg 
            hover:shadow-aurora-blue/20 hover:border-aurora-blue/50;
   }
 
@@ -31,8 +31,53 @@
     @apply shadow-[0_0_15px_rgba(0,166,255,0.5)];
   }
 
-  .animate-spin-slow {
-    animation: spin 3s linear infinite;
+  /* Card layouts using Fibonacci proportions */
+  .card-fibonacci {
+    @apply w-full md:w-[550px] lg:w-[890px];
+  }
+
+  .card-fibonacci-sm {
+    @apply w-full md:w-[340px] lg:w-[550px];
+  }
+
+  /* Button sizes using Fibonacci */
+  .btn-fibonacci {
+    @apply h-fib-4 px-fib-3 min-w-[144px];
+  }
+
+  .btn-fibonacci-sm {
+    @apply h-fib-3 px-fib-2 min-w-[89px];
+  }
+
+  /* Grid layouts using Golden Ratio */
+  .grid-golden {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-fib-3;
+    grid-template-columns: 1fr calc(1fr * var(--inverse-golden-ratio));
+  }
+
+  /* Animations using Golden Ratio timing */
+  .transition-golden {
+    @apply transition-all duration-golden ease-in-out;
+  }
+
+  .hover-scale-golden {
+    @apply hover:scale-[1.618] transition-golden;
+  }
+
+  .fade-in-golden {
+    animation: fadeIn calc(0.618s * var(--golden-ratio)) ease-out forwards;
+  }
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(8px * var(--golden-ratio)));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

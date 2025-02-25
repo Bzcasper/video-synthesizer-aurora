@@ -82,4 +82,24 @@
   .font-inter {
     font-display: swap;
   }
+
+  /* Content Sections */
+  section {
+    @apply py-fib-6;
+  }
+
+  /* Container widths using Fibonacci */
+  .container {
+    @apply max-w-[1440px] mx-auto px-fib-3;
+  }
+
+  /* Form elements */
+  input, textarea, select {
+    @apply h-fib-4 px-fib-2 rounded-lg;
+  }
+
+  /* Buttons */
+  button {
+    @apply min-h-fib-4 px-fib-3 rounded-lg transition-all duration-golden;
+  }
 }

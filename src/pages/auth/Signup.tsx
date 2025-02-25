@@ -56,8 +56,8 @@ const Signup = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-8">
-      <div className="text-center">
+    <div className="w-full max-w-md mx-auto space-y-8 px-4">
+      <div className="text-center mb-12">
         <h2 className="text-3xl font-bold text-white font-orbitron">Create Account</h2>
         <p className="mt-2 text-aurora-blue">Start creating amazing videos with AI</p>
       </div>

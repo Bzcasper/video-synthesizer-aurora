@@ -64,7 +64,7 @@ const AuthLayout = ({ children, requireAuth = false }: AuthLayoutProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-aurora-black">
+    <div className="min-h-screen bg-aurora-black flex items-center justify-center">
       <div className="fixed inset-0 bg-gradient-to-br from-aurora-purple/10 via-aurora-blue/5 to-aurora-green/10 pointer-events-none" />
       <AnimatePresence mode="wait">
         <motion.div
@@ -73,7 +73,7 @@ const AuthLayout = ({ children, requireAuth = false }: AuthLayoutProps) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className={`relative z-10 ${isTransitioning ? 'pointer-events-none' : ''}`}
+          className={`relative z-10 w-full ${isTransitioning ? 'pointer-events-none' : ''}`}
         >
           {children}
         </motion.div>

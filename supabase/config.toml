@@ -1,5 +1,5 @@
 
-# project_id = "voaorlwianfzffcpimdj"
+project_id = "voaorlwianfzffcpimdj"
 
 [functions.generate-video]
 verify_jwt = true

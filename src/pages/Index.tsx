@@ -1,4 +1,3 @@
-
 import React from 'react';
 import NavigationBar from '@/components/landing/NavigationBar';
 import HeroSection from '@/components/landing/HeroSection';
@@ -26,25 +25,34 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-aurora-black">
-      {/* Fixed background gradients */}
-      <div className="fixed inset-0 bg-gradient-to-b from-aurora-purple/5 via-aurora-blue/5 to-aurora-green/5 pointer-events-none" />
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-aurora-purple/10 via-aurora-blue/10 to-aurora-green/10 opacity-30 pointer-events-none" />
+    <div className="relative min-h-screen bg-aurora-black overflow-x-hidden">
+      {/* Background gradients with lower z-index */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-aurora-purple/5 via-aurora-blue/5 to-aurora-green/5" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-aurora-purple/10 via-aurora-blue/10 to-aurora-green/10 opacity-30" />
+      </div>
       
-      {/* Content container */}
-      <div className="flex-1 flex flex-col relative">
+      {/* Main content container */}
+      <div className="relative z-10 flex flex-col min-h-screen">
         <NavigationBar />
-        <main className="flex-1 flex flex-col relative">
-          <HeroSection />
-          <div className="flex-1 flex flex-col relative z-20">
+        
+        <main className="flex-1 flex flex-col">
+          {/* Hero section at the top */}
+          <div className="relative">
+            <HeroSection />
+          </div>
+          
+          {/* Other sections */}
+          <div className="relative flex flex-col">
             <FeaturesSection />
             <DemoSection />
             <UseCasesSection />
             <TestimonialsSection />
             <PricingSection />
           </div>
-          <StickyCTA />
         </main>
+        
+        <StickyCTA />
       </div>
     </div>
   );

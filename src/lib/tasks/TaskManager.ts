@@ -3,9 +3,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Database } from "@/integrations/supabase/types";
 
 type Task = Database['public']['Tables']['tasks']['Row'];
+type TaskStatus = Database['public']['Enums']['task_status'];
 
 export class TaskManager {
-  static async getTasks(userId: string, status?: string) {
+  static async getTasks(userId: string, status?: TaskStatus) {
     try {
       let query = supabase
         .from('tasks')
@@ -27,7 +28,7 @@ export class TaskManager {
     }
   }
 
-  static async updateTaskStatus(taskId: string, status: 'pending' | 'in_progress' | 'completed' | 'failed') {
+  static async updateTaskStatus(taskId: string, status: TaskStatus) {
     try {
       const { error } = await supabase
         .from('tasks')

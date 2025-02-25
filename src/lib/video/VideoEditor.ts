@@ -1,9 +1,9 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { VideoEditOperation } from "@/types/video";
+import { VideoEditOperation, EditParameters } from "@/types/video";
 
 export class VideoEditor {
-  static async submitEdit(videoId: string, userId: string, operation: VideoEditOperation, parameters: any) {
+  static async submitEdit(videoId: string, userId: string, operation: VideoEditOperation, parameters: EditParameters) {
     try {
       const { data: task, error } = await supabase
         .from('tasks')

@@ -1,7 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { VideoEditor } from "@/lib/video/VideoEditor";
-import { VideoEditOperation } from "@/types/video";
+import { VideoEditOperation, EditParameters } from "@/types/video";
 
 export async function POST(req: Request) {
   try {
@@ -11,12 +11,16 @@ export async function POST(req: Request) {
       return new Response('Unauthorized', { status: 401 });
     }
 
-    const { videoId, operation, parameters } = await req.json();
+    const { videoId, operation, parameters } = await req.json() as {
+      videoId: string;
+      operation: VideoEditOperation;
+      parameters: EditParameters;
+    };
     
     const task = await VideoEditor.submitEdit(
       videoId,
       session.user.id,
-      operation as VideoEditOperation,
+      operation,
       parameters
     );
 

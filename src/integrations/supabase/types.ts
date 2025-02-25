@@ -344,6 +344,33 @@ export type Database = {
           },
         ]
       }
+      error_logs: {
+        Row: {
+          context: Json | null
+          created_at: string | null
+          error_message: string
+          error_stack: string | null
+          id: string
+          timestamp: string
+        }
+        Insert: {
+          context?: Json | null
+          created_at?: string | null
+          error_message: string
+          error_stack?: string | null
+          id?: string
+          timestamp?: string
+        }
+        Update: {
+          context?: Json | null
+          created_at?: string | null
+          error_message?: string
+          error_stack?: string | null
+          id?: string
+          timestamp?: string
+        }
+        Relationships: []
+      }
       job_assets: {
         Row: {
           created_at: string | null
@@ -378,6 +405,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      metrics: {
+        Row: {
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          name: string
+          timestamp: string
+          value: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          name: string
+          timestamp?: string
+          value: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          name?: string
+          timestamp?: string
+          value?: number
+        }
+        Relationships: []
       }
       modal_docs: {
         Row: {
@@ -458,6 +512,47 @@ export type Database = {
           video_count?: number | null
         }
         Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          job_id: string
+          message: string
+          metadata: Json | null
+          read: boolean | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          job_id: string
+          message: string
+          metadata?: Json | null
+          read?: boolean | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          job_id?: string
+          message?: string
+          metadata?: Json | null
+          read?: boolean | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       processing_queue: {
         Row: {

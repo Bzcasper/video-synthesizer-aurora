@@ -93,9 +93,9 @@ const GenerateForm = ({
         <Button
           type="submit"
           disabled={isGenerating || !prompt.trim()}
-          className="w-full bg-gradient-to-r from-aurora-purple to-aurora-blue 
-                   hover:from-aurora-blue hover:to-aurora-purple transition-all
-                   duration-300 font-semibold text-white shadow-neon"
+          className="w-full bg-aurora-blue hover:bg-aurora-blue/90 text-white 
+                   shadow-[0_0_20px_rgba(0,166,255,0.3)] hover:shadow-[0_0_30px_rgba(0,166,255,0.5)]
+                   transition-all duration-300 font-semibold"
         >
           {isGenerating ? (
             <>

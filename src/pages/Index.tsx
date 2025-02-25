@@ -26,17 +26,17 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-aurora-black">
+    <div className="min-h-screen flex flex-col bg-aurora-black">
       {/* Fixed background gradients */}
       <div className="fixed inset-0 bg-gradient-to-b from-aurora-purple/5 via-aurora-blue/5 to-aurora-green/5 pointer-events-none" />
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-aurora-purple/10 via-aurora-blue/10 to-aurora-green/10 opacity-30 pointer-events-none" />
       
       {/* Content container */}
-      <div className="relative z-10">
+      <div className="flex-1 flex flex-col relative">
         <NavigationBar />
-        <main className="relative">
+        <main className="flex-1 flex flex-col relative">
           <HeroSection />
-          <div className="relative z-20">
+          <div className="flex-1 flex flex-col relative z-20">
             <FeaturesSection />
             <DemoSection />
             <UseCasesSection />

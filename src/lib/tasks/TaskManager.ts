@@ -1,47 +1,84 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { Database } from "@/integrations/supabase/types";
 
-type Task = Database['public']['Tables']['tasks']['Row'];
-type TaskStatus = 'pending' | 'in_progress' | 'completed' | 'failed';
+interface Task {
+  id: string;
+  title: string;
+  status: 'pending' | 'completed' | 'failed';
+  priority: 'low' | 'medium' | 'high';
+  task_type?: string;
+  description?: string;
+  completed_at?: string | null;
+}
 
 export class TaskManager {
-  static async getTasks(userId: string, status?: TaskStatus) {
+  async createTask(task: Omit<Task, 'id' | 'status'>): Promise<Task | null> {
     try {
-      const query = supabase
+      const { data, error } = await supabase
         .from('tasks')
-        .select('id, task_type, status, completed_at, created_at, user_id')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false });
-
-      if (status) {
-        query.eq('status', status);
-      }
-
-      const { data, error } = await query;
+        .insert({
+          ...task,
+          status: 'pending'
+        })
+        .select()
+        .single();
 
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error fetching tasks:', error);
-      throw error;
+      console.error('Error creating task:', error);
+      return null;
     }
   }
 
-  static async updateTaskStatus(taskId: string, status: TaskStatus) {
+  async completeTask(taskId: string): Promise<boolean> {
     try {
       const { error } = await supabase
         .from('tasks')
-        .update({ 
-          status,
-          completed_at: status === 'completed' ? new Date().toISOString() : null
+        .update({
+          status: 'completed',
+          completed_at: new Date().toISOString()
         })
         .eq('id', taskId);
 
       if (error) throw error;
+      return true;
+    } catch (error) {
+      console.error('Error completing task:', error);
+      return false;
+    }
+  }
+
+  async getPendingTasks(): Promise<Task[]> {
+    try {
+      const { data, error } = await supabase
+        .from('tasks')
+        .select('*')
+        .eq('status', 'pending')
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error('Error fetching pending tasks:', error);
+      return [];
+    }
+  }
+
+  async updateTaskStatus(taskId: string, status: Task['status']): Promise<boolean> {
+    try {
+      const { error } = await supabase
+        .from('tasks')
+        .update({ status })
+        .eq('id', taskId);
+
+      if (error) throw error;
+      return true;
     } catch (error) {
       console.error('Error updating task status:', error);
-      throw error;
+      return false;
     }
   }
 }
+
+export default new TaskManager();

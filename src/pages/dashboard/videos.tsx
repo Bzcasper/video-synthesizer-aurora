@@ -2,12 +2,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { VideoCard } from "@/components/video/VideoCard";
 import { VideoFilters } from "@/components/video/VideoFilters";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { ErrorMessage } from "@/components/ui/error-message";
+import { EmptyVideos } from "@/components/video/EmptyVideos";
 import { type Database } from "@/integrations/supabase/types";
 
 type VideoJobStatus = Database["public"]["Enums"]["video_job_status"];
@@ -70,25 +72,11 @@ const VideosPage = () => {
   const navigate = useNavigate();
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin-slow">
-          <img
-            src="/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png"
-            alt="Loading..."
-            className="w-16 h-16 filter brightness-150"
-          />
-        </div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {
-    return (
-      <div className="text-center text-red-500">
-        Error loading videos. Please try again later.
-      </div>
-    );
+    return <ErrorMessage message="Error loading videos. Please try again later." />;
   }
 
   return (
@@ -117,22 +105,7 @@ const VideosPage = () => {
           ))}
         </div>
       ) : (
-        <Card className="p-12 bg-black/50 border-white/10">
-          <div className="text-center space-y-4">
-            <p className="text-xl text-gray-400">No videos found</p>
-            <p className="text-sm text-gray-500">
-              {statusFilter !== 'all' 
-                ? `No videos with status "${statusFilter}". Try changing the filter.`
-                : 'Start by generating a new video or uploading one to edit'}
-            </p>
-            <Button
-              onClick={() => navigate('/dashboard/generate')}
-              className="bg-gradient-to-r from-aurora-purple to-aurora-blue hover:from-aurora-blue hover:to-aurora-purple text-white shadow-neon mt-4 transform transition-all duration-300 hover:scale-105"
-            >
-              Generate New Video
-            </Button>
-          </div>
-        </Card>
+        <EmptyVideos statusFilter={statusFilter} />
       )}
     </div>
   );

@@ -6,13 +6,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { ErrorMessage } from "@/components/ui/error-message";
 import GenerateForm from '@/components/generate/GenerateForm';
 import { useQuery } from '@tanstack/react-query';
+import { Database } from "@/integrations/supabase/types";
 
 type VideoJob = {
   prompt: string;
   duration: number;
   style: string;
   resolution: { width: number; height: number };
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: Database['public']['Enums']['video_job_status'];
   user_id: string;
   metadata: {
     source: string;

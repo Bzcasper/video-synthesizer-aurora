@@ -8,19 +8,21 @@ type Json = string | number | boolean | null | { [key: string]: Json | undefined
 export class VideoEditor {
   static async submitEdit(videoId: string, userId: string, operation: VideoEditOperation, parameters: EditParameters) {
     try {
+      // Convert parameters to a JSON-safe format
+      const safeParameters = JSON.parse(JSON.stringify(parameters));
+      
       const { data: task, error } = await supabase
         .from('tasks')
         .insert({
           user_id: userId,
           title: `Video Edit - ${operation}`,
-          description: `Edit operation ${operation} for video ${videoId}`,
           task_type: 'video_edit',
           status: 'pending',
           metadata: {
             video_id: videoId,
             operation,
-            parameters
-          }
+            parameters: safeParameters
+          } as Json
         })
         .select()
         .single();

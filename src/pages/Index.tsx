@@ -10,7 +10,6 @@ import PricingSection from '@/components/landing/PricingSection';
 import StickyCTA from '@/components/landing/StickyCTA';
 
 const Index = () => {
-  // Add parallax effect on scroll
   React.useEffect(() => {
     const handleParallax = () => {
       const parallaxElements = document.querySelectorAll('[class*="parallax"]');
@@ -27,25 +26,27 @@ const Index = () => {
   }, []);
 
   return (
-    <main className="relative min-h-screen bg-aurora-black text-aurora-white overflow-x-hidden">
+    <div className="min-h-screen bg-aurora-black">
       {/* Fixed background gradients */}
-      <div className="absolute inset-0 bg-gradient-to-b from-aurora-purple/5 via-aurora-blue/5 to-aurora-green/5 pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-aurora-purple/10 via-aurora-blue/10 to-aurora-green/10 opacity-30 pointer-events-none" />
+      <div className="fixed inset-0 bg-gradient-to-b from-aurora-purple/5 via-aurora-blue/5 to-aurora-green/5 pointer-events-none" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-aurora-purple/10 via-aurora-blue/10 to-aurora-green/10 opacity-30 pointer-events-none" />
       
-      {/* Content */}
+      {/* Content container */}
       <div className="relative z-10">
         <NavigationBar />
-        <div className="relative space-y-0">
+        <main className="relative">
           <HeroSection />
-          <FeaturesSection />
-          <DemoSection />
-          <UseCasesSection />
-          <TestimonialsSection />
-          <PricingSection />
+          <div className="relative z-20">
+            <FeaturesSection />
+            <DemoSection />
+            <UseCasesSection />
+            <TestimonialsSection />
+            <PricingSection />
+          </div>
           <StickyCTA />
-        </div>
+        </main>
       </div>
-    </main>
+    </div>
   );
 };
 

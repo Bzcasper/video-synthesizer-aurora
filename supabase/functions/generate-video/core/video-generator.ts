@@ -1,23 +1,22 @@
-// supabase/functions/generate-video/core/VideoGenerator.ts
+// supabase/functions/generate-video/core/video-generator.ts
 
-import { ProgressTracker } from './ProgressTracker';
-import { AssetManager } from './AssetManager';
+import { createClient } from '@supabase/supabase-js';
+import { VIDEO_SETTINGS, SYSTEM } from '../config/constants';
 import { ErrorHandler } from './ErrorHandler';
-import { VIDEO_SETTINGS } from '../config/constants';
-import { VideoSettings } from '../config/validation';
+import { ProgressTracker } from './ProgressTracker';
 import { logger } from '../utils/logging';
 
-/**
- * Interface for video generation job
- */
 export interface VideoJob {
   id: string;
   userId: string;
   prompt: string;
-  settings: VideoSettings;
+  settings: {
+    duration: number;
+    resolution: [number, number];
+    fps: number;
+    style: string;
+  };
   createdAt: Date;
-  startedAt?: Date;
-  completedAt?: Date;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   progress: number;
   error?: string;
@@ -25,355 +24,238 @@ export interface VideoJob {
   thumbnailUrl?: string;
 }
 
-/**
- * Interface for video generation result
- */
-export interface VideoGenerationResult {
-  videoUrl: string;
-  thumbnailUrl: string;
-  duration: number;
-  frameCount: number;
-  resolution: [number, number];
-}
-
-/**
- * Class responsible for video generation using Stable Video Diffusion
- */
 export class VideoGenerator {
-  private progressTracker: ProgressTracker;
-  private assetManager: AssetManager;
+  private supabase: ReturnType<typeof createClient>;
   private errorHandler: ErrorHandler;
+  private progressTracker: ProgressTracker;
 
   constructor(
-    progressTracker: ProgressTracker,
-    assetManager: AssetManager,
-    errorHandler: ErrorHandler
+    supabaseClient: ReturnType<typeof createClient>,
+    errorHandler: ErrorHandler,
+    progressTracker: ProgressTracker
   ) {
-    this.progressTracker = progressTracker;
-    this.assetManager = assetManager;
+    this.supabase = supabaseClient;
     this.errorHandler = errorHandler;
+    this.progressTracker = progressTracker;
   }
 
-  /**
-   * Generate a video based on the provided job configuration
-   * @param job The video generation job
-   * @returns Promise resolving to video generation result
-   */
-  async generateVideo(job: VideoJob): Promise<VideoGenerationResult> {
+  async generateVideo(job: VideoJob): Promise<{ videoUrl: string; thumbnailUrl: string }> {
+    logger.info(`Starting video generation for job ${job.id}`);
+    
     try {
-      logger.info(`Starting video generation for job ${job.id}`);
-      
-      // Update job status to processing
-      job.status = 'processing';
-      job.startedAt = new Date();
-      job.progress = 0;
-      await this.progressTracker.updateProgress(job.id, 0, 'Initializing video generation');
-      
-      // Calculate parameters for video generation
-      const frameCount = this.calculateFrameCount(job.settings);
-      
-      // 1. Generate frames using Stable Diffusion
-      const frames = await this.generateFrames(job, frameCount);
-      
-      // 2. Apply frame enhancements if requested
-      const enhancedFrames = job.settings.enhanceFrames 
-        ? await this.enhanceFrames(frames, job)
-        : frames;
-      
-      // 3. Compose video from frames
-      const video = await this.composeVideo(enhancedFrames, job);
-      
-      // 4. Generate thumbnail
-      const thumbnail = await this.generateThumbnail(video, job);
-      
-      // 5. Save and upload assets
-      const result = await this.assetManager.saveVideoAssets(job.id, video, thumbnail);
+      // Update progress to indicate we're starting
+      await this.progressTracker.updateProgress(job.id, 5, 'Initializing video generation');
 
-      // Update job as completed
-      job.status = 'completed';
-      job.completedAt = new Date();
-      job.progress = 100;
-      job.outputUrl = result.videoUrl;
-      job.thumbnailUrl = result.thumbnailUrl;
-      
-      await this.progressTracker.updateProgress(
-        job.id, 
-        100, 
-        'Video generation completed successfully'
-      );
-      
-      logger.info(`Video generation completed successfully for job ${job.id}`);
-      
-      return {
-        videoUrl: result.videoUrl,
-        thumbnailUrl: result.thumbnailUrl,
-        duration: job.settings.duration || VIDEO_SETTINGS.DURATION.DEFAULT,
-        frameCount,
-        resolution: job.settings.resolution || VIDEO_SETTINGS.RESOLUTIONS.FULL_HD
-      };
+      // Generate frames using Stable Video Diffusion
+      const frames = await this.generateFrames(job);
+      await this.progressTracker.updateProgress(job.id, 40, 'Frames generated');
+
+      // Process and enhance frames
+      const enhancedFrames = await this.enhanceFrames(frames, job);
+      await this.progressTracker.updateProgress(job.id, 70, 'Frames enhanced');
+
+      // Combine frames into video
+      const { videoData, thumbnailData } = await this.combineFrames(enhancedFrames, job);
+      await this.progressTracker.updateProgress(job.id, 90, 'Video assembled');
+
+      // Upload to storage
+      const { videoUrl, thumbnailUrl } = await this.uploadResults(job.id, videoData, thumbnailData);
+      await this.progressTracker.updateProgress(job.id, 100, 'Video ready');
+
+      return { videoUrl, thumbnailUrl };
     } catch (error) {
-      // Handle errors and update job status
-      return this.errorHandler.handleVideoGenerationError(job, error);
+      logger.error(`Error generating video for job ${job.id}:`, error);
+      throw this.errorHandler.wrapError(error, `Failed to generate video for job ${job.id}`);
     }
   }
 
-  /**
-   * Generate frames for the video using Stable Diffusion
-   * @param job The video job
-   * @param frameCount Number of frames to generate
-   * @returns Array of generated frame assets
-   * @private
-   */
-  private async generateFrames(job: VideoJob, frameCount: number): Promise<Uint8Array[]> {
-    logger.info(`Generating ${frameCount} frames for job ${job.id}`);
-    
-    const frames: Uint8Array[] = [];
-    const { prompt, settings } = job;
-    
-    // Update progress tracker to frame generation stage
-    await this.progressTracker.updateProgress(
-      job.id,
-      5,
-      'Beginning frame generation'
-    );
+  private async generateFrames(job: VideoJob): Promise<Uint8Array[]> {
+    logger.info(`Generating frames for job ${job.id}`);
     
     try {
-      // TODO: Replace with actual Stable Diffusion model API call
-      // This is a placeholder for the actual implementation
-      
-      // For each frame in the sequence
-      for (let i = 0; i < frameCount; i++) {
-        // In a real implementation, this would call the Stable Diffusion API
-        // with parameters adapted for the specific frame in the sequence
-        
-        // Calculate progress percentage for frame generation (5% to 70%)
-        const progressPercent = 5 + Math.floor((i / frameCount) * 65);
-        
-        // Simulate frame generation
-        const frame = await this.simulateFrameGeneration(
-          prompt,
-          settings.style || VIDEO_SETTINGS.STYLES.CINEMATIC,
-          settings.resolution || VIDEO_SETTINGS.RESOLUTIONS.FULL_HD,
-          i / frameCount
+      const frameCount = Math.ceil(job.settings.duration * job.settings.fps);
+      const frames: Uint8Array[] = [];
+
+      // Initialize Stable Video Diffusion with job settings
+      const model = await this.initializeStableVideoDiffusion(job.settings);
+
+      // Generate frames in batches to manage memory
+      const batchSize = 10;
+      for (let i = 0; i < frameCount; i += batchSize) {
+        const batchFrames = await model.generateFrameBatch(
+          job.prompt,
+          Math.min(batchSize, frameCount - i),
+          {
+            width: job.settings.resolution[0],
+            height: job.settings.resolution[1],
+            style: job.settings.style
+          }
         );
-        
-        frames.push(frame);
-        
+
+        frames.push(...batchFrames);
+
         // Update progress
+        const progress = Math.floor((i / frameCount) * 35) + 5;
         await this.progressTracker.updateProgress(
-          job.id,
-          progressPercent,
-          `Generating frame ${i + 1}/${frameCount}`
+          job.id, 
+          progress,
+          `Generating frames ${i + 1} to ${Math.min(i + batchSize, frameCount)}`
         );
       }
-      
-      logger.info(`Successfully generated ${frameCount} frames for job ${job.id}`);
+
       return frames;
     } catch (error) {
       logger.error(`Error generating frames for job ${job.id}:`, error);
-      throw this.errorHandler.wrapError(error, 'Failed to generate video frames');
+      throw this.errorHandler.wrapError(error, 'Frame generation failed');
     }
   }
-  
-  /**
-   * Apply enhancements to video frames
-   * @param frames Original frames
-   * @param job Video job
-   * @returns Enhanced frames
-   * @private
-   */
+
   private async enhanceFrames(frames: Uint8Array[], job: VideoJob): Promise<Uint8Array[]> {
-    logger.info(`Enhancing ${frames.length} frames for job ${job.id}`);
-    
+    logger.info(`Enhancing frames for job ${job.id}`);
+
     try {
-      // Update progress tracker to enhancement stage
-      await this.progressTracker.updateProgress(
-        job.id,
-        70,
-        'Beginning frame enhancement'
-      );
-      
-      // TODO: Replace with actual frame enhancement implementation
-      // This is a placeholder for the actual enhancement process
-      
+      // Initialize SDXL for frame enhancement
+      const enhancer = await this.initializeSDXL();
+
       const enhancedFrames: Uint8Array[] = [];
-      
       for (let i = 0; i < frames.length; i++) {
-        // Calculate progress percentage for frame enhancement (70% to 85%)
-        const progressPercent = 70 + Math.floor((i / frames.length) * 15);
-        
-        // Simulate frame enhancement
-        const enhancedFrame = await this.simulateFrameEnhancement(frames[i]);
-        enhancedFrames.push(enhancedFrame);
-        
+        const enhanced = await enhancer.upscale(frames[i], {
+          scale: 1.5,
+          denoise: 0.3
+        });
+
+        enhancedFrames.push(enhanced);
+
         // Update progress
+        const progress = Math.floor((i / frames.length) * 30) + 40;
         await this.progressTracker.updateProgress(
           job.id,
-          progressPercent,
+          progress,
           `Enhancing frame ${i + 1}/${frames.length}`
         );
       }
-      
-      logger.info(`Successfully enhanced ${frames.length} frames for job ${job.id}`);
+
       return enhancedFrames;
     } catch (error) {
       logger.error(`Error enhancing frames for job ${job.id}:`, error);
-      throw this.errorHandler.wrapError(error, 'Failed to enhance video frames');
+      throw this.errorHandler.wrapError(error, 'Frame enhancement failed');
     }
   }
-  
-  /**
-   * Compose video from frames
-   * @param frames Video frames
-   * @param job Video job
-   * @returns Video data as Uint8Array
-   * @private
-   */
-  private async composeVideo(frames: Uint8Array[], job: VideoJob): Promise<Uint8Array> {
-    logger.info(`Composing video from ${frames.length} frames for job ${job.id}`);
-    
-    try {
-      // Update progress tracker to video composition stage
-      await this.progressTracker.updateProgress(
-        job.id,
-        85,
-        'Beginning video composition'
-      );
-      
-      // TODO: Replace with actual video composition code
-      // This is a placeholder for the actual video composition process
-      
-      // Simulate video composition
-      const video = await this.simulateVideoComposition(
-        frames,
-        job.settings.fps || VIDEO_SETTINGS.FPS.STANDARD,
-        job.settings.outputFormat || VIDEO_SETTINGS.FORMATS.MP4,
-        job.settings.quality || VIDEO_SETTINGS.QUALITY.STANDARD
-      );
-      
-      // Update progress
-      await this.progressTracker.updateProgress(
-        job.id,
-        95,
-        'Video composition completed'
-      );
-      
-      logger.info(`Successfully composed video for job ${job.id}`);
-      return video;
-    } catch (error) {
-      logger.error(`Error composing video for job ${job.id}:`, error);
-      throw this.errorHandler.wrapError(error, 'Failed to compose video from frames');
-    }
-  }
-  
-  /**
-   * Generate thumbnail for the video
-   * @param video Video data
-   * @param job Video job
-   * @returns Thumbnail data as Uint8Array
-   * @private
-   */
-  private async generateThumbnail(video: Uint8Array, job: VideoJob): Promise<Uint8Array> {
-    logger.info(`Generating thumbnail for job ${job.id}`);
-    
-    try {
-      // Update progress tracker to thumbnail generation stage
-      await this.progressTracker.updateProgress(
-        job.id,
-        97,
-        'Generating thumbnail'
-      );
-      
-      // TODO: Replace with actual thumbnail generation code
-      // This is a placeholder for the actual thumbnail generation process
-      
-      // Simulate thumbnail generation
-      const thumbnail = await this.simulateThumbnailGeneration(video);
-      
-      // Update progress
-      await this.progressTracker.updateProgress(
-        job.id,
-        99,
-        'Thumbnail generation completed'
-      );
-      
-      logger.info(`Successfully generated thumbnail for job ${job.id}`);
-      return thumbnail;
-    } catch (error) {
-      logger.error(`Error generating thumbnail for job ${job.id}:`, error);
-      throw this.errorHandler.wrapError(error, 'Failed to generate thumbnail');
-    }
-  }
-  
-  /**
-   * Calculate the number of frames needed based on duration and FPS
-   * @param settings Video settings
-   * @returns Number of frames
-   * @private
-   */
-  private calculateFrameCount(settings: VideoSettings): number {
-    const duration = settings.duration || VIDEO_SETTINGS.DURATION.DEFAULT;
-    const fps = settings.fps || VIDEO_SETTINGS.FPS.STANDARD;
-    return Math.ceil(duration * fps);
-  }
-  
-  // Simulation methods for development (to be replaced with actual implementations)
-  
-  /**
-   * Simulates frame generation (placeholder for actual Stable Diffusion API call)
-   * @private
-   */
-  private async simulateFrameGeneration(
-    prompt: string,
-    style: string,
-    resolution: [number, number],
-    timePosition: number
-  ): Promise<Uint8Array> {
-    // Simulate processing time
-    await new Promise(resolve => setTimeout(resolve, 50));
-    
-    // Return a dummy frame (would be actual image data in production)
-    return new Uint8Array(resolution[0] * resolution[1] * 3);
-  }
-  
-  /**
-   * Simulates frame enhancement (placeholder for actual enhancement process)
-   * @private
-   */
-  private async simulateFrameEnhancement(frame: Uint8Array): Promise<Uint8Array> {
-    // Simulate processing time
-    await new Promise(resolve => setTimeout(resolve, 20));
-    
-    // Return simulated enhanced frame
-    return frame;
-  }
-  
-  /**
-   * Simulates video composition (placeholder for actual FFmpeg or similar process)
-   * @private
-   */
-  private async simulateVideoComposition(
+
+  private async combineFrames(
     frames: Uint8Array[],
-    fps: number,
-    format: string,
-    quality: string
-  ): Promise<Uint8Array> {
-    // Simulate processing time
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
-    // Return a dummy video (would be actual video data in production)
-    return new Uint8Array(frames.length * 1024);
+    job: VideoJob
+  ): Promise<{ videoData: Uint8Array; thumbnailData: Uint8Array }> {
+    logger.info(`Combining frames for job ${job.id}`);
+
+    try {
+      // Initialize video encoder with job settings
+      const encoder = await this.initializeVideoEncoder(job.settings);
+
+      // Encode frames into video
+      const videoData = await encoder.encode(frames, {
+        fps: job.settings.fps,
+        quality: VIDEO_SETTINGS.QUALITY.HIGH
+      });
+
+      // Generate thumbnail from middle frame
+      const middleFrameIndex = Math.floor(frames.length / 2);
+      const thumbnailData = frames[middleFrameIndex];
+
+      return { videoData, thumbnailData };
+    } catch (error) {
+      logger.error(`Error combining frames for job ${job.id}:`, error);
+      throw this.errorHandler.wrapError(error, 'Video assembly failed');
+    }
   }
-  
-  /**
-   * Simulates thumbnail generation (placeholder for actual process)
-   * @private
-   */
-  private async simulateThumbnailGeneration(video: Uint8Array): Promise<Uint8Array> {
-    // Simulate processing time
-    await new Promise(resolve => setTimeout(resolve, 30));
-    
-    // Return a dummy thumbnail (would be actual image data in production)
-    return new Uint8Array(1920 * 1080 * 3);
+
+  private async uploadResults(
+    jobId: string,
+    videoData: Uint8Array,
+    thumbnailData: Uint8Array
+  ): Promise<{ videoUrl: string; thumbnailUrl: string }> {
+    logger.info(`Uploading results for job ${jobId}`);
+
+    try {
+      // Upload video file
+      const videoPath = `${SYSTEM.STORAGE.VIDEOS_PATH}/${jobId}/output.mp4`;
+      const { error: videoError } = await this.supabase.storage
+        .from('video-assets')
+        .upload(videoPath, videoData, {
+          contentType: 'video/mp4',
+          cacheControl: '3600',
+          upsert: true
+        });
+
+      if (videoError) throw videoError;
+
+      // Upload thumbnail
+      const thumbnailPath = `${SYSTEM.STORAGE.THUMBNAILS_PATH}/${jobId}/thumbnail.jpg`;
+      const { error: thumbnailError } = await this.supabase.storage
+        .from('video-thumbnails')
+        .upload(thumbnailPath, thumbnailData, {
+          contentType: 'image/jpeg',
+          cacheControl: '3600',
+          upsert: true
+        });
+
+      if (thumbnailError) throw thumbnailError;
+
+      // Get public URLs
+      const { data: videoUrlData } = this.supabase.storage
+        .from('video-assets')
+        .getPublicUrl(videoPath);
+
+      const { data: thumbnailUrlData } = this.supabase.storage
+        .from('video-thumbnails')
+        .getPublicUrl(thumbnailPath);
+
+      return {
+        videoUrl: videoUrlData.publicUrl,
+        thumbnailUrl: thumbnailUrlData.publicUrl
+      };
+    } catch (error) {
+      logger.error(`Error uploading results for job ${jobId}:`, error);
+      throw this.errorHandler.wrapError(error, 'Failed to upload video assets');
+    }
+  }
+
+  private async initializeStableVideoDiffusion(settings: VideoJob['settings']) {
+    // Implementation for initializing Stable Video Diffusion model
+    // This would be replaced with actual model initialization code
+    logger.info('Initializing Stable Video Diffusion model');
+    return {
+      generateFrameBatch: async (prompt: string, frameCount: number, options: any) => {
+        // Placeholder for actual frame generation
+        // This would be replaced with actual model inference
+        return Array(frameCount).fill(new Uint8Array(1024));
+      }
+    };
+  }
+
+  private async initializeSDXL() {
+    // Implementation for initializing SDXL model
+    // This would be replaced with actual model initialization code
+    logger.info('Initializing SDXL model');
+    return {
+      upscale: async (frame: Uint8Array, options: any) => {
+        // Placeholder for actual frame enhancement
+        // This would be replaced with actual model inference
+        return frame;
+      }
+    };
+  }
+
+  private async initializeVideoEncoder(settings: VideoJob['settings']) {
+    // Implementation for initializing video encoder
+    // This would be replaced with actual encoder initialization code
+    logger.info('Initializing video encoder');
+    return {
+      encode: async (frames: Uint8Array[], options: any) => {
+        // Placeholder for actual video encoding
+        // This would be replaced with actual encoding logic
+        return new Uint8Array(1024);
+      }
+    };
   }
 }

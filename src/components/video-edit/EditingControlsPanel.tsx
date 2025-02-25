@@ -21,7 +21,7 @@ const EditingControlsPanel: React.FC<EditingControlsPanelProps> = ({
   return (
     <div className="space-y-4">
       <Card className="p-4">
-        <h3 className="text-lg font-semibold mb-4">Trim Video</h3>
+        <h3 className="text-lg font-semibold mb-4 text-white">Trim Video</h3>
         <TrimVideoControl
           videoId={videoId}
           onSubmit={(params) => onEditSubmit({ type: 'trim', params })}
@@ -29,7 +29,7 @@ const EditingControlsPanel: React.FC<EditingControlsPanelProps> = ({
       </Card>
 
       <Card className="p-4">
-        <h3 className="text-lg font-semibold mb-4">Apply Filter</h3>
+        <h3 className="text-lg font-semibold mb-4 text-white">Apply Filter</h3>
         <FilterVideoControl
           videoId={videoId}
           onSubmit={(params) => onEditSubmit({ type: 'filter', params })}
@@ -37,7 +37,7 @@ const EditingControlsPanel: React.FC<EditingControlsPanelProps> = ({
       </Card>
 
       <Card className="p-4">
-        <h3 className="text-lg font-semibold mb-4">Adjust Speed</h3>
+        <h3 className="text-lg font-semibold mb-4 text-white">Adjust Speed</h3>
         <SpeedVideoControl
           videoId={videoId}
           onSubmit={(params) => onEditSubmit({ type: 'speed', params })}
@@ -45,7 +45,7 @@ const EditingControlsPanel: React.FC<EditingControlsPanelProps> = ({
       </Card>
 
       <Card className="p-4">
-        <h3 className="text-lg font-semibold mb-4">Add Subtitles</h3>
+        <h3 className="text-lg font-semibold mb-4 text-white">Add Subtitles</h3>
         <SubtitleVideoControl
           videoId={videoId}
           onSubmit={(params) => onEditSubmit({ type: 'subtitle', params })}
@@ -56,4 +56,3 @@ const EditingControlsPanel: React.FC<EditingControlsPanelProps> = ({
 };
 
 export default EditingControlsPanel;
-

@@ -1,8 +1,11 @@
 
-# project_id = "voaorlwianfzffcpimdj"
+project_id = "voaorlwianfzffcpimdj"
 
 [functions.generate-video]
 verify_jwt = true
 
 [functions.get-video-status]
+verify_jwt = true
+
+[functions.enhance-video]
 verify_jwt = true

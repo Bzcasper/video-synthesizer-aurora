@@ -406,6 +406,41 @@ export type Database = {
           },
         ]
       }
+      job_metrics: {
+        Row: {
+          created_at: string
+          duration_seconds: number | null
+          id: number
+          job_id: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration_seconds?: number | null
+          id?: number
+          job_id?: string | null
+          status: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          duration_seconds?: number | null
+          id?: number
+          job_id?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_metrics_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       metrics: {
         Row: {
           created_at: string | null
@@ -862,6 +897,7 @@ export type Database = {
           created_at: string | null
           file_path: string
           id: string
+          job_id: number[] | null
           metadata: Json | null
           original_video_id: string | null
           updated_at: string | null
@@ -871,6 +907,7 @@ export type Database = {
           created_at?: string | null
           file_path: string
           id?: string
+          job_id?: number[] | null
           metadata?: Json | null
           original_video_id?: string | null
           updated_at?: string | null
@@ -880,6 +917,7 @@ export type Database = {
           created_at?: string | null
           file_path?: string
           id?: string
+          job_id?: number[] | null
           metadata?: Json | null
           original_video_id?: string | null
           updated_at?: string | null
@@ -960,6 +998,121 @@ export type Database = {
           {
             foreignKeyName: "video_edits_video_id_fkey"
             columns: ["original_video_id"]
+            isOneToOne: false
+            referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      video_enhancements: {
+        Row: {
+          callback_url: string | null
+          completed_at: string | null
+          created_at: string | null
+          enhancement_type: Database["public"]["Enums"]["video_enhancement_type"]
+          error_message: string | null
+          estimated_completion_time: string | null
+          filter_type: Database["public"]["Enums"]["video_filter_type"] | null
+          id: string
+          metadata: Json | null
+          output_url: string | null
+          priority: string | null
+          progress: number | null
+          speed_factor: number | null
+          started_at: string | null
+          status: Database["public"]["Enums"]["video_job_status"] | null
+          subtitle_file: string | null
+          target_resolution: string | null
+          updated_at: string | null
+          user_id: string
+          video_id: string
+        }
+        Insert: {
+          callback_url?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          enhancement_type: Database["public"]["Enums"]["video_enhancement_type"]
+          error_message?: string | null
+          estimated_completion_time?: string | null
+          filter_type?: Database["public"]["Enums"]["video_filter_type"] | null
+          id?: string
+          metadata?: Json | null
+          output_url?: string | null
+          priority?: string | null
+          progress?: number | null
+          speed_factor?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["video_job_status"] | null
+          subtitle_file?: string | null
+          target_resolution?: string | null
+          updated_at?: string | null
+          user_id: string
+          video_id: string
+        }
+        Update: {
+          callback_url?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          enhancement_type?: Database["public"]["Enums"]["video_enhancement_type"]
+          error_message?: string | null
+          estimated_completion_time?: string | null
+          filter_type?: Database["public"]["Enums"]["video_filter_type"] | null
+          id?: string
+          metadata?: Json | null
+          output_url?: string | null
+          priority?: string | null
+          progress?: number | null
+          speed_factor?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["video_job_status"] | null
+          subtitle_file?: string | null
+          target_resolution?: string | null
+          updated_at?: string | null
+          user_id?: string
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_enhancements_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      video_generation_errors: {
+        Row: {
+          created_at: string
+          error_message: string
+          error_type: string | null
+          id: number
+          job_id: string | null
+          stack_trace: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          error_message: string
+          error_type?: string | null
+          id?: number
+          job_id?: string | null
+          stack_trace?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          error_message?: string
+          error_type?: string | null
+          id?: number
+          job_id?: string | null
+          stack_trace?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_generation_errors_job_id_fkey"
+            columns: ["job_id"]
             isOneToOne: false
             referencedRelation: "video_jobs"
             referencedColumns: ["id"]
@@ -1584,6 +1737,13 @@ export type Database = {
       task_status: "pending" | "in_progress" | "completed" | "failed"
       user_role: "free" | "pro" | "admin"
       video_edit_operation: "trim" | "subtitle" | "filter" | "speed"
+      video_enhancement_type:
+        | "upscale"
+        | "frame_interpolation"
+        | "filter"
+        | "speed_adjustment"
+        | "subtitle_overlay"
+        | "lip_sync"
       video_filter_type: "cinematic" | "vintage" | "anime" | "none"
       video_job_status: "pending" | "processing" | "completed" | "failed"
       video_operation:

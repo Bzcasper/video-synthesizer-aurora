@@ -1,122 +1,96 @@
-// supabase/functions/generate-video/config/constants.ts
+// supabase/functions/generate-video/config/validation.ts
+
+import { z } from 'zod';
+import { VIDEO_SETTINGS, QUOTA } from './constants';
 
 /**
- * Configuration constants for video generation service
+ * Video settings schema for request validation
  */
+export const videoSettingsSchema = z.object({
+  resolution: z.tuple([z.number().int().positive(), z.number().int().positive()])
+    .optional()
+    .default([VIDEO_SETTINGS.RESOLUTIONS.FULL_HD[0], VIDEO_SETTINGS.RESOLUTIONS.FULL_HD[1]]),
+  fps: z.number().int().min(1).max(60)
+    .optional()
+    .default(VIDEO_SETTINGS.FPS.STANDARD),
+  duration: z.number().min(VIDEO_SETTINGS.DURATION.MIN).max(VIDEO_SETTINGS.DURATION.MAX)
+    .optional()
+    .default(VIDEO_SETTINGS.DURATION.DEFAULT),
+  enhanceFrames: z.boolean()
+    .optional()
+    .default(true),
+  style: z.enum([
+    VIDEO_SETTINGS.STYLES.CINEMATIC,
+    VIDEO_SETTINGS.STYLES.ANIME,
+    VIDEO_SETTINGS.STYLES.REALISTIC,
+    VIDEO_SETTINGS.STYLES.ARTISTIC
+  ])
+    .optional()
+    .default(VIDEO_SETTINGS.STYLES.CINEMATIC),
+  outputFormat: z.enum([VIDEO_SETTINGS.FORMATS.MP4, VIDEO_SETTINGS.FORMATS.WEBM])
+    .optional()
+    .default(VIDEO_SETTINGS.FORMATS.MP4),
+  quality: z.enum([VIDEO_SETTINGS.QUALITY.DRAFT, VIDEO_SETTINGS.QUALITY.STANDARD, VIDEO_SETTINGS.QUALITY.HIGH])
+    .optional()
+    .default(VIDEO_SETTINGS.QUALITY.STANDARD),
+});
 
-// Video generation settings
-export const VIDEO_SETTINGS = {
-  // Resolution presets (width x height)
-  RESOLUTIONS: {
-    SD: [640, 360],
-    HD: [1280, 720],
-    FULL_HD: [1920, 1080],
-  },
-  
-  // Video duration limits in seconds
-  DURATION: {
-    MIN: 5,
-    MAX: 60,
-    DEFAULT: 15,
-  },
-  
-  // Frame rate options
-  FPS: {
-    STANDARD: 24,
-    SMOOTH: 30,
-    HIGH: 60,
-  },
-  
-  // Video style presets
-  STYLES: {
-    CINEMATIC: 'cinematic',
-    ANIME: 'anime',
-    REALISTIC: 'realistic',
-    ARTISTIC: 'artistic',
-  },
-  
-  // Output formats
-  FORMATS: {
-    MP4: 'mp4',
-    WEBM: 'webm',
-  },
+/**
+ * Video generation request schema
+ */
+export const videoGenerationRequestSchema = z.object({
+  userId: z.string().min(1),
+  prompt: z.string().min(1).max(1000),
+  settings: videoSettingsSchema,
+  userTier: z.enum(['free', 'pro']).default('free'),
+  callbackUrl: z.string().url().optional(),
+});
 
-  // Video quality presets (affects bitrate and compression)
-  QUALITY: {
-    DRAFT: 'draft',     // Lower quality for previews
-    STANDARD: 'standard', // Good balance of quality and file size
-    HIGH: 'high',       // High quality, larger file size
-  },
+/**
+ * Types for validated schemas
+ */
+export type VideoSettings = z.infer<typeof videoSettingsSchema>;
+export type VideoGenerationRequest = z.infer<typeof videoGenerationRequestSchema>;
+
+/**
+ * Validate the video generation request
+ * @param request Request object to validate
+ * @returns Validated request object
+ * @throws {Error} If validation fails
+ */
+export const validateRequest = (request: any): VideoGenerationRequest => {
+  try {
+    return videoGenerationRequestSchema.parse(request);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const errorMessage = error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
+      throw new Error(`Validation error: ${errorMessage}`);
+    }
+    throw error;
+  }
 };
 
-// System settings
-export const SYSTEM = {
-  // Concurrency limits
-  MAX_CONCURRENT_JOBS: 5,
+/**
+ * Normalize settings based on user tier
+ * @param settings User settings
+ * @param userTier User's tier (free or pro)
+ * @returns Normalized settings
+ */
+export const normalizeSettings = (settings: VideoSettings, userTier: 'free' | 'pro' = 'free'): VideoSettings => {
+  const tierLimits = userTier === 'pro' ? QUOTA.PRO_TIER : QUOTA.FREE_TIER;
+  const maxResolution = 
+    userTier === 'pro' 
+      ? VIDEO_SETTINGS.RESOLUTIONS.FULL_HD 
+      : VIDEO_SETTINGS.RESOLUTIONS.HD;
   
-  // Job timeout in milliseconds
-  JOB_TIMEOUT: 15 * 60 * 1000, // 15 minutes
-  
-  // Retry configuration
-  MAX_RETRIES: 3,
-  RETRY_DELAY: 5000, // 5 seconds
-  
-  // Storage paths
-  STORAGE: {
-    BUCKET: 'video-assets',
-    FRAMES_PATH: 'frames',
-    VIDEOS_PATH: 'videos',
-    THUMBNAILS_PATH: 'thumbnails',
-  },
-  
-  // Progress update interval in milliseconds
-  PROGRESS_UPDATE_INTERVAL: 2000, // 2 seconds
-};
-
-// Rate limiting and quota settings
-export const QUOTA = {
-  // Default user limits per month
-  FREE_TIER: {
-    MAX_VIDEOS: 10,
-    MAX_DURATION: 15, // seconds
-    MAX_RESOLUTION: 'HD', // Maps to VIDEO_SETTINGS.RESOLUTIONS.HD
-  },
-  
-  PRO_TIER: {
-    MAX_VIDEOS: 100,
-    MAX_DURATION: 60, // seconds
-    MAX_RESOLUTION: 'FULL_HD', // Maps to VIDEO_SETTINGS.RESOLUTIONS.FULL_HD
-  },
-  
-  // Rate limiting (requests per minute)
-  RATE_LIMIT: {
-    FREE_TIER: 5,
-    PRO_TIER: 20,
-  },
-};
-
-// Database table names
-export const DB_TABLES = {
-  VIDEO_JOBS: 'video_jobs',
-  VIDEO_ASSETS: 'video_assets',
-  MONTHLY_USAGE: 'monthly_usage',
-};
-
-// Webhook event types
-export const WEBHOOK_EVENTS = {
-  JOB_CREATED: 'job.created',
-  JOB_STARTED: 'job.started',
-  JOB_PROGRESS: 'job.progress',
-  JOB_COMPLETED: 'job.completed',
-  JOB_FAILED: 'job.failed',
-};
-
-// Error types for categorization
-export const ERROR_TYPES = {
-  VALIDATION: 'validation_error',
-  SYSTEM: 'system_error',
-  MODEL: 'model_error',
-  STORAGE: 'storage_error',
-  TIMEOUT: 'timeout_error',
-  UNKNOWN: 'unknown_error',
+  return {
+    ...settings,
+    // Limit duration based on tier
+    duration: Math.min(settings.duration, tierLimits.MAX_DURATION),
+    // Limit resolution based on tier
+    resolution: [
+      Math.min(settings.resolution[0], maxResolution[0]),
+      Math.min(settings.resolution[1], maxResolution[1])
+    ],
+  };
 };

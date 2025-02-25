@@ -1,0 +1,29 @@
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-lg 
+           hover:border-aurora-blue/30 hover:bg-white/10 
+           transition-all duration-300;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-lg 
+           hover:shadow-aurora-blue/20 hover:border-aurora-blue/50;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+  }
+
+  .bg-gradient-glow {
+    @apply bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green;
+  }
+
+  .neon-border {
+    @apply border border-aurora-blue/50 shadow-[0_0_15px_rgba(0,166,255,0.3)];
+  }
+
+  .aurora-glow {
+    @apply shadow-[0_0_30px_rgba(138,43,226,0.3)];
+  }
+}

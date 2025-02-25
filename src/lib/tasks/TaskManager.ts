@@ -10,7 +10,7 @@ export class TaskManager {
     try {
       let query = supabase
         .from('tasks')
-        .select('*')
+        .select('id, task_type, status, completed_at, created_at, user_id')
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
 

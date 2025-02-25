@@ -1,5 +1,6 @@
 
 import React from 'react';
+import NavigationBar from '@/components/landing/NavigationBar';
 import HeroSection from '@/components/landing/HeroSection';
 import FeaturesSection from '@/components/landing/FeaturesSection';
 import DemoSection from '@/components/landing/DemoSection';
@@ -14,7 +15,7 @@ const Index = () => {
     const handleParallax = () => {
       const parallaxElements = document.querySelectorAll('[class*="parallax"]');
       parallaxElements.forEach((element) => {
-        const htmlElement = element as HTMLElement; // Type assertion here
+        const htmlElement = element as HTMLElement;
         const speed = htmlElement.getAttribute('data-speed') || '0.1';
         const y = (window.scrollY * Number(speed));
         htmlElement.style.setProperty('--parallax-y', `${y}px`);
@@ -35,6 +36,7 @@ const Index = () => {
       
       {/* Content */}
       <div className="relative">
+        <NavigationBar />
         <HeroSection />
         <FeaturesSection />
         <DemoSection />

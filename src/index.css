@@ -35,8 +35,12 @@
     @apply border-border selection:bg-aurora-blue/20;
   }
 
+  html, body, #root {
+    @apply bg-aurora-black min-h-screen w-full;
+  }
+
   body {
-    @apply bg-aurora-black text-aurora-white font-inter antialiased min-h-screen overflow-x-hidden;
+    @apply text-aurora-white font-inter antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -185,4 +189,3 @@
 :root {
   color-scheme: dark;
 }
-

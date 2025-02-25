@@ -8,11 +8,10 @@ interface PageLayoutProps {
 const PageLayout = ({ children }: PageLayoutProps) => {
   return (
     <div 
-      className="min-h-screen bg-aurora-black"
+      className="min-h-screen w-full bg-aurora-black"
       style={{ 
-        height: 'auto',
-        overflow: 'visible',
-        position: 'static'
+        position: 'relative',
+        overflow: 'auto'
       }}
     >
       {children}

@@ -1,7 +1,7 @@
 
 import { Database } from "@/integrations/supabase/types";
 
-type Json = Database['public']['CompositeTypes']['json'];
+type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 // Video operation types matching Supabase enums
 export type VideoEditOperation = 'trim' | 'subtitle' | 'filter' | 'speed';

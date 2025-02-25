@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { VideoEditOperation, EditParameters } from "@/types/video";
 import { Database } from "@/integrations/supabase/types";
 
-type Json = Database['public']['CompositeTypes']['json'];
+type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export class VideoEditor {
   static async submitEdit(videoId: string, userId: string, operation: VideoEditOperation, parameters: EditParameters) {
@@ -19,7 +19,7 @@ export class VideoEditor {
           metadata: {
             video_id: videoId,
             operation,
-            parameters: parameters as unknown as Json
+            parameters
           }
         })
         .select()

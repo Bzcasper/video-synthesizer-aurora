@@ -459,6 +459,50 @@ export type Database = {
         }
         Relationships: []
       }
+      processing_queue: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          id: string
+          original_video_id: string | null
+          priority: number | null
+          started_at: string | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          original_video_id?: string | null
+          priority?: number | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          original_video_id?: string | null
+          priority?: number | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "processing_queue_original_video_id_fkey"
+            columns: ["original_video_id"]
+            isOneToOne: false
+            referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -660,6 +704,44 @@ export type Database = {
         }
         Relationships: []
       }
+      video_assets: {
+        Row: {
+          asset_type: string
+          created_at: string | null
+          file_path: string
+          id: string
+          metadata: Json | null
+          original_video_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          asset_type: string
+          created_at?: string | null
+          file_path: string
+          id?: string
+          metadata?: Json | null
+          original_video_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          asset_type?: string
+          created_at?: string | null
+          file_path?: string
+          id?: string
+          metadata?: Json | null
+          original_video_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_assets_original_video_id_fkey"
+            columns: ["original_video_id"]
+            isOneToOne: false
+            referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       video_edits: {
         Row: {
           created_at: string | null
@@ -720,7 +802,9 @@ export type Database = {
           duration: number
           error_message: string | null
           id: string
+          metadata: Json | null
           output_url: string | null
+          priority: number | null
           processing_completed_at: string | null
           processing_started_at: string | null
           prompt: string
@@ -737,7 +821,9 @@ export type Database = {
           duration: number
           error_message?: string | null
           id?: string
+          metadata?: Json | null
           output_url?: string | null
+          priority?: number | null
           processing_completed_at?: string | null
           processing_started_at?: string | null
           prompt: string
@@ -754,7 +840,9 @@ export type Database = {
           duration?: number
           error_message?: string | null
           id?: string
+          metadata?: Json | null
           output_url?: string | null
+          priority?: number | null
           processing_completed_at?: string | null
           processing_started_at?: string | null
           prompt?: string

@@ -25,6 +25,10 @@
     --input: 240 3.7% 15.9%;
     --ring: 180 100% 50%;
     --radius: 0.5rem;
+    
+    /* Golden Ratio Constants */
+    --golden-ratio: 1.618;
+    --inverse-golden-ratio: 0.618;
   }
 
   * {
@@ -37,21 +41,32 @@
 
   body {
     @apply bg-aurora-black text-aurora-white font-inter antialiased min-h-screen;
+    line-height: var(--golden-ratio);
   }
 
   #root {
     @apply min-h-screen bg-aurora-black;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-orbitron;
+  /* Typography scaling using Fibonacci sequence */
+  h1 {
+    @apply text-fib-xl font-orbitron font-bold tracking-tight;
+    margin-bottom: calc(1rem * var(--golden-ratio));
   }
 
-  /* Fix for Safari */
-  @supports (-webkit-touch-callout: none) {
-    .min-h-screen {
-      min-height: -webkit-fill-available;
-    }
+  h2 {
+    @apply text-fib-lg font-orbitron font-semibold;
+    margin-bottom: calc(0.8rem * var(--golden-ratio));
+  }
+
+  h3 {
+    @apply text-fib-base font-orbitron font-medium;
+    margin-bottom: calc(0.6rem * var(--golden-ratio));
+  }
+
+  p {
+    @apply text-fib-sm leading-relaxed;
+    margin-bottom: calc(1rem * var(--inverse-golden-ratio));
   }
 
   /* Force dark mode */

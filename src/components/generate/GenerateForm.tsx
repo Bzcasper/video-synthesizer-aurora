@@ -52,21 +52,21 @@ const GenerateForm = ({
   onSubmit,
 }: GenerateFormProps) => {
   return (
-    <Card className="p-6 glass-panel hover-glow">
-      <form className="space-y-6" onSubmit={onSubmit}>
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-200 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-aurora-blue" />
+    <Card className="p-fib-4 glass-panel hover-glow">
+      <form className="space-y-fib-3" onSubmit={onSubmit}>
+        <div className="space-y-fib-2">
+          <label className="text-fib-base font-medium text-gray-200 flex items-center gap-2">
+            <Sparkles className="w-fib-3 h-fib-3 text-aurora-blue" />
             Video Description
           </label>
           <Textarea
             placeholder="Describe your video in detail. For example: A serene mountain landscape at sunset, with clouds moving in timelapse..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            className="h-32 bg-white/5 border-white/10 text-white focus:ring-aurora-blue 
-                     hover:border-aurora-blue/50 transition-colors"
+            className="h-[144px] bg-white/5 border-white/10 text-white focus:ring-aurora-blue 
+                     hover:border-aurora-blue/50 transition-golden"
           />
-          <p className="text-sm text-gray-400">
+          <p className="text-fib-sm text-gray-400">
             Be specific about what you want to see in your video. Include details about mood, lighting, and movement.
           </p>
         </div>
@@ -76,9 +76,9 @@ const GenerateForm = ({
           onDurationChange={setDuration}
         />
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-200">Video Style</label>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="space-y-fib-2">
+          <label className="text-fib-base font-medium text-gray-200">Video Style</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-fib-3">
             {videoStyles.map((styleOption) => (
               <VideoStyleOption
                 key={styleOption.id}
@@ -93,18 +93,18 @@ const GenerateForm = ({
         <Button
           type="submit"
           disabled={isGenerating || !prompt.trim()}
-          className="w-full bg-aurora-blue hover:bg-aurora-blue/90 text-white 
+          className="w-full h-fib-5 text-fib-base bg-aurora-blue hover:bg-aurora-blue/90 text-white 
                    shadow-[0_0_20px_rgba(0,166,255,0.3)] hover:shadow-[0_0_30px_rgba(0,166,255,0.5)]
-                   transition-all duration-300 font-semibold"
+                   transition-golden duration-golden font-semibold"
         >
           {isGenerating ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="mr-2 h-fib-3 w-fib-3 animate-spin" />
               Generating...
             </>
           ) : (
             <>
-              <Video className="mr-2 h-4 w-4" />
+              <Video className="mr-2 h-fib-3 w-fib-3" />
               Generate Video
             </>
           )}

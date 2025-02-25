@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -65,6 +64,40 @@ export default {
           black: "#0A0A0A",
           white: "#F5F5F5"
         }
+      },
+      spacing: {
+        // Fibonacci sequence for spacing
+        'fib-1': '8px',    // 8
+        'fib-2': '13px',   // 13
+        'fib-3': '21px',   // 21
+        'fib-4': '34px',   // 34
+        'fib-5': '55px',   // 55
+        'fib-6': '89px',   // 89
+        'fib-7': '144px',  // 144
+        'fib-8': '233px',  // 233
+        'fib-9': '377px',  // 377
+        'fib-10': '610px', // 610
+        'golden': '61.8%',
+      },
+      fontSize: {
+        // Fibonacci-based typography scale
+        'fib-xs': '8px',
+        'fib-sm': '13px',
+        'fib-base': '21px',
+        'fib-lg': '34px',
+        'fib-xl': '55px',
+        'fib-2xl': '89px',
+      },
+      transitionDuration: {
+        'golden': '618ms',
+      },
+      width: {
+        'golden-lg': '61.8%',
+        'golden-sm': '38.2%',
+      },
+      height: {
+        'golden-lg': '61.8vh',
+        'golden-sm': '38.2vh',
       },
       keyframes: {
         "accordion-down": {

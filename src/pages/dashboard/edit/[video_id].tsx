@@ -1,90 +1,136 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import VideoPreviewPanel from '@/components/video-edit/VideoPreviewPanel';
-import EditingControlsPanel from '@/components/video-edit/EditingControlsPanel';
-import type { Database } from "@/integrations/supabase/types";
-
-type VideoJob = Database["public"]["Tables"]["video_jobs"]["Row"];
+import { toast } from "@/hooks/use-toast";
+import VideoPreviewPanel from "@/components/video-edit/VideoPreviewPanel";
+import TrimVideoControl from "@/components/video-edit/TrimVideoControl";
 
 const VideoEditPage = () => {
   const { video_id } = useParams();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const [video, setVideo] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const { data: video, isLoading, error } = useQuery({
-    queryKey: ['video', video_id],
-    queryFn: async () => {
+  useEffect(() => {
+    const fetchVideo = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('video_jobs')
+          .select('*')
+          .eq('id', video_id)
+          .single();
+
+        if (error) throw error;
+
+        setVideo(data);
+        // Initialize end time to video duration once we have the video
+        if (data.duration) {
+          setEndTime(data.duration);
+        }
+      } catch (error) {
+        console.error('Error fetching video:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load video details",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (video_id) {
+      fetchVideo();
+    }
+  }, [video_id]);
+
+  const handleApplyTrim = async () => {
+    if (!video) return;
+
+    setIsProcessing(true);
+    try {
       const { data, error } = await supabase
-        .from('video_jobs')
-        .select('*')
-        .eq('id', video_id)
+        .from('video_edits')
+        .insert([
+          {
+            original_video_id: video.id,
+            operation: 'trim',
+            parameters: {
+              start_time: startTime,
+              end_time: endTime
+            },
+            user_id: video.user_id
+          }
+        ])
+        .select()
         .single();
 
-      if (error) {
-        toast({
-          title: "Error loading video",
-          description: error.message,
-          variant: "destructive"
-        });
-        throw error;
-      }
-      return data as VideoJob;
-    }
-  });
+      if (error) throw error;
 
-  const handlePlayPause = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
+      toast({
+        title: "Success",
+        description: "Trim operation started",
+      });
+
+    } catch (error) {
+      console.error('Error applying trim:', error);
+      toast({
+        title: "Error",
+        description: "Failed to apply trim edit",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin-slow">
-          <img
-            src="/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png"
-            alt="Loading..."
-            className="w-16 h-16 filter brightness-150"
-          />
-        </div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-pulse text-aurora-blue">Loading...</div>
       </div>
     );
   }
 
-  if (error || !video) {
+  if (!video) {
     return (
-      <div className="text-center text-red-500">
-        Error loading video. Please try again later.
+      <div className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-300">Video not found</h2>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-orbitron font-bold text-gradient bg-gradient-glow">
-          Edit Video
-        </h1>
-      </div>
+    <div className="container mx-auto p-6 space-y-6">
+      <h1 className="text-3xl font-orbitron font-bold text-transparent bg-clip-text bg-gradient-glow mb-8">
+        Edit Video
+      </h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <VideoPreviewPanel
-          video={video}
-          isPlaying={isPlaying}
-          onPlayPause={handlePlayPause}
-          videoRef={videoRef}
-        />
-        <EditingControlsPanel video={video} />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Video Preview - Takes up 2 columns on larger screens */}
+        <div className="lg:col-span-2">
+          <VideoPreviewPanel
+            videoUrl={video.output_url}
+            startTime={startTime}
+            endTime={endTime}
+          />
+        </div>
+
+        {/* Editing Controls - Takes up 1 column */}
+        <div className="space-y-6">
+          <TrimVideoControl
+            duration={video.duration}
+            startTime={startTime}
+            endTime={endTime}
+            onStartTimeChange={setStartTime}
+            onEndTimeChange={setEndTime}
+            onApplyTrim={handleApplyTrim}
+            isProcessing={isProcessing}
+          />
+        </div>
       </div>
     </div>
   );

@@ -1,54 +1,95 @@
 
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Play, Pause } from "lucide-react";
-import type { Database } from "@/integrations/supabase/types";
-
-type VideoJob = Database["public"]["Tables"]["video_jobs"]["Row"];
 
 interface VideoPreviewPanelProps {
-  video: VideoJob;
-  isPlaying: boolean;
-  onPlayPause: () => void;
-  videoRef: React.RefObject<HTMLVideoElement>;
+  videoUrl: string;
+  startTime?: number;
+  endTime?: number;
+  playbackSpeed?: number;
+  filter?: string;
 }
 
-const VideoPreviewPanel = ({ video, isPlaying, onPlayPause, videoRef }: VideoPreviewPanelProps) => {
+const VideoPreviewPanel = ({ 
+  videoUrl, 
+  startTime = 0, 
+  endTime,
+  playbackSpeed = 1,
+  filter
+}: VideoPreviewPanelProps) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [duration, setDuration] = useState<number>(0);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleLoadedMetadata = () => {
+      setDuration(video.duration);
+      if (!endTime) {
+        // If no end time is set, use the full video duration
+        video.currentTime = startTime;
+      }
+    };
+
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    
+    return () => {
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+    };
+  }, [videoUrl, endTime, startTime]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.playbackRate = playbackSpeed;
+  }, [playbackSpeed]);
+
+  useEffect(() => {
+    if (!videoRef.current) return;
+    
+    // Set video current time when start time changes
+    videoRef.current.currentTime = startTime;
+  }, [startTime]);
+
+  const getFilterClass = () => {
+    switch (filter) {
+      case 'vintage':
+        return 'sepia brightness-90 contrast-110';
+      case 'cinematic':
+        return 'contrast-125 saturate-150';
+      case 'anime':
+        return 'saturate-200 brightness-110';
+      default:
+        return '';
+    }
+  };
+
   return (
-    <Card className="glass-panel p-6 space-y-4">
-      <div className="relative aspect-video rounded-lg overflow-hidden bg-black/50">
-        {video.output_url ? (
-          <>
-            <video
-              ref={videoRef}
-              src={video.output_url}
-              className="w-full h-full object-contain"
-              onEnded={() => onPlayPause()}
-            />
-            <Button
-              onClick={onPlayPause}
-              variant="ghost"
-              size="icon"
-              className="absolute bottom-4 left-1/2 transform -translate-x-1/2
-                       bg-black/50 hover:bg-black/70 text-white rounded-full w-12 h-12"
-            >
-              {isPlaying ? (
-                <Pause className="h-6 w-6" />
-              ) : (
-                <Play className="h-6 w-6 ml-1" />
-              )}
-            </Button>
-          </>
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <span className="text-sm text-gray-400">No preview available</span>
-          </div>
-        )}
+    <Card className="glass-panel p-4 w-full">
+      <div className="aspect-video relative rounded-lg overflow-hidden bg-black/20">
+        <video
+          ref={videoRef}
+          src={videoUrl}
+          className={`w-full h-full object-contain ${getFilterClass()}`}
+          controls
+          onTimeUpdate={() => {
+            const video = videoRef.current;
+            if (!video) return;
+            
+            // Loop video between start and end times for preview
+            if (endTime && video.currentTime >= endTime) {
+              video.currentTime = startTime;
+            }
+          }}
+        />
       </div>
-      <div className="space-y-2">
-        <h3 className="font-medium text-white">Original Video</h3>
-        <p className="text-sm text-gray-400">{video.prompt}</p>
+      <div className="mt-4 text-sm text-gray-400">
+        <div className="flex justify-between items-center">
+          <span>Preview with current edits applied</span>
+          <span>{Math.floor(duration)}s</span>
+        </div>
       </div>
     </Card>
   );

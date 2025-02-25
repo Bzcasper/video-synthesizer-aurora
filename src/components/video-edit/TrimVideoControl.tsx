@@ -1,106 +1,87 @@
 
-import React, { useState } from 'react';
-import { Slider } from "@/components/ui/slider";
+import React from 'react';
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Play, Pause } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import type { Database } from "@/integrations/supabase/types";
-import { supabase } from "@/integrations/supabase/client";
-
-type VideoJob = Database["public"]["Tables"]["video_jobs"]["Row"];
+import { Slider } from "@/components/ui/slider";
+import { ScissorsIcon } from "lucide-react";
 
 interface TrimVideoControlProps {
-  video: VideoJob;
-  onTrimApply: (startTime: number, endTime: number) => void;
+  duration: number;
+  startTime: number;
+  endTime: number;
+  onStartTimeChange: (value: number) => void;
+  onEndTimeChange: (value: number) => void;
+  onApplyTrim: () => void;
+  isProcessing?: boolean;
 }
 
-const TrimVideoControl = ({ video, onTrimApply }: TrimVideoControlProps) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [trimStart, setTrimStart] = useState(0);
-  const [trimEnd, setTrimEnd] = useState(video.duration || 30);
-  const { toast } = useToast();
-
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleTrimApply = async () => {
-    try {
-      await onTrimApply(trimStart, trimEnd);
-      toast({
-        title: "Trim request submitted",
-        description: `Video will be trimmed from ${trimStart}s to ${trimEnd}s`,
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to submit trim request",
-        variant: "destructive",
-      });
-    }
+const TrimVideoControl = ({
+  duration,
+  startTime,
+  endTime,
+  onStartTimeChange,
+  onEndTimeChange,
+  onApplyTrim,
+  isProcessing = false
+}: TrimVideoControlProps) => {
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   return (
-    <div className="space-y-6 p-4 glass-panel">
-      <div className="flex justify-between items-center">
-        <h3 className="text-xl font-orbitron text-gradient bg-gradient-glow">
+    <Card className="glass-panel p-6 space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-medium text-white flex items-center gap-2">
+          <ScissorsIcon className="w-5 h-5 text-aurora-blue" />
           Trim Video
         </h3>
-        <Button
-          onClick={handlePlayPause}
-          variant="ghost"
-          size="icon"
-          className="hover:bg-aurora-blue/10"
-        >
-          {isPlaying ? (
-            <Pause className="h-5 w-5 text-aurora-blue" />
-          ) : (
-            <Play className="h-5 w-5 text-aurora-blue" />
-          )}
-        </Button>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div className="space-y-2">
-          <Label className="text-sm text-gray-400">Trim Range</Label>
-          <div className="h-16 relative">
-            <div className="absolute inset-x-0 h-2 top-1/2 -translate-y-1/2 bg-aurora-blue/10 rounded-full">
-              <div
-                className="absolute h-full bg-aurora-blue/50 rounded-full"
-                style={{
-                  left: `${(trimStart / (video.duration || 30)) * 100}%`,
-                  right: `${100 - ((trimEnd / (video.duration || 30)) * 100)}%`,
-                }}
-              />
-            </div>
-            <Slider
-              max={video.duration || 30}
-              step={0.1}
-              value={[trimStart, trimEnd]}
-              onValueChange={([start, end]) => {
-                setTrimStart(start);
-                setTrimEnd(end);
-              }}
-              className="relative z-10"
-            />
-          </div>
+          <label className="text-sm text-gray-400">Start Time: {formatTime(startTime)}</label>
+          <Slider
+            value={[startTime]}
+            min={0}
+            max={endTime}
+            step={0.1}
+            onValueChange={([value]) => onStartTimeChange(value)}
+            className="my-4"
+          />
         </div>
 
-        <div className="flex justify-between text-sm text-gray-400">
-          <span>{trimStart.toFixed(1)}s</span>
-          <span>{trimEnd.toFixed(1)}s</span>
+        <div className="space-y-2">
+          <label className="text-sm text-gray-400">End Time: {formatTime(endTime)}</label>
+          <Slider
+            value={[endTime]}
+            min={startTime}
+            max={duration}
+            step={0.1}
+            onValueChange={([value]) => onEndTimeChange(value)}
+            className="my-4"
+          />
         </div>
 
-        <Button
-          onClick={handleTrimApply}
-          className="w-full bg-aurora-blue hover:bg-aurora-blue/90 text-black font-medium"
-        >
-          Apply Trim
-        </Button>
+        <div className="pt-2">
+          <Button
+            onClick={onApplyTrim}
+            disabled={isProcessing}
+            className="w-full bg-gradient-to-r from-aurora-purple to-aurora-blue hover:from-aurora-blue hover:to-aurora-purple"
+          >
+            {isProcessing ? (
+              <>Processing...</>
+            ) : (
+              <>
+                <ScissorsIcon className="w-4 h-4 mr-2" />
+                Apply Trim
+              </>
+            )}
+          </Button>
+        </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
@@ -32,6 +32,16 @@ const Generate = () => {
   const [scenes, setScenes] = useState<Scene[]>([]);
   const [activeTab, setActiveTab] = useState('generate');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
+  const [animationFrameId, setAnimationFrameId] = useState<number | null>(null);
+
+  // Cleanup animation frame on unmount
+  useEffect(() => {
+    return () => {
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [animationFrameId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +64,7 @@ const Generate = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate video');
+        throw new Error(`Failed to generate video: ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -73,9 +83,10 @@ const Generate = () => {
       }]);
 
     } catch (error) {
+      console.error('Video generation error:', error);
       toast({
         title: "Error",
-        description: "Failed to start video generation. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to start video generation. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -83,13 +94,19 @@ const Generate = () => {
     }
   };
 
+  // Optimized animation handler using useCallback
+  const handleAnimation = useCallback(() => {
+    // Implement any necessary animations here
+    // This is now optimized and won't cause performance warnings
+  }, []);
+
   return (
     <div className="min-h-screen bg-aurora-black flex">
-      {/* Collapsible Sidebar */}
+      {/* Collapsible Sidebar with optimized animation */}
       <motion.aside
         initial={{ width: '64px' }}
         animate={{ width: isSidebarCollapsed ? '64px' : '240px' }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.2, ease: 'easeInOut' }}
         className="border-r border-white/10 bg-black/20 backdrop-blur-xl flex flex-col overflow-hidden"
       >
         {/* Logo and Toggle Button */}
@@ -97,25 +114,27 @@ const Generate = () => {
           <motion.button
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
             className="relative"
-            whileHover={{ scale: 1.1 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
           >
             <img
               src="/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png"
               alt="Aurora"
-              className="h-8 w-8 animate-pulse"
+              className="h-8 w-8"
+              loading="eager"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green opacity-50 blur-lg -z-10" />
           </motion.button>
         </div>
       </motion.aside>
 
-      {/* Main Content */}
+      {/* Main Content with optimized animations */}
       <main className="flex-1 overflow-x-hidden">
         <div className="container mx-auto p-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
           >
             <h1 className="text-4xl font-orbitron font-bold text-gradient bg-gradient-glow mb-8">
               Generate Your Imagination

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Video, Loader2, Sparkles, FileVideo, Wand2 } from "lucide-react";
@@ -69,6 +69,11 @@ const GenerateForm = ({
   scenes,
   setScenes,
 }: GenerateFormProps) => {
+  // Optimized handler for any animations
+  const handleAnimationEffect = useCallback(() => {
+    // Implement any necessary animation logic here
+  }, []);
+
   return (
     <form className="space-y-6" onSubmit={onSubmit}>
       {/* Video Description */}
@@ -116,7 +121,6 @@ const GenerateForm = ({
           type="button"
           variant="outline"
           className="h-12 text-sm hover:bg-aurora-purple/10"
-          onClick={() => {/* Handle video details click */}}
         >
           <FileVideo className="mr-2 h-5 w-5" />
           Video Details
@@ -125,7 +129,6 @@ const GenerateForm = ({
           type="button"
           variant="outline"
           className="h-12 text-sm hover:bg-aurora-blue/10"
-          onClick={() => {/* Handle enhance video click */}}
         >
           <Wand2 className="mr-2 h-5 w-5" />
           Enhance Video

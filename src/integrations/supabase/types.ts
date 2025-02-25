@@ -1300,6 +1300,13 @@ export type Database = {
       video_edit_operation: "trim" | "subtitle" | "filter" | "speed"
       video_filter_type: "cinematic" | "vintage" | "anime" | "none"
       video_job_status: "pending" | "processing" | "completed" | "failed"
+      video_operation:
+        | "trim"
+        | "speed"
+        | "filter"
+        | "subtitle"
+        | "crop"
+        | "rotate"
     }
     CompositeTypes: {
       http_header: {

@@ -306,6 +306,44 @@ export type Database = {
         }
         Relationships: []
       }
+      edit_batches: {
+        Row: {
+          created_at: string | null
+          id: string
+          operations: Json[]
+          status: Database["public"]["Enums"]["video_job_status"] | null
+          updated_at: string | null
+          user_id: string
+          video_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          operations: Json[]
+          status?: Database["public"]["Enums"]["video_job_status"] | null
+          updated_at?: string | null
+          user_id: string
+          video_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          operations?: Json[]
+          status?: Database["public"]["Enums"]["video_job_status"] | null
+          updated_at?: string | null
+          user_id?: string
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "edit_batches_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_assets: {
         Row: {
           created_at: string | null
@@ -621,6 +659,59 @@ export type Database = {
           url?: string
         }
         Relationships: []
+      }
+      video_edits: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          id: string
+          operation: Database["public"]["Enums"]["video_edit_operation"]
+          original_video_id: string
+          output_url: string | null
+          parameters: Json
+          processing_completed_at: string | null
+          processing_started_at: string | null
+          status: Database["public"]["Enums"]["video_job_status"] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          operation: Database["public"]["Enums"]["video_edit_operation"]
+          original_video_id: string
+          output_url?: string | null
+          parameters?: Json
+          processing_completed_at?: string | null
+          processing_started_at?: string | null
+          status?: Database["public"]["Enums"]["video_job_status"] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          operation?: Database["public"]["Enums"]["video_edit_operation"]
+          original_video_id?: string
+          output_url?: string | null
+          parameters?: Json
+          processing_completed_at?: string | null
+          processing_started_at?: string | null
+          status?: Database["public"]["Enums"]["video_job_status"] | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_edits_original_video_id_fkey"
+            columns: ["original_video_id"]
+            isOneToOne: false
+            referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       video_jobs: {
         Row: {
@@ -1206,6 +1297,8 @@ export type Database = {
     }
     Enums: {
       subscription_tier: "free" | "pro" | "enterprise"
+      video_edit_operation: "trim" | "subtitle" | "filter" | "speed"
+      video_filter_type: "cinematic" | "vintage" | "anime" | "none"
       video_job_status: "pending" | "processing" | "completed" | "failed"
     }
     CompositeTypes: {

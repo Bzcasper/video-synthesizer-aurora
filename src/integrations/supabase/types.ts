@@ -673,40 +673,31 @@ export type Database = {
       }
       tasks: {
         Row: {
-          completed_at: string | null
-          created_at: string | null
+          created_at: string
           description: string | null
           id: string
-          metadata: Json | null
-          status: Database["public"]["Enums"]["task_status"] | null
-          task_type: string
+          priority: string
+          status: string
           title: string
-          updated_at: string | null
-          user_id: string
+          updated_at: string
         }
         Insert: {
-          completed_at?: string | null
-          created_at?: string | null
+          created_at?: string
           description?: string | null
           id?: string
-          metadata?: Json | null
-          status?: Database["public"]["Enums"]["task_status"] | null
-          task_type: string
+          priority?: string
+          status?: string
           title: string
-          updated_at?: string | null
-          user_id: string
+          updated_at?: string
         }
         Update: {
-          completed_at?: string | null
-          created_at?: string | null
+          created_at?: string
           description?: string | null
           id?: string
-          metadata?: Json | null
-          status?: Database["public"]["Enums"]["task_status"] | null
-          task_type?: string
+          priority?: string
+          status?: string
           title?: string
-          updated_at?: string | null
-          user_id?: string
+          updated_at?: string
         }
         Relationships: []
       }

@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Video, Sparkles, Film, Clock, Text, Mic } from 'lucide-react';
@@ -8,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { type Database } from "@/integrations/supabase/types";
@@ -30,6 +30,13 @@ interface Enhancement {
   description: string;
   icon: React.ReactNode;
   comingSoon?: boolean;
+}
+
+interface EnhancementProgress {
+  id: string;
+  progress: number;
+  status: VideoJobStatus;
+  estimated_completion_time: string | null;
 }
 
 const enhancements: Enhancement[] = [
@@ -78,6 +85,7 @@ export const VideoEnhancementSelector = () => {
   const [selectedFilter, setSelectedFilter] = useState<FilterType>("none");
   const [speedFactor, setSpeedFactor] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [enhancementProgress, setEnhancementProgress] = useState<Record<string, EnhancementProgress>>({});
 
   // Fetch user's videos
   const { data: videos, isLoading } = useQuery({
@@ -101,6 +109,53 @@ export const VideoEnhancementSelector = () => {
     }
   });
 
+  useEffect(() => {
+    // Subscribe to real-time updates for video enhancements
+    const channel = supabase
+      .channel('video-enhancements')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'video_enhancements'
+        },
+        (payload) => {
+          const { new: newData } = payload;
+          if (newData) {
+            setEnhancementProgress(prev => ({
+              ...prev,
+              [newData.id]: {
+                id: newData.id,
+                progress: newData.progress || 0,
+                status: newData.status,
+                estimated_completion_time: newData.estimated_completion_time
+              }
+            }));
+
+            // Show toast notifications for important status changes
+            if (newData.status === 'completed') {
+              toast({
+                title: "Enhancement Complete",
+                description: "Your video enhancement has been successfully processed.",
+              });
+            } else if (newData.status === 'failed') {
+              toast({
+                title: "Enhancement Failed",
+                description: newData.error_message || "An error occurred during video enhancement.",
+                variant: "destructive"
+              });
+            }
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
   const handleSubmitEnhancement = async () => {
     if (!selectedVideo || !selectedEnhancement) return;
 
@@ -114,6 +169,7 @@ export const VideoEnhancementSelector = () => {
           filter_type: selectedEnhancement.id === 'filter' ? selectedFilter : null,
           speed_factor: selectedEnhancement.id === 'speed_adjustment' ? speedFactor : null,
           status: 'pending',
+          progress: 0,
           user_id: (await supabase.auth.getUser()).data.user?.id,
         })
         .select()
@@ -123,8 +179,21 @@ export const VideoEnhancementSelector = () => {
 
       toast({
         title: "Enhancement submitted",
-        description: "Your video enhancement is being processed",
+        description: "Your video enhancement is being processed. You'll see progress updates in real-time.",
       });
+
+      // Initialize progress tracking for the new enhancement
+      if (data) {
+        setEnhancementProgress(prev => ({
+          ...prev,
+          [data.id]: {
+            id: data.id,
+            progress: 0,
+            status: 'pending',
+            estimated_completion_time: null
+          }
+        }));
+      }
 
       // Reset selections after successful submission
       setSelectedEnhancement(null);
@@ -227,6 +296,25 @@ export const VideoEnhancementSelector = () => {
               </Tooltip>
             ))}
           </div>
+
+          {Object.values(enhancementProgress).map((progress) => (
+            <Card key={progress.id} className="p-4 space-y-2">
+              <div className="flex justify-between items-center">
+                <div className="space-y-1">
+                  <p className="text-sm font-medium">
+                    Enhancement {progress.status === 'completed' ? 'Complete' : 'In Progress'}
+                  </p>
+                  {progress.estimated_completion_time && progress.status === 'processing' && (
+                    <p className="text-xs text-muted-foreground">
+                      Estimated completion: {new Date(progress.estimated_completion_time).toLocaleTimeString()}
+                    </p>
+                  )}
+                </div>
+                <span className="text-sm font-medium">{progress.progress}%</span>
+              </div>
+              <Progress value={progress.progress} className="h-2" />
+            </Card>
+          ))}
 
           {selectedEnhancement && (
             <div className="space-y-4">

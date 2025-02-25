@@ -1011,11 +1011,13 @@ export type Database = {
           created_at: string | null
           enhancement_type: Database["public"]["Enums"]["video_enhancement_type"]
           error_message: string | null
+          estimated_completion_time: string | null
           filter_type: Database["public"]["Enums"]["video_filter_type"] | null
           id: string
           metadata: Json | null
           output_url: string | null
           priority: string | null
+          progress: number | null
           speed_factor: number | null
           started_at: string | null
           status: Database["public"]["Enums"]["video_job_status"] | null
@@ -1031,11 +1033,13 @@ export type Database = {
           created_at?: string | null
           enhancement_type: Database["public"]["Enums"]["video_enhancement_type"]
           error_message?: string | null
+          estimated_completion_time?: string | null
           filter_type?: Database["public"]["Enums"]["video_filter_type"] | null
           id?: string
           metadata?: Json | null
           output_url?: string | null
           priority?: string | null
+          progress?: number | null
           speed_factor?: number | null
           started_at?: string | null
           status?: Database["public"]["Enums"]["video_job_status"] | null
@@ -1051,11 +1055,13 @@ export type Database = {
           created_at?: string | null
           enhancement_type?: Database["public"]["Enums"]["video_enhancement_type"]
           error_message?: string | null
+          estimated_completion_time?: string | null
           filter_type?: Database["public"]["Enums"]["video_filter_type"] | null
           id?: string
           metadata?: Json | null
           output_url?: string | null
           priority?: string | null
+          progress?: number | null
           speed_factor?: number | null
           started_at?: string | null
           status?: Database["public"]["Enums"]["video_job_status"] | null

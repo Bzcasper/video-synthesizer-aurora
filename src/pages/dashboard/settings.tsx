@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,10 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { Copy, Eye, EyeOff, KeyRound, RefreshCw, User, Bell, Wallet, Settings, Zap } from "lucide-react";
+import { Copy, Eye, EyeOff, KeyRound, RefreshCw, User, Bell, Wallet, Settings as SettingsIcon, Zap } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
-const Settings = () => {
+const SettingsPage = () => {
   const [showApiKey, setShowApiKey] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [settings, setSettings] = useState({
@@ -80,19 +79,19 @@ const Settings = () => {
       <Tabs defaultValue="account" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5 glass-panel">
           <TabsTrigger value="account" className="flex gap-2">
-            <User className="w-4 h-4" /> Account
+            <User size={16} /> Account
           </TabsTrigger>
           <TabsTrigger value="api" className="flex gap-2">
-            <KeyRound className="w-4 h-4" /> API
+            <KeyRound size={16} /> API
           </TabsTrigger>
           <TabsTrigger value="preferences" className="flex gap-2">
-            <Settings className="w-4 h-4" /> Preferences
+            <SettingsIcon size={16} /> Preferences
           </TabsTrigger>
           <TabsTrigger value="billing" className="flex gap-2">
-            <Wallet className="w-4 h-4" /> Billing
+            <Wallet size={16} /> Billing
           </TabsTrigger>
           <TabsTrigger value="notifications" className="flex gap-2">
-            <Bell className="w-4 h-4" /> Notifications
+            <Bell size={16} /> Notifications
           </TabsTrigger>
         </TabsList>
 
@@ -291,4 +290,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default SettingsPage;

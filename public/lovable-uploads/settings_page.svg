@@ -1,0 +1,174 @@
+<!-- settings-page.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" width="100%" height="100%">
+  <!-- Gradient and effect definitions -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a0b2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d0618;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="glow-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9046FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00C896;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="glow-effect" height="130%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="glow" />
+      <feComposite in="SourceGraphic" in2="glow" operator="over" />
+    </filter>
+    
+    <pattern id="grid-pattern" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#3D1E6B" stroke-width="0.5"/>
+    </pattern>
+    
+    <linearGradient id="card-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#191230;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0F0820;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="active-toggle" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9046FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7532DB;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background elements -->
+  <rect width="100%" height="100%" fill="url(#bg-gradient)" />
+  <rect width="100%" height="100%" fill="url(#grid-pattern)" opacity="0.2" />
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="100%" height="70" fill="#0A0614" opacity="0.8" />
+  <text x="80" y="45" font-family="Arial, sans-serif" font-size="24" font-weight="bold" 
+        fill="#ffffff">Settings</text>
+  
+  <!-- Left navigation sidebar -->
+  <rect x="0" y="70" width="300" height="830" fill="#0D0618" opacity="0.9" />
+  
+  <!-- Nav items -->
+  <g transform="translate(40, 120)">
+    <circle cx="12" cy="12" r="6" fill="#9046FF" />
+    <text x="40" y="17" font-family="Arial, sans-serif" font-size="16" fill="#ffffff">Account Settings</text>
+  </g>
+  
+  <g transform="translate(40, 170)">
+    <circle cx="12" cy="12" r="6" fill="#ffffff" opacity="0.4" />
+    <text x="40" y="17" font-family="Arial, sans-serif" font-size="16" fill="#8A8AA3">API Integrations</text>
+  </g>
+  
+  <g transform="translate(40, 220)">
+    <circle cx="12" cy="12" r="6" fill="#ffffff" opacity="0.4" />
+    <text x="40" y="17" font-family="Arial, sans-serif" font-size="16" fill="#8A8AA3">Preferences</text>
+  </g>
+  
+  <g transform="translate(40, 270)">
+    <circle cx="12" cy="12" r="6" fill="#ffffff" opacity="0.4" />
+    <text x="40" y="17" font-family="Arial, sans-serif" font-size="16" fill="#8A8AA3">Billing</text>
+  </g>
+  
+  <g transform="translate(40, 320)">
+    <circle cx="12" cy="12" r="6" fill="#ffffff" opacity="0.4" />
+    <text x="40" y="17" font-family="Arial, sans-serif" font-size="16" fill="#8A8AA3">Notifications</text>
+  </g>
+  
+  <!-- Main content area -->
+  <g transform="translate(350, 120)">
+    <!-- Section title -->
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="28" font-weight="bold" 
+          fill="#ffffff">Account Settings</text>
+    <text x="0" y="30" font-family="Arial, sans-serif" font-size="16" 
+          fill="#8A8AA3">Manage your account preferences and API access</text>
+    
+    <!-- Profile section -->
+    <rect x="0" y="70" width="1040" height="200" rx="10" ry="10" 
+          fill="url(#card-gradient)" stroke="#3D1E6B" stroke-width="1" />
+          
+    <text x="30" y="110" font-family="Arial, sans-serif" font-size="20" font-weight="bold" 
+          fill="#ffffff">Profile Information</text>
+          
+    <!-- Profile form -->
+    <g transform="translate(30, 130)">
+      <text x="0" y="20" font-family="Arial, sans-serif" font-size="14" fill="#8A8AA3">Username</text>
+      <rect x="0" y="30" width="300" height="40" rx="6" ry="6" 
+            fill="#0D0618" stroke="#3D1E6B" stroke-width="1" />
+      <text x="15" y="55" font-family="Arial, sans-serif" font-size="14" fill="#ffffff">quantum_creator</text>
+      
+      <text x="340" y="20" font-family="Arial, sans-serif" font-size="14" fill="#8A8AA3">Email</text>
+      <rect x="340" y="30" width="300" height="40" rx="6" ry="6" 
+            fill="#0D0618" stroke="#3D1E6B" stroke-width="1" />
+      <text x="355" y="55" font-family="Arial, sans-serif" font-size="14" fill="#ffffff">creator@example.com</text>
+      
+      <text x="680" y="20" font-family="Arial, sans-serif" font-size="14" fill="#8A8AA3">Account Type</text>
+      <rect x="680" y="30" width="300" height="40" rx="6" ry="6" 
+            fill="#0D0618" stroke="#3D1E6B" stroke-width="1" />
+      <text x="695" y="55" font-family="Arial, sans-serif" font-size="14" fill="#00C896">Pro</text>
+    </g>
+    
+    <!-- Save button -->
+    <rect x="30" y="210" width="160" height="40" rx="20" ry="20" 
+          fill="url(#glow-gradient)" filter="url(#glow-effect)" />
+    <text x="110" y="235" font-family="Arial, sans-serif" font-size="14" font-weight="bold" 
+          fill="#0A0614" text-anchor="middle">Update Profile</text>
+          
+    <!-- API section -->
+    <rect x="0" y="300" width="1040" height="250" rx="10" ry="10" 
+          fill="url(#card-gradient)" stroke="#3D1E6B" stroke-width="1" />
+          
+    <text x="30" y="340" font-family="Arial, sans-serif" font-size="20" font-weight="bold" 
+          fill="#ffffff">API Access</text>
+          
+    <!-- API key display -->
+    <g transform="translate(30, 360)">
+      <text x="0" y="20" font-family="Arial, sans-serif" font-size="14" fill="#8A8AA3">API Key</text>
+      <rect x="0" y="30" width="760" height="40" rx="6" ry="6" 
+            fill="#0D0618" stroke="#3D1E6B" stroke-width="1" />
+      <text x="15" y="55" font-family="Arial, sans-serif" font-size="14" fill="#ffffff">••••••••••••••••••••••••••••••••••••</text>
+      
+      <rect x="780" y="30" width="120" height="40" rx="20" ry="20" 
+            fill="#1A0D2C" stroke="#3D1E6B" stroke-width="1" />
+      <text x="840" y="55" font-family="Arial, sans-serif" font-size="14" fill="#9046FF" text-anchor="middle">Show</text>
+      
+      <rect x="920" y="30" width="120" height="40" rx="20" ry="20" 
+            fill="#1A0D2C" stroke="#3D1E6B" stroke-width="1" />
+      <text x="980" y="55" font-family="Arial, sans-serif" font-size="14" fill="#00C896" text-anchor="middle">Regenerate</text>
+    </g>
+    
+    <!-- Rate limits -->
+    <g transform="translate(30, 440)">
+      <text x="0" y="20" font-family="Arial, sans-serif" font-size="14" fill="#8A8AA3">Rate Limits</text>
+      <text x="0" y="50" font-family="Arial, sans-serif" font-size="14" fill="#ffffff">Requests per minute: 60</text>
+      <text x="0" y="80" font-family="Arial, sans-serif" font-size="14" fill="#ffffff">Daily limit: 10,000</text>
+    </g>
+    
+    <!-- Advanced options section -->
+    <rect x="0" y="580" width="1040" height="200" rx="10" ry="10" 
+          fill="url(#card-gradient)" stroke="#3D1E6B" stroke-width="1" />
+          
+    <text x="30" y="620" font-family="Arial, sans-serif" font-size="20" font-weight="bold" 
+          fill="#ffffff">Advanced Options</text>
+          
+    <!-- Toggle switches -->
+    <g transform="translate(30, 640)">
+      <text x="0" y="20" font-family="Arial, sans-serif" font-size="16" fill="#ffffff">Enable beta features</text>
+      
+      <!-- Toggle on -->
+      <rect x="700" y="10" width="60" height="30" rx="15" ry="15" 
+            fill="url(#active-toggle)" filter="url(#glow-effect)" />
+      <circle cx="745" cy="25" r="12" fill="#ffffff" />
+      
+      <text x="0" y="80" font-family="Arial, sans-serif" font-size="16" fill="#ffffff">Developer mode</text>
+      
+      <!-- Toggle off -->
+      <rect x="700" y="70" width="60" height="30" rx="15" ry="15" 
+            fill="#1A0D2C" stroke="#3D1E6B" stroke-width="1" />
+      <circle cx="715" cy="85" r="12" fill="#ffffff" />
+      
+      <text x="0" y="140" font-family="Arial, sans-serif" font-size="16" fill="#ffffff">Enhanced logging</text>
+      
+      <!-- Toggle off -->
+      <rect x="700" y="130" width="60" height="30" rx="15" ry="15" 
+            fill="#1A0D2C" stroke="#3D1E6B" stroke-width="1" />
+      <circle cx="715" cy="145" r="12" fill="#ffffff" />
+    </g>
+  </g>
+</svg>

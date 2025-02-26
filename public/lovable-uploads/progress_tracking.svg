@@ -1,0 +1,92 @@
+<!-- progress-tracker.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="panel-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#151028;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0A0720;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9046FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00C896;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="glow-soft" height="130%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
+      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 12 -6" result="glow" />
+      <feComposite in="SourceGraphic" in2="glow" operator="over" />
+    </filter>
+    
+    <!-- Animation for processing -->
+    <linearGradient id="shimmer" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00C896;stop-opacity:0.1">
+        <animate attributeName="offset" values="0;1" dur="2s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="20%" style="stop-color:#00C896;stop-opacity:0.3">
+        <animate attributeName="offset" values="0.2;1.2" dur="2s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="40%" style="stop-color:#00C896;stop-opacity:0.1">
+        <animate attributeName="offset" values="0.4;1.4" dur="2s" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+  </defs>
+  
+  <!-- Panel background -->
+  <rect width="100%" height="100%" rx="10" ry="10" fill="url(#panel-bg)" 
+        stroke="#2D1E5B" stroke-width="1.5" />
+  
+  <!-- Title -->
+  <text x="30" y="40" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#ffffff">Processing Status</text>
+  
+  <!-- Progress indicator -->
+  <g transform="translate(30, 70)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="16" fill="#9046FF">Overall Progress: 65%</text>
+    
+    <rect x="0" y="20" width="540" height="20" rx="10" ry="10" 
+          fill="#0D0618" stroke="#2D1E5B" stroke-width="1" />
+    <rect x="0" y="20" width="351" height="20" rx="10" ry="10" 
+          fill="url(#progress-gradient)" filter="url(#glow-soft)" />
+    <rect x="0" y="20" width="540" height="20" rx="10" ry="10" 
+          fill="url(#shimmer)" />
+  </g>
+  
+  <!-- Current stage -->
+  <g transform="translate(30, 120)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="14" fill="#ffffff">Current Stage: Enhancing Frames</text>
+    
+    <rect x="0" y="20" width="540" height="60" rx="8" ry="8" 
+          fill="#120921" stroke="#2D1E5B" stroke-width="1" />
+    <text x="20" y="40" font-family="Arial, sans-serif" font-size="14" fill="#ffffff">Processing frame 157/240</text>
+    <text x="20" y="65" font-family="Arial, sans-serif" font-size="12" fill="#8A8AA3">Applying style transfer and enhancing details</text>
+    
+    <rect x="410" y="30" width="100" height="30" rx="15" ry="15" 
+          fill="#0D0618" stroke="#2D1E5B" stroke-width="1" />
+    <text x="460" y="50" font-family="Arial, sans-serif" font-size="12" fill="#9046FF" text-anchor="middle">~2 min left</text>
+  </g>
+  
+  <!-- Processing steps -->
+  <g transform="translate(30, 210)">
+    <!-- Step 1: Completed -->
+    <circle cx="15" cy="15" r="15" fill="#00C896" />
+    <text x="40" y="20" font-family="Arial, sans-serif" font-size="14" fill="#ffffff">Frame Generation</text>
+    
+    <!-- Step 2: In Progress -->
+    <circle cx="15" cy="55" r="15" fill="#9046FF" filter="url(#glow-soft)">
+      <animate attributeName="opacity" values="1;0.6;1" dur="2s" repeatCount="indefinite" />
+    </circle>
+    <text x="40" y="60" font-family="Arial, sans-serif" font-size="14" fill="#ffffff">Enhancing Frames</text>
+    
+    <!-- Step 3: Pending -->
+    <circle cx="15" cy="95" r="15" fill="#1A102C" stroke="#2D1E5B" stroke-width="1.5" />
+    <text x="40" y="100" font-family="Arial, sans-serif" font-size="14" fill="#8A8AA3">Composing Video</text>
+    
+    <!-- Step 4: Pending -->
+    <circle cx="15" cy="135" r="15" fill="#1A102C" stroke="#2D1E5B" stroke-width="1.5" />
+    <text x="40" y="140" font-family="Arial, sans-serif" font-size="14" fill="#8A8AA3">Finalizing Output</text>
+    
+    <!-- Cancel button -->
+    <rect x="430" y="110" width="110" height="40" rx="20" ry="20" 
+          fill="transparent" stroke="#FF5277" stroke-width="1.5" />
+    <text x="485" y="135" font-family="Arial, sans-serif" font-size="14" fill="#FF5277" text-anchor="middle">Cancel</text>
+  </g>
+</svg>

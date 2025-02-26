@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="api-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9046FF" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#00C896" stop-opacity="1"/>
+    </linearGradient>
+    <filter id="api-glow" height="130%" width="130%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 12 -3" result="glow"/>
+      <feComposite in="SourceGraphic" in2="glow" operator="over"/>
+    </filter>
+  </defs>
+  
+  <!-- Connection nodes -->
+  <circle cx="18" cy="18" r="6" fill="#141029" stroke="url(#api-gradient)" stroke-width="1.5" filter="url(#api-glow)"/>
+  <circle cx="18" cy="46" r="6" fill="#141029" stroke="url(#api-gradient)" stroke-width="1.5" filter="url(#api-glow)"/>
+  <circle cx="46" cy="18" r="6" fill="#141029" stroke="url(#api-gradient)" stroke-width="1.5" filter="url(#api-glow)"/>
+  <circle cx="46" cy="46" r="6" fill="#141029" stroke="url(#api-gradient)" stroke-width="1.5" filter="url(#api-glow)"/>
+  
+  <!-- Connection lines -->
+  <line x1="18" y1="24" x2="18" y2="40" stroke="url(#api-gradient)" stroke-width="2" filter="url(#api-glow)"/>
+  <line x1="24" y1="18" x2="40" y2="18" stroke="url(#api-gradient)" stroke-width="2" filter="url(#api-glow)"/>
+  <line x1="46" y1="24" x2="46" y2="40" stroke="url(#api-gradient)" stroke-width="2" filter="url(#api-glow)"/>
+  <line x1="24" y1="46" x2="40" y2="46" stroke="url(#api-gradient)" stroke-width="2" filter="url(#api-glow)"/>
+  
+  <!-- API text -->
+  <text x="16" y="21" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF" text-anchor="middle">API</text>
+  <text x="46" y="21" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF" text-anchor="middle">SDK</text>
+  <text x="18" y="49" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF" text-anchor="middle">DB</text>
+  <text x="46" y="49" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF" text-anchor="middle">APP</text>
+  
+  <!-- Data transfer pulses -->
+  <circle cx="18" cy="32" r="2" fill="#00E0B0">
+    <animate attributeName="cy" values="24;40;24" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  
+  <circle cx="32" cy="18" r="2" fill="#9046FF">
+    <animate attributeName="cx" values="24;40;24" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite"/>
+  </circle>
+</svg>

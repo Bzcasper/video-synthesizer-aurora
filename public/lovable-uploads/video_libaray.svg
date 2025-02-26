@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="library-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9046FF" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#00C896" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="library-gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00C896" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#9046FF" stop-opacity="1"/>
+    </linearGradient>
+    <filter id="library-glow" height="130%" width="130%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 12 -3" result="glow"/>
+      <feComposite in="SourceGraphic" in2="glow" operator="over"/>
+    </filter>
+  </defs>
+  
+  <!-- Video cards -->
+  <rect x="10" y="15" width="20" height="14" rx="2" ry="2" fill="#141029" stroke="url(#library-gradient)" stroke-width="1.5" filter="url(#library-glow)"/>
+  <rect x="34" y="15" width="20" height="14" rx="2" ry="2" fill="#141029" stroke="url(#library-gradient)" stroke-width="1.5" filter="url(#library-glow)"/>
+  <rect x="10" y="35" width="20" height="14" rx="2" ry="2" fill="#141029" stroke="url(#library-gradient)" stroke-width="1.5" filter="url(#library-glow)"/>
+  <rect x="34" y="35" width="20" height="14" rx="2" ry="2" fill="#141029" stroke="url(#library-gradient)" stroke-width="1.5" filter="url(#library-glow)"/>
+  
+  <!-- Play icons -->
+  <path d="M17,22 L23,22 L20,19 Z" fill="url(#library-gradient)" filter="url(#library-glow)"/>
+  <path d="M41,22 L47,22 L44,19 Z" fill="url(#library-gradient2)" filter="url(#library-glow)"/>
+  <path d="M17,42 L23,42 L20,39 Z" fill="url(#library-gradient2)" filter="url(#library-glow)"/>
+  <path d="M41,42 L47,42 L44,39 Z" fill="url(#library-gradient)" filter="url(#library-glow)"/>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="help-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9046FF" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#00C896" stop-opacity="1"/>
+    </linearGradient>
+    <filter id="help-glow" height="130%" width="130%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 12 -3" result="glow"/>
+      <feComposite in="SourceGraphic" in2="glow" operator="over"/>
+    </filter>
+  </defs>
+  
+  <!-- Question mark circle -->
+  <circle cx="32" cy="32" r="20" fill="#141029" stroke="url(#help-gradient)" stroke-width="2" filter="url(#help-glow)"/>
+  
+  <!-- Question mark -->
+  <path d="M32,38 L32,36 C32,33 35,32 35,29 C35,26.5 33,24 30,24 C27,24 25,27 25,29" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="32" cy="44" r="2" fill="#FFFFFF"/>
+  
+  <!-- Support rays -->
+  <path d="M32,12 L32,16" stroke="#00E0B0" stroke-width="2" stroke-linecap="round" filter="url(#help-glow)"/>
+  <path d="M32,48 L32,52" stroke="#00E0B0" stroke-width="2" stroke-linecap="round" filter="url(#help-glow)"/>
+  <path d="M12,32 L16,32" stroke="#00E0B0" stroke-width="2" stroke-linecap="round" filter="url(#help-glow)"/>
+  <path d="M48,32 L52,32" stroke="#00E0B0" stroke-width="2" stroke-linecap="round" filter="url(#help-glow)"/>
+  
+  <path d="M18,18 L21,21" stroke="#00E0B0" stroke-width="2" stroke-linecap="round" filter="url(#help-glow)"/>
+  <path d="M43,43 L46,46" stroke="#00E0B0" stroke-width="2" stroke-linecap="round" filter="url(#help-glow)"/>
+  <path d="M18,46 L21,43" stroke="#00E0B0" stroke-width="2" stroke-linecap="round" filter="url(#help-glow)"/>
+  <path d="M43,21 L46,18" stroke="#00E0B0" stroke-width="2" stroke-linecap="round" filter="url(#help-glow)"/>
+</svg>

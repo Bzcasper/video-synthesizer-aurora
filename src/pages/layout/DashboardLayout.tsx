@@ -1,14 +1,16 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Settings, Video, Home, LogOut, PlusCircle } from 'lucide-react';
+import { Settings, Video, Home, LogOut, PlusCircle, Menu } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
 
   const handleLogout = async () => {
     setIsTransitioning(true);
@@ -27,8 +29,18 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="min-h-screen bg-aurora-black flex">
+      {/* Mobile menu button */}
+      <Button
+        variant="ghost"
+        className="fixed top-4 left-4 z-50 md:hidden"
+        onClick={() => setSidebarOpen(!isSidebarOpen)}
+      >
+        <Menu className="h-6 w-6" />
+      </Button>
+
       {/* Sidebar */}
-      <aside className="w-64 border-r border-white/10 bg-black/20 backdrop-blur-xl">
+      <aside className={`fixed md:static w-64 h-full border-r border-white/10 bg-black/20 backdrop-blur-xl transform transition-transform duration-300 z-40 
+                        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

@@ -11,6 +11,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { ErrorMessage } from "@/components/ui/error-message";
 import { EmptyVideos } from "@/components/video/EmptyVideos";
 import { type Database } from "@/integrations/supabase/types";
+import { Plus } from 'lucide-react';
 
 type VideoJobStatus = Database["public"]["Enums"]["video_job_status"];
 type SortOption = 'date-desc' | 'date-asc' | 'duration-desc' | 'duration-asc';
@@ -81,12 +82,17 @@ const VideosPage = () => {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-orbitron font-bold text-gradient bg-gradient-glow">My Videos</h1>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 className="text-3xl md:text-4xl font-orbitron font-bold text-gradient bg-gradient-glow">
+          My Videos
+        </h1>
         <Button
           onClick={() => navigate('/dashboard/generate')}
-          className="bg-gradient-to-r from-aurora-purple to-aurora-blue hover:from-aurora-blue hover:to-aurora-purple text-white shadow-neon transform transition-all duration-300 hover:scale-105"
+          className="w-full sm:w-auto bg-gradient-to-r from-aurora-purple to-aurora-blue 
+                   hover:from-aurora-blue hover:to-aurora-purple text-white shadow-neon 
+                   transform transition-all duration-300 hover:scale-105"
         >
+          <Plus className="mr-2 h-4 w-4" />
           Generate New Video
         </Button>
       </div>
@@ -99,7 +105,7 @@ const VideosPage = () => {
       />
 
       {videos && videos.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {videos.map((video) => (
             <VideoCard key={video.id} video={video} />
           ))}

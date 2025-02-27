@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Settings, Video, Home, LogOut, PlusCircle, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import CustomIcon from '@/components/ui/custom-icon';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
@@ -19,10 +20,10 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   const navItems = [
-    { icon: Home, label: 'Home', path: '/dashboard' },
-    { icon: PlusCircle, label: 'Generate', path: '/dashboard/generate' },
-    { icon: Video, label: 'My Videos', path: '/dashboard/videos' },
-    { icon: Settings, label: 'Settings', path: '/dashboard/settings' },
+    { icon: 'home', label: 'Home', path: '/dashboard' },
+    { icon: 'generate', label: 'Generate', path: '/dashboard/generate' },
+    { icon: 'videos', label: 'My Videos', path: '/dashboard/videos' },
+    { icon: 'settings', label: 'Settings', path: '/dashboard/settings' },
   ];
 
   const isActivePath = (path: string) => location.pathname === path;
@@ -80,7 +81,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                  <item.icon className="h-5 w-5 mr-3" />
+                  <CustomIcon name={item.icon} className="h-5 w-5 mr-3" />
                   {item.label}
                   {isActivePath(item.path) && (
                     <motion.div
@@ -103,7 +104,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <LogOut className="h-5 w-5 mr-3" />
+            <CustomIcon name="logout" className="h-5 w-5 mr-3" />
             Logout
           </motion.button>
         </nav>

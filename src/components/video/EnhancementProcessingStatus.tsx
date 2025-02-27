@@ -8,7 +8,12 @@ export const EnhancementProcessingStatus: React.FC = () => {
   const { enhancementProgress } = useVideoEnhancements();
   
   return (
-    <div className="space-y-4">
+    <div 
+      className="space-y-4" 
+      aria-live="polite" 
+      aria-atomic="true"
+      role="status"
+    >
       <EnhancementProcessingPanel />
     </div>
   );

@@ -21,16 +21,18 @@ export const EnhancementSubmitButton: React.FC<EnhancementSubmitButtonProps> = (
       id="enhance-video-button"
       name="enhance-video-button"
       aria-label="Enhance selected video"
+      aria-busy={isSubmitting}
+      type="button"
     >
       {isSubmitting ? (
         <>
-          <LoadingSpinner className="mr-2" />
-          Processing...
+          <LoadingSpinner className="mr-2" aria-hidden="true" />
+          <span>Processing...</span>
         </>
       ) : (
         <>
-          <Sparkles className="mr-2" />
-          Enhance Video
+          <Sparkles className="mr-2" aria-hidden="true" />
+          <span>Enhance Video</span>
         </>
       )}
     </Button>

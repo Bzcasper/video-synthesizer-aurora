@@ -20,9 +20,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   const navItems = [
-    { icon: 'home', label: 'Home', path: '/dashboard' },
-    { icon: 'generate', label: 'Generate', path: '/dashboard/generate' },
+    { icon: 'home', label: 'Dashboard', path: '/dashboard' },
+    { icon: 'generate', label: 'Generate Video', path: '/dashboard/generate' },
+    { icon: 'enhance', label: 'Enhance Video', path: '/dashboard/enhance' },
+    { icon: 'batch', label: 'Batch Queue', path: '/dashboard/batch' },
     { icon: 'videos', label: 'My Videos', path: '/dashboard/videos' },
+    { icon: 'stats', label: 'Processing Stats', path: '/dashboard/stats' },
     { icon: 'settings', label: 'Settings', path: '/dashboard/settings' },
   ];
 
@@ -64,7 +67,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           </Link>
         </motion.div>
 
-        <nav className="mt-6">
+        <nav className="mt-6 space-y-1">
           <AnimatePresence>
             {navItems.map((item, index) => (
               <motion.div
@@ -81,7 +84,9 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                  <CustomIcon name={item.icon} className="h-5 w-5 mr-3" />
+                  <div className={`mr-3 flex items-center justify-center w-7 h-7 rounded-md ${isActivePath(item.path) ? 'bg-aurora-blue/20' : 'bg-white/5'}`}>
+                    <CustomIcon name={item.icon} className={`h-4 w-4 ${isActivePath(item.path) ? 'text-aurora-blue' : 'text-gray-400'}`} />
+                  </div>
                   {item.label}
                   {isActivePath(item.path) && (
                     <motion.div
@@ -96,18 +101,22 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               </motion.div>
             ))}
           </AnimatePresence>
+        </nav>
 
+        <div className="absolute bottom-8 w-full px-6">
           <motion.button
             onClick={handleLogout}
-            className="w-full flex items-center px-6 py-3 text-sm font-medium text-gray-400
-                     hover:text-white hover:bg-white/5 transition-colors"
+            className="w-full flex items-center px-4 py-3 text-sm font-medium text-gray-400
+                     hover:text-white hover:bg-white/5 transition-colors rounded-md"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <CustomIcon name="logout" className="h-5 w-5 mr-3" />
+            <div className="mr-3 flex items-center justify-center w-7 h-7 rounded-md bg-white/5">
+              <CustomIcon name="logout" className="h-4 w-4 text-gray-400" />
+            </div>
             Logout
           </motion.button>
-        </nav>
+        </div>
       </aside>
 
       {/* Main content */}

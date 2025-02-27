@@ -1,5 +1,5 @@
 
-import { Filter, ArrowUpDown } from "lucide-react";
+import { Filter, ArrowUpDown, SortAsc, SortDesc } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { type Database } from "@/integrations/supabase/types";
 
 type VideoJobStatus = Database["public"]["Enums"]["video_job_status"];
-type SortOption = 'date-desc' | 'date-asc' | 'duration-desc' | 'duration-asc';
+type SortOption = 'date-desc' | 'date-asc' | 'duration-desc' | 'duration-asc' | 'title-asc' | 'title-desc';
 type StatusFilter = 'all' | VideoJobStatus;
 
 interface VideoFiltersProps {
@@ -38,7 +38,7 @@ export const VideoFilters = ({
           <SelectTrigger id="status-filter" name="status-filter" className="w-[180px] bg-black/50 border-white/10">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-black/90 border-white/10">
             <SelectItem value="all">All Status</SelectItem>
             <SelectItem value="completed">Completed</SelectItem>
             <SelectItem value="processing">Processing</SelectItem>
@@ -57,11 +57,37 @@ export const VideoFilters = ({
           <SelectTrigger id="sort-by" name="sort-by" className="w-[180px] bg-black/50 border-white/10">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="date-desc">Newest First</SelectItem>
-            <SelectItem value="date-asc">Oldest First</SelectItem>
-            <SelectItem value="duration-desc">Longest First</SelectItem>
-            <SelectItem value="duration-asc">Shortest First</SelectItem>
+          <SelectContent className="bg-black/90 border-white/10">
+            <SelectItem value="date-desc">
+              <span className="flex items-center">
+                <SortDesc className="w-3 h-3 mr-2" /> Newest First
+              </span>
+            </SelectItem>
+            <SelectItem value="date-asc">
+              <span className="flex items-center">
+                <SortAsc className="w-3 h-3 mr-2" /> Oldest First
+              </span>
+            </SelectItem>
+            <SelectItem value="duration-desc">
+              <span className="flex items-center">
+                <SortDesc className="w-3 h-3 mr-2" /> Longest First
+              </span>
+            </SelectItem>
+            <SelectItem value="duration-asc">
+              <span className="flex items-center">
+                <SortAsc className="w-3 h-3 mr-2" /> Shortest First
+              </span>
+            </SelectItem>
+            <SelectItem value="title-asc">
+              <span className="flex items-center">
+                <SortAsc className="w-3 h-3 mr-2" /> A-Z
+              </span>
+            </SelectItem>
+            <SelectItem value="title-desc">
+              <span className="flex items-center">
+                <SortDesc className="w-3 h-3 mr-2" /> Z-A
+              </span>
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>

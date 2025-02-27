@@ -7,3 +7,133 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Load Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+/* Additional animations */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Navbar styles */
+.logo-hover {
+  transition: all 0.3s ease;
+}
+
+.logo-hover:hover {
+  filter: drop-shadow(0 0 10px rgba(0, 166, 255, 0.7));
+  transform: scale(1.05);
+}
+
+.logo-preloader {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Auth form animations */
+.auth-slide-in {
+  animation: auth-slide-in 0.3s ease-out forwards;
+}
+
+@keyframes auth-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Use golden ratio for certain animations */
+:root {
+  --golden-ratio: 1.618;
+  --inverse-golden-ratio: 0.618;
+}
+
+/* Card hover effects */
+.video-card-actions {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transform: translateY(10px);
+}
+
+.group:hover .video-card-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hover-scale {
+  transition: transform 0.3s ease-in-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Status colors */
+.status-processing {
+  @apply bg-blue-500/20 text-blue-400 border-blue-500/30;
+}
+
+.status-completed {
+  @apply bg-green-500/20 text-green-400 border-green-500/30;
+}
+
+.status-failed {
+  @apply bg-red-500/20 text-red-400 border-red-500/30;
+}
+
+.status-pending {
+  @apply bg-yellow-500/20 text-yellow-400 border-yellow-500/30;
+}
+
+/* Tab styles */
+.dashboard-tab {
+  @apply px-4 py-2 text-sm font-medium relative transition-all duration-300;
+}
+
+.dashboard-tab[data-state="active"] {
+  @apply text-aurora-blue;
+}
+
+.dashboard-tab[data-state="active"]::after {
+  content: '';
+  @apply absolute bottom-0 left-0 right-0 h-0.5 bg-aurora-blue rounded-full;
+}
+
+/* Card animations */
+.card-hover-effect {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 166, 255, 0.3);
+}
+
+/* Glassmorphism panels */
+.glassmorphism {
+  @apply bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg;
+}

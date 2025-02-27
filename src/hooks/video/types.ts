@@ -11,6 +11,7 @@ export interface Video {
   created_at: string | null;
   prompt: string;
   status: VideoJobStatus;
+  isFavorite?: boolean;
 }
 
 export interface Enhancement {

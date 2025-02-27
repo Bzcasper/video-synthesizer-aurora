@@ -1,5 +1,7 @@
 
 import { type Database } from "@/integrations/supabase/types";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle, Clock, AlertTriangle, Loader2 } from "lucide-react";
 
 type VideoJobStatus = Database["public"]["Enums"]["video_job_status"];
 
@@ -8,22 +10,41 @@ interface StatusBadgeProps {
 }
 
 export const StatusBadge = ({ status }: StatusBadgeProps) => {
-  const getStatusColor = () => {
+  const getStatusConfig = () => {
     switch (status) {
       case 'completed':
-        return 'bg-green-500/20 text-green-400 border-green-500/30';
+        return {
+          className: "bg-green-500/20 text-green-400 border-green-500/30",
+          icon: <CheckCircle className="w-3 h-3 mr-1" />,
+          label: "Completed"
+        };
       case 'processing':
-        return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+        return {
+          className: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+          icon: <Loader2 className="w-3 h-3 mr-1 animate-spin" />,
+          label: "Processing"
+        };
       case 'failed':
-        return 'bg-red-500/20 text-red-400 border-red-500/30';
+        return {
+          className: "bg-red-500/20 text-red-400 border-red-500/30",
+          icon: <AlertTriangle className="w-3 h-3 mr-1" />,
+          label: "Failed"
+        };
       default:
-        return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+        return {
+          className: "bg-gray-500/20 text-gray-400 border-gray-500/30",
+          icon: <Clock className="w-3 h-3 mr-1" />,
+          label: status.charAt(0).toUpperCase() + status.slice(1)
+        };
     }
   };
 
+  const { className, icon, label } = getStatusConfig();
+
   return (
-    <span className={`text-sm px-3 py-1 rounded-full border ${getStatusColor()} transition-colors duration-300`}>
-      {status.charAt(0).toUpperCase() + status.slice(1)}
-    </span>
+    <Badge variant="outline" className={`inline-flex items-center text-xs px-2 py-0.5 rounded-full transition-colors duration-300 ${className}`}>
+      {icon}
+      {label}
+    </Badge>
   );
 };

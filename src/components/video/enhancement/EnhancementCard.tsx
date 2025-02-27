@@ -20,11 +20,14 @@ export const EnhancementCard: React.FC<EnhancementCardProps> = ({
     <Tooltip>
       <TooltipTrigger asChild>
         <motion.div
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.98 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
         >
           <Card
-            className={`cursor-pointer p-6 transition-all duration-300 ${
+            className={`cursor-pointer p-6 transition-all duration-golden ${
               enhancement.comingSoon ? 'opacity-50 cursor-not-allowed' :
               isSelected 
                 ? 'bg-gradient-to-r from-aurora-purple to-aurora-blue border-none shadow-neon' 
@@ -33,15 +36,50 @@ export const EnhancementCard: React.FC<EnhancementCardProps> = ({
             onClick={() => !enhancement.comingSoon && onSelect()}
           >
             <div className="flex flex-col items-center text-center space-y-4">
-              <div className="text-aurora-blue">{enhancement.icon}</div>
+              <motion.div 
+                className="text-aurora-blue"
+                animate={{ 
+                  scale: [1, 1.2, 1],
+                  rotate: enhancement.comingSoon ? 0 : [0, 5, -5, 0]
+                }}
+                transition={{ 
+                  duration: 2, 
+                  repeat: Infinity, 
+                  repeatType: "loop",
+                  ease: "easeInOut"
+                }}
+              >
+                {enhancement.icon}
+              </motion.div>
               <div>
-                <div className="font-medium mb-2">{enhancement.label}</div>
-                <div className="text-sm text-gray-400">{enhancement.description}</div>
+                <motion.div 
+                  className="font-medium mb-2"
+                  initial={{ opacity: 0.7 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {enhancement.label}
+                </motion.div>
+                <motion.div 
+                  className="text-sm text-gray-400"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.8 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                >
+                  {enhancement.description}
+                </motion.div>
               </div>
               {enhancement.comingSoon && (
-                <span className="text-xs px-2 py-1 rounded-full bg-aurora-purple/20 text-aurora-purple">
+                <motion.span 
+                  className="text-xs px-2 py-1 rounded-full bg-aurora-purple/20 text-aurora-purple"
+                  animate={{ 
+                    opacity: [0.7, 1, 0.7],
+                    scale: [1, 1.05, 1]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
                   Coming Soon
-                </span>
+                </motion.span>
               )}
             </div>
           </Card>

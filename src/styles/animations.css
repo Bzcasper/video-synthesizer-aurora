@@ -42,6 +42,33 @@
   .logo-processing {
     animation: logoProcessing 1.5s ease-in-out infinite;
   }
+
+  .card-pulse {
+    animation: cardPulse 2s ease-in-out infinite;
+  }
+  
+  .text-shimmer {
+    background: linear-gradient(
+      90deg,
+      theme('colors.aurora.blue') 0%,
+      theme('colors.aurora.purple') 50%,
+      theme('colors.aurora.blue') 100%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textShimmer 3s linear infinite;
+  }
+  
+  .hover-float {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .hover-float:hover {
+    transform: translateY(-5px);
+  }
 }
 
 @keyframes fadeIn {
@@ -133,5 +160,25 @@
   100% {
     transform: scale(1) rotate(360deg);
     filter: drop-shadow(0 0 10px theme('colors.aurora.blue'));
+  }
+}
+
+@keyframes cardPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(0, 166, 255, 0.3);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+  }
+}
+
+@keyframes textShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
   }
 }

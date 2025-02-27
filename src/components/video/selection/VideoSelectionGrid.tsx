@@ -2,7 +2,7 @@
 import React, { memo } from 'react';
 import type { Video } from '@/hooks/use-video-enhancements';
 import { VideoCard } from './VideoCard';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface VideoSelectionGridProps {
   videos: Video[];
@@ -15,13 +15,26 @@ export const VideoSelectionGrid: React.FC<VideoSelectionGridProps> = memo(({
   selectedVideo, 
   onSelectVideo 
 }) => {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+  
   return (
-    <div 
+    <motion.div 
       className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
       role="listbox"
       aria-label="Available videos for enhancement"
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
     >
-      <AnimatePresence>
+      <AnimatePresence mode="popLayout">
         {videos?.map((video) => (
           <VideoCard 
             key={video.id}
@@ -31,7 +44,7 @@ export const VideoSelectionGrid: React.FC<VideoSelectionGridProps> = memo(({
           />
         ))}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 });
 

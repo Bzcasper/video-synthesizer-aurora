@@ -13,15 +13,16 @@ interface VideoCardProps {
 export const VideoCard: React.FC<VideoCardProps> = ({ video, isSelected, onClick }) => {
   return (
     <motion.div
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.98 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3 }}
       layout
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
     >
       <Card
-        className={`cursor-pointer p-4 transition-all duration-300 ${
+        className={`cursor-pointer p-4 transition-all duration-golden ${
           isSelected 
             ? 'bg-gradient-to-r from-aurora-purple to-aurora-blue border-none shadow-neon' 
             : 'bg-white/5 border border-white/10 hover:border-aurora-blue/50'
@@ -37,11 +38,11 @@ export const VideoCard: React.FC<VideoCardProps> = ({ video, isSelected, onClick
           }
         }}
       >
-        <div className="aspect-video relative rounded-lg overflow-hidden mb-4">
+        <div className="aspect-video relative rounded-lg overflow-hidden mb-4 group">
           {video.output_url ? (
-            <video
+            <motion.video
               src={video.output_url}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-all duration-golden group-hover:scale-105"
               poster="/placeholder.svg"
               preload="none"
               muted
@@ -53,9 +54,14 @@ export const VideoCard: React.FC<VideoCardProps> = ({ video, isSelected, onClick
             </div>
           )}
         </div>
-        <div className="font-medium truncate" title={video.prompt || 'Untitled video'}>
+        <motion.div 
+          className="font-medium truncate"
+          initial={{ opacity: 0.7 }}
+          animate={{ opacity: 1 }}
+          title={video.prompt || 'Untitled video'}
+        >
           {video.prompt || 'Untitled video'}
-        </div>
+        </motion.div>
       </Card>
     </motion.div>
   );

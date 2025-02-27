@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Timer, Loader2 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+import { SpeedControls } from '../video/enhancement/SpeedControls';
 
 interface SpeedVideoControlProps {
   videoId: string;
@@ -13,12 +14,13 @@ interface SpeedVideoControlProps {
 const SpeedVideoControl = ({ videoId, onSubmit, isProcessing = false }: SpeedVideoControlProps) => {
   const [speed, setSpeed] = useState(1);
 
-  const handleSpeedChange = (value: number[]) => {
-    setSpeed(value[0]);
-  };
-
   return (
     <div className="space-y-6">
+      <SpeedControls 
+        speedFactor={speed}
+        setSpeedFactor={setSpeed}
+      />
+
       <div className="space-y-2">
         <div className="flex justify-between text-sm text-gray-400">
           <span>0.5x</span>
@@ -27,7 +29,7 @@ const SpeedVideoControl = ({ videoId, onSubmit, isProcessing = false }: SpeedVid
         </div>
         <Slider
           value={[speed]}
-          onValueChange={handleSpeedChange}
+          onValueChange={(value) => setSpeed(value[0])}
           min={0.5}
           max={2}
           step={0.1}

@@ -4,9 +4,9 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useVideoEnhancements } from '@/hooks/use-video-enhancements';
-import { VideoSelectionGrid } from './VideoSelectionGrid';
-import { EnhancementOptionsGrid } from './EnhancementOptionsGrid';
-import { EnhancementProgressBar } from './EnhancementProgress';
+import { VideoSelectionGrid } from './selection/VideoSelectionGrid';
+import { EnhancementOptionsGrid } from './enhancement/EnhancementOptionsGrid';
+import { EnhancementProgressCard } from './enhancement/EnhancementProgressCard';
 import { EnhancementControls } from './EnhancementControls';
 import { enhancements } from './enhancement-options';
 import CustomIcon from '@/components/ui/custom-icon';
@@ -110,7 +110,7 @@ export const VideoEnhancementSelector = () => {
           />
 
           {Object.values(enhancementProgress).map((progress) => (
-            <EnhancementProgressBar key={progress.id} progress={progress} />
+            <EnhancementProgressCard key={progress.id} progress={progress} />
           ))}
 
           <EnhancementControls

@@ -1436,7 +1436,15 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      mv_user_video_stats: {
+        Row: {
+          latest_video: string | null
+          status: Database["public"]["Enums"]["video_job_status"] | null
+          user_id: string | null
+          video_count: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       accept_any_json: {
@@ -1490,6 +1498,19 @@ export type Database = {
       get_diy_trends: {
         Args: Record<PropertyKey, never>
         Returns: Json
+      }
+      get_slow_queries: {
+        Args: {
+          query_limit?: number
+          min_calls?: number
+        }
+        Returns: {
+          query: string
+          total_time: number
+          mean_time: number
+          calls: number
+          rows: number
+        }[]
       }
       halfvec_avg: {
         Args: {
@@ -1699,6 +1720,14 @@ export type Database = {
           metadata: Json
           similarity: number
         }[]
+      }
+      optimize_video_tables: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      refresh_video_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       sparsevec_out: {
         Args: {

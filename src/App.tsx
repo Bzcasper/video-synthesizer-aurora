@@ -18,7 +18,9 @@ const VerifyEmail = React.lazy(() => import('./pages/auth/VerifyEmail'));
 const Dashboard = React.lazy(() => import('./pages/dashboard'));
 const Generate = React.lazy(() => import('./pages/dashboard/generate'));
 const Enhance = React.lazy(() => import('./pages/dashboard/enhance'));
+const BatchQueue = React.lazy(() => import('./pages/dashboard/batch'));
 const Videos = React.lazy(() => import('./pages/dashboard/videos'));
+const Stats = React.lazy(() => import('./pages/dashboard/stats'));
 const Settings = React.lazy(() => import('./pages/dashboard/settings'));
 const Pricing = React.lazy(() => import('./pages/Pricing'));
 const Checkout = React.lazy(() => import('./pages/Checkout'));
@@ -91,10 +93,24 @@ const App = () => (
                 </DashboardLayout>
               </AuthLayout>
             } />
+            <Route path="/dashboard/batch" element={
+              <AuthLayout requireAuth>
+                <DashboardLayout>
+                  <BatchQueue />
+                </DashboardLayout>
+              </AuthLayout>
+            } />
             <Route path="/dashboard/videos" element={
               <AuthLayout requireAuth>
                 <DashboardLayout>
                   <Videos />
+                </DashboardLayout>
+              </AuthLayout>
+            } />
+            <Route path="/dashboard/stats" element={
+              <AuthLayout requireAuth>
+                <DashboardLayout>
+                  <Stats />
                 </DashboardLayout>
               </AuthLayout>
             } />

@@ -5,15 +5,20 @@ import { CardTitle, CardDescription } from '@/components/ui/card';
 interface AuthHeaderProps {
   title: string;
   description: string;
+  logoSrc?: string;
 }
 
-export const AuthHeader: React.FC<AuthHeaderProps> = ({ title, description }) => {
+export const AuthHeader: React.FC<AuthHeaderProps> = ({ 
+  title, 
+  description, 
+  logoSrc = "/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png" 
+}) => {
   return (
     <>
       <div className="flex justify-center mb-2">
         <div className="relative">
           <img
-            src="/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png"
+            src={logoSrc}
             alt="Aurora"
             className="h-12 w-12"
           />

@@ -5,7 +5,7 @@ import { toast } from "@/hooks/use-toast";
 import type { Video } from "@/hooks/video/types";
 
 /**
- * Hook to fetch videos from Supabase
+ * Hook to fetch videos from Supabase with optimized caching
  * 
  * @returns Query result containing videos data, loading state, and error
  */
@@ -28,6 +28,10 @@ export function useFetchVideos() {
         throw error;
       }
       return data as Video[];
-    }
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 15 * 60 * 1000, // 15 minutes
+    refetchOnWindowFocus: false,
+    retry: 1
   });
 }

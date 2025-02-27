@@ -1,12 +1,16 @@
 
-import React, { useRef } from 'react';
+import React, { useRef, lazy, Suspense } from 'react';
+import { useScrollVisibility } from '@/hooks/useScrollVisibility';
+import PageLayout from '@/components/landing/PageLayout';
+import StyleInitializer from '@/components/landing/StyleInitializer';
+
+// Immediately load critical components
 import BackgroundEffects from '@/components/landing/BackgroundEffects';
 import MainContentWrapper from '@/components/landing/MainContentWrapper';
 import HeroSection from '@/components/landing/HeroSection';
-import ContentSections from '@/components/landing/ContentSections';
-import PageLayout from '@/components/landing/PageLayout';
-import StyleInitializer from '@/components/landing/StyleInitializer';
-import { useScrollVisibility } from '@/hooks/useScrollVisibility';
+
+// Lazy load non-critical components
+const ContentSections = lazy(() => import('@/components/landing/ContentSections'));
 
 const Index = () => {
   const mainRef = useRef<HTMLDivElement>(null);
@@ -19,7 +23,9 @@ const Index = () => {
         <BackgroundEffects />
         <MainContentWrapper>
           <HeroSection />
-          <ContentSections />
+          <Suspense fallback={<div className="min-h-[200px]"></div>}>
+            <ContentSections />
+          </Suspense>
         </MainContentWrapper>
       </div>
     </PageLayout>

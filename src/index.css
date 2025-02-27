@@ -71,3 +71,69 @@
   --golden-ratio: 1.618;
   --inverse-golden-ratio: 0.618;
 }
+
+/* Card hover effects */
+.video-card-actions {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transform: translateY(10px);
+}
+
+.group:hover .video-card-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hover-scale {
+  transition: transform 0.3s ease-in-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Status colors */
+.status-processing {
+  @apply bg-blue-500/20 text-blue-400 border-blue-500/30;
+}
+
+.status-completed {
+  @apply bg-green-500/20 text-green-400 border-green-500/30;
+}
+
+.status-failed {
+  @apply bg-red-500/20 text-red-400 border-red-500/30;
+}
+
+.status-pending {
+  @apply bg-yellow-500/20 text-yellow-400 border-yellow-500/30;
+}
+
+/* Tab styles */
+.dashboard-tab {
+  @apply px-4 py-2 text-sm font-medium relative transition-all duration-300;
+}
+
+.dashboard-tab[data-state="active"] {
+  @apply text-aurora-blue;
+}
+
+.dashboard-tab[data-state="active"]::after {
+  content: '';
+  @apply absolute bottom-0 left-0 right-0 h-0.5 bg-aurora-blue rounded-full;
+}
+
+/* Card animations */
+.card-hover-effect {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 166, 255, 0.3);
+}
+
+/* Glassmorphism panels */
+.glassmorphism {
+  @apply bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg;
+}

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import type { Video } from '@/hooks/use-video-enhancements';
+import type { Video } from '@/hooks/video/types';
 import { VideoCard } from './VideoCard';
 
 interface VideoSelectionGridProps {

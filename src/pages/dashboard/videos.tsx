@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -13,7 +14,8 @@ import { ErrorMessage } from "@/components/ui/error-message";
 import { EmptyVideos } from "@/components/video/EmptyVideos";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { type Database } from "@/integrations/supabase/types";
-import { Plus, Search, Grid, List, Star, Trash2, Edit2 } from 'lucide-react';
+import { Plus, Search, Grid, List, Star, Trash2, Edit2, Clock, Calendar } from 'lucide-react';
+import { StatusBadge } from "@/components/video/StatusBadge";
 
 type VideoJobStatus = Database["public"]["Enums"]["video_job_status"];
 type SortOption = 'date-desc' | 'date-asc' | 'duration-desc' | 'duration-asc' | 'title-asc' | 'title-desc';

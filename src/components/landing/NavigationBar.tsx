@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { Menu, X, ChevronDown, User, Settings, LogOut } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -70,7 +69,7 @@ const NavigationBar = () => {
       await supabase.auth.signOut();
       toast({
         description: "Signed out successfully",
-        variant: "success",
+        variant: "default",
       });
       navigate('/login');
     } catch (error) {

@@ -1,11 +1,9 @@
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import GenerateForm from "@/components/generate/GenerateForm";
-import { VideoEnhancementSelector } from "@/components/video/VideoEnhancementSelector";
 import { type Database } from "@/integrations/supabase/types";
 import type { Video } from "@/hooks/use-video-enhancements";
 import { ChevronLeft } from "lucide-react";
@@ -32,19 +30,23 @@ const Generate = () => {
   const [scenes, setScenes] = useState<Scene[]>([]);
   const [activeTab, setActiveTab] = useState('generate');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
-  const [animationFrameId, setAnimationFrameId] = useState<number | null>(null);
+  
+  // Prevent multiple submissions
+  const isSubmitting = useRef(false);
 
-  // Cleanup animation frame on unmount
+  // Clean up any animations on unmount
   useEffect(() => {
     return () => {
-      if (animationFrameId !== null) {
-        cancelAnimationFrame(animationFrameId);
-      }
+      // Any cleanup needed
     };
-  }, [animationFrameId]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Prevent multiple submissions
+    if (isSubmitting.current || isGenerating) return;
+    isSubmitting.current = true;
     setIsGenerating(true);
 
     try {
@@ -82,6 +84,9 @@ const Generate = () => {
         status: 'pending'
       }]);
 
+      // Reset form after successful submission
+      setPrompt('');
+
     } catch (error) {
       console.error('Video generation error:', error);
       toast({
@@ -91,14 +96,9 @@ const Generate = () => {
       });
     } finally {
       setIsGenerating(false);
+      isSubmitting.current = false;
     }
   };
-
-  // Optimized animation handler using useCallback
-  const handleAnimation = useCallback(() => {
-    // Implement any necessary animations here
-    // This is now optimized and won't cause performance warnings
-  }, []);
 
   return (
     <div className="min-h-screen bg-aurora-black flex">
@@ -116,6 +116,7 @@ const Generate = () => {
             className="relative"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
+            aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             <img
               src="/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png"
@@ -141,19 +142,44 @@ const Generate = () => {
             </h1>
 
             <Card className="glass-panel">
-              <GenerateForm
-                prompt={prompt}
-                setPrompt={setPrompt}
-                duration={duration}
-                setDuration={setDuration}
-                style={style}
-                setStyle={setStyle}
-                isGenerating={isGenerating}
-                onSubmit={handleSubmit}
-                scenes={scenes}
-                setScenes={setScenes}
-              />
+              <div className="p-6">
+                <GenerateForm
+                  prompt={prompt}
+                  setPrompt={setPrompt}
+                  duration={duration}
+                  setDuration={setDuration}
+                  style={style}
+                  setStyle={setStyle}
+                  isGenerating={isGenerating}
+                  onSubmit={handleSubmit}
+                  scenes={scenes}
+                  setScenes={setScenes}
+                />
+              </div>
             </Card>
+            
+            {generatedVideos.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="mt-8"
+              >
+                <h2 className="text-2xl font-orbitron font-bold text-gradient bg-gradient-glow mb-4">
+                  Recently Generated Videos
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {generatedVideos.map(video => (
+                    <Card key={video.id} className="glass-panel p-4">
+                      <div className="font-medium mb-2">{video.prompt}</div>
+                      <div className="text-sm text-gray-400">
+                        Status: {video.status === 'pending' ? 'Processing...' : video.status}
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </main>

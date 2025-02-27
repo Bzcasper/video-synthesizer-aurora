@@ -44,7 +44,6 @@ export const VideoCard: React.FC<VideoCardProps> = ({ video, isSelected, onClick
               className="w-full h-full object-cover"
               poster="/placeholder.svg"
               preload="none"
-              loading="lazy"
               muted
               aria-label={`Preview of video: ${video.prompt || 'Untitled video'}`}
             />

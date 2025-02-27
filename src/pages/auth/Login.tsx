@@ -8,12 +8,15 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { ForgotPassword } from '@/components/auth/ForgotPassword';
 import { AuthHeader } from '@/components/auth/AuthHeader';
+import { LoginSuccessMessage } from '@/components/auth/LoginSuccessMessage';
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [forgotPassword, setForgotPassword] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
   // Check if user is already logged in
   useEffect(() => {
@@ -31,11 +34,17 @@ const Login = () => {
   }, [navigate]);
 
   const handleLoginSuccess = () => {
-    navigate('/dashboard');
+    setIsLoggingIn(true);
+    setLoginSuccess(true);
+    
+    // Show success message briefly before redirecting
+    setTimeout(() => {
+      navigate('/dashboard');
+    }, 1500);
   };
 
   // If we're checking auth status or authenticated, show loading
-  if (isAuthenticated) {
+  if (isAuthenticated && !loginSuccess) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <LoadingSpinner size="lg" />
@@ -45,6 +54,12 @@ const Login = () => {
 
   // Get header content based on current state
   const getHeaderContent = () => {
+    if (loginSuccess) {
+      return {
+        title: 'Login Successful',
+        description: 'Redirecting you to your dashboard'
+      };
+    }
     if (forgotPassword) {
       return {
         title: 'Reset Password',
@@ -64,7 +79,7 @@ const Login = () => {
       <div className="flex flex-1 items-center justify-center p-6">
         <AnimatePresence mode="wait">
           <motion.div
-            key={forgotPassword ? 'reset' : 'login'}
+            key={loginSuccess ? 'success' : forgotPassword ? 'reset' : 'login'}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -76,7 +91,9 @@ const Login = () => {
                 <AuthHeader title={title} description={description} />
               </CardHeader>
               <CardContent>
-                {forgotPassword ? (
+                {loginSuccess ? (
+                  <LoginSuccessMessage />
+                ) : forgotPassword ? (
                   <ForgotPassword 
                     email={email}
                     setEmail={setEmail}
@@ -88,6 +105,8 @@ const Login = () => {
                     setEmail={setEmail}
                     onForgotPassword={() => setForgotPassword(true)}
                     onLoginSuccess={handleLoginSuccess}
+                    isLoggingIn={isLoggingIn}
+                    setIsLoggingIn={setIsLoggingIn}
                   />
                 )}
               </CardContent>

@@ -5,6 +5,7 @@ import { Mail, Lock, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from '@/components/ui/use-toast';
 import { supabase } from "@/integrations/supabase/client";
 
@@ -13,16 +14,20 @@ interface LoginFormProps {
   setEmail: (email: string) => void;
   onForgotPassword: () => void;
   onLoginSuccess: () => void;
+  isLoggingIn: boolean;
+  setIsLoggingIn: (isLoggingIn: boolean) => void;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ 
   email, 
   setEmail, 
   onForgotPassword,
-  onLoginSuccess
+  onLoginSuccess,
+  isLoggingIn,
+  setIsLoggingIn
 }) => {
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +40,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       return;
     }
     
-    setIsLoading(true);
+    setIsLoggingIn(true);
     
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -57,8 +62,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         description: error.message || 'Error logging in',
         variant: 'destructive',
       });
-    } finally {
-      setIsLoading(false);
+      setIsLoggingIn(false);
     }
   };
 
@@ -76,7 +80,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             onChange={(e) => setEmail(e.target.value)}
             className="pl-10 bg-black/30 border-white/10 focus:border-aurora-blue/50"
             autoComplete="email"
-            disabled={isLoading}
+            disabled={isLoggingIn}
           />
         </div>
       </div>
@@ -102,18 +106,33 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             onChange={(e) => setPassword(e.target.value)}
             className="pl-10 bg-black/30 border-white/10 focus:border-aurora-blue/50"
             autoComplete="current-password"
-            disabled={isLoading}
+            disabled={isLoggingIn}
           />
         </div>
+      </div>
+      
+      <div className="flex items-center space-x-2">
+        <Checkbox 
+          id="remember" 
+          checked={rememberMe}
+          onCheckedChange={(checked) => setRememberMe(checked === true)}
+          disabled={isLoggingIn}
+        />
+        <label
+          htmlFor="remember"
+          className="text-sm text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          Remember me
+        </label>
       </div>
       
       <Button 
         type="submit" 
         className="w-full bg-gradient-to-r from-aurora-purple to-aurora-blue 
                  hover:from-aurora-blue hover:to-aurora-purple shadow-lg transition-all"
-        disabled={isLoading}
+        disabled={isLoggingIn}
       >
-        {isLoading ? 'Logging in...' : 'Log in'}
+        {isLoggingIn ? 'Logging in...' : 'Log in'}
         <LogIn className="ml-2 h-4 w-4" />
       </Button>
       

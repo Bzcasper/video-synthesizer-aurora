@@ -1,0 +1,42 @@
+
+name: Preview Environment
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build
+        run: npm run build
+        
+      - name: Deploy Preview
+        env:
+          PREVIEW_URL: "preview-${{ github.event.pull_request.number }}.aurora-video-synth.dev"
+        run: |
+          echo "Deploying preview to $PREVIEW_URL"
+          # Add preview deployment commands here
+
+      - name: Comment Preview URL
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Preview environment deployed to: https://preview-${context.issue.number}.aurora-video-synth.dev`
+            })
+

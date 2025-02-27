@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Sparkles } from 'lucide-react';
+import { Label } from "@/components/ui/label";
 import type { Enhancement } from '@/hooks/use-video-enhancements';
 import type { Database } from "@/integrations/supabase/types";
 
@@ -34,12 +35,14 @@ export const EnhancementControls = ({
     <div className="space-y-4">
       {selectedEnhancement.id === 'filter' && (
         <div>
-          <label className="block text-sm font-medium mb-2">Select Filter Style</label>
+          <Label htmlFor="filter-style" className="block text-sm font-medium mb-2">
+            Select Filter Style
+          </Label>
           <Select
             value={selectedFilter}
             onValueChange={(value: FilterType) => setSelectedFilter(value)}
           >
-            <SelectTrigger className="w-full max-w-xs">
+            <SelectTrigger id="filter-style" name="filter-style" className="w-full max-w-xs">
               <SelectValue placeholder="Choose a filter style" />
             </SelectTrigger>
             <SelectContent>
@@ -54,12 +57,14 @@ export const EnhancementControls = ({
 
       {selectedEnhancement.id === 'speed_adjustment' && (
         <div>
-          <label className="block text-sm font-medium mb-2">Speed Factor</label>
+          <Label htmlFor="speed-factor" className="block text-sm font-medium mb-2">
+            Speed Factor
+          </Label>
           <Select
             value={speedFactor.toString()}
             onValueChange={(value) => setSpeedFactor(parseFloat(value))}
           >
-            <SelectTrigger className="w-full max-w-xs">
+            <SelectTrigger id="speed-factor" name="speed-factor" className="w-full max-w-xs">
               <SelectValue placeholder="Select speed factor" />
             </SelectTrigger>
             <SelectContent>
@@ -76,6 +81,9 @@ export const EnhancementControls = ({
         onClick={onSubmit}
         disabled={isSubmitting}
         className="w-full md:w-auto bg-gradient-to-r from-aurora-purple to-aurora-blue hover:from-aurora-blue hover:to-aurora-purple text-white shadow-neon"
+        id="enhance-video-button"
+        name="enhance-video-button"
+        aria-label="Enhance selected video"
       >
         {isSubmitting ? (
           <>

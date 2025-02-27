@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { type Database } from "@/integrations/supabase/types";
 
 type VideoJobStatus = Database["public"]["Enums"]["video_job_status"];
@@ -28,10 +29,13 @@ export const VideoFilters = ({
 }: VideoFiltersProps) => {
   return (
     <div className="flex flex-col sm:flex-row gap-4 glassmorphism rounded-lg p-4">
-      <div className="flex items-center gap-2">
-        <Filter className="w-4 h-4 text-aurora-blue" />
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="status-filter" className="text-sm font-medium text-aurora-blue">
+          <Filter className="w-4 h-4 inline-block mr-2" />
+          Filter by Status
+        </Label>
         <Select value={statusFilter} onValueChange={(value) => onStatusFilterChange(value as StatusFilter)}>
-          <SelectTrigger className="w-[180px] bg-black/50 border-white/10">
+          <SelectTrigger id="status-filter" name="status-filter" className="w-[180px] bg-black/50 border-white/10">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
           <SelectContent>
@@ -44,10 +48,13 @@ export const VideoFilters = ({
         </Select>
       </div>
 
-      <div className="flex items-center gap-2">
-        <ArrowUpDown className="w-4 h-4 text-aurora-blue" />
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="sort-by" className="text-sm font-medium text-aurora-blue">
+          <ArrowUpDown className="w-4 h-4 inline-block mr-2" />
+          Sort Videos
+        </Label>
         <Select value={sortBy} onValueChange={(value) => onSortChange(value as SortOption)}>
-          <SelectTrigger className="w-[180px] bg-black/50 border-white/10">
+          <SelectTrigger id="sort-by" name="sort-by" className="w-[180px] bg-black/50 border-white/10">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>

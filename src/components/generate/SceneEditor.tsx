@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { type Database } from "@/integrations/supabase/types";
 import { PlusCircle, MinusCircle, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
+import { Label } from "@/components/ui/label";
 
 type SceneType = Database["public"]["Enums"]["scene_type"];
 type CameraMotion = Database["public"]["Enums"]["camera_motion_type"];
@@ -78,13 +79,21 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ scenes, setScenes }) =
             <CardContent className="pt-4 space-y-4">
               <div className="flex justify-between gap-4">
                 <div className="flex-1">
-                  <label className="text-sm font-medium mb-2 block">Scene Description</label>
+                  <Label htmlFor={`scene-description-${index}`} className="text-sm font-medium mb-2 block">
+                    Scene Description
+                  </Label>
                   <Textarea
+                    id={`scene-description-${index}`}
+                    name={`scene-description-${index}`}
                     value={scene.prompt}
                     onChange={(e) => updateScene(index, { prompt: e.target.value })}
                     placeholder="Describe the scene..."
                     className="h-[100px]"
+                    aria-describedby={`scene-description-hint-${index}`}
                   />
+                  <p id={`scene-description-hint-${index}`} className="sr-only">
+                    Enter a detailed description of the scene you want to create
+                  </p>
                 </div>
                 
                 <div className="flex flex-col gap-2">
@@ -93,6 +102,7 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ scenes, setScenes }) =
                     size="sm"
                     onClick={() => moveScene(index, 'up')}
                     disabled={index === 0}
+                    aria-label={`Move scene ${index + 1} up`}
                   >
                     <ArrowUpCircle className="w-4 h-4" />
                   </Button>
@@ -101,6 +111,7 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ scenes, setScenes }) =
                     size="sm"
                     onClick={() => moveScene(index, 'down')}
                     disabled={index === scenes.length - 1}
+                    aria-label={`Move scene ${index + 1} down`}
                   >
                     <ArrowDownCircle className="w-4 h-4" />
                   </Button>
@@ -108,6 +119,7 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ scenes, setScenes }) =
                     variant="ghost" 
                     size="sm"
                     onClick={() => removeScene(index)}
+                    aria-label={`Remove scene ${index + 1}`}
                   >
                     <MinusCircle className="w-4 h-4" />
                   </Button>
@@ -116,13 +128,15 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ scenes, setScenes }) =
 
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Scene Type</label>
+                  <Label htmlFor={`scene-type-${index}`} className="text-sm font-medium mb-2 block">
+                    Scene Type
+                  </Label>
                   <Select
                     value={scene.sceneType}
                     onValueChange={(value: SceneType) => 
                       updateScene(index, { sceneType: value })}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger id={`scene-type-${index}`} name={`scene-type-${index}`}>
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -135,13 +149,15 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ scenes, setScenes }) =
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Camera Motion</label>
+                  <Label htmlFor={`camera-motion-${index}`} className="text-sm font-medium mb-2 block">
+                    Camera Motion
+                  </Label>
                   <Select
                     value={scene.cameraMotion}
                     onValueChange={(value: CameraMotion) => 
                       updateScene(index, { cameraMotion: value })}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger id={`camera-motion-${index}`} name={`camera-motion-${index}`}>
                       <SelectValue placeholder="Select motion" />
                     </SelectTrigger>
                     <SelectContent>
@@ -156,8 +172,12 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ scenes, setScenes }) =
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Duration (seconds)</label>
+                  <Label htmlFor={`scene-duration-${index}`} className="text-sm font-medium mb-2 block">
+                    Duration (seconds)
+                  </Label>
                   <Input
+                    id={`scene-duration-${index}`}
+                    name={`scene-duration-${index}`}
                     type="number"
                     min={1}
                     max={30}
@@ -171,13 +191,15 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ scenes, setScenes }) =
 
               {index < scenes.length - 1 && (
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Transition</label>
+                  <Label htmlFor={`transition-type-${index}`} className="text-sm font-medium mb-2 block">
+                    Transition
+                  </Label>
                   <Select
                     value={scene.transitionType || 'none'}
                     onValueChange={(value) => 
                       updateScene(index, { transitionType: value === 'none' ? undefined : value })}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger id={`transition-type-${index}`} name={`transition-type-${index}`}>
                       <SelectValue placeholder="Select transition" />
                     </SelectTrigger>
                     <SelectContent>

@@ -17,6 +17,7 @@ const ResetPassword = React.lazy(() => import('./pages/auth/ResetPassword'));
 const VerifyEmail = React.lazy(() => import('./pages/auth/VerifyEmail'));
 const Dashboard = React.lazy(() => import('./pages/dashboard'));
 const Generate = React.lazy(() => import('./pages/dashboard/generate'));
+const Enhance = React.lazy(() => import('./pages/dashboard/enhance'));
 const Videos = React.lazy(() => import('./pages/dashboard/videos'));
 const Settings = React.lazy(() => import('./pages/dashboard/settings'));
 const Pricing = React.lazy(() => import('./pages/Pricing'));
@@ -80,6 +81,13 @@ const App = () => (
               <AuthLayout requireAuth>
                 <DashboardLayout>
                   <Generate />
+                </DashboardLayout>
+              </AuthLayout>
+            } />
+            <Route path="/dashboard/enhance" element={
+              <AuthLayout requireAuth>
+                <DashboardLayout>
+                  <Enhance />
                 </DashboardLayout>
               </AuthLayout>
             } />

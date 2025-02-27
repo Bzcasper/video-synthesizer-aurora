@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
@@ -11,7 +11,18 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  
+  // Set sidebar to open by default on larger screens, closed on mobile
+  useEffect(() => {
+    const handleResize = () => {
+      setSidebarOpen(window.innerWidth >= 768);
+    };
+    
+    handleResize(); // Set initial value
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleLogout = async () => {
     setIsTransitioning(true);
@@ -30,6 +41,13 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   ];
 
   const isActivePath = (path: string) => location.pathname === path;
+
+  // Close sidebar when clicking outside on mobile
+  const handleContentClick = () => {
+    if (window.innerWidth < 768 && isSidebarOpen) {
+      setSidebarOpen(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-aurora-black flex">
@@ -78,7 +96,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               >
                 <Link
                   to={item.path}
-                  className={`flex items-center px-6 py-3 text-sm font-medium transition-colors relative
+                  className={`flex items-center px-6 py-3 text-sm font-medium transition-all relative
                              ${isActivePath(item.path)
                     ? 'text-aurora-blue bg-aurora-blue/10'
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -120,7 +138,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 overflow-x-hidden">
+      <main className="flex-1 overflow-x-hidden" onClick={handleContentClick}>
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}

@@ -9,6 +9,7 @@ import { EnhancementOptionsGrid } from './EnhancementOptionsGrid';
 import { EnhancementProgressBar } from './EnhancementProgress';
 import { EnhancementControls } from './EnhancementControls';
 import { enhancements } from './enhancement-options';
+import CustomIcon from '@/components/ui/custom-icon';
 
 export const VideoEnhancementSelector = () => {
   const {
@@ -74,13 +75,19 @@ export const VideoEnhancementSelector = () => {
   }, [setEnhancementProgress]);
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return (
+      <div className="flex flex-col items-center justify-center h-full min-h-[300px]">
+        <LoadingSpinner className="w-12 h-12 text-aurora-blue" />
+        <p className="mt-4 text-gray-400">Loading your videos...</p>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-8">
       <div className="space-y-4">
-        <h2 className="text-2xl font-orbitron font-bold text-gradient bg-gradient-glow">
+        <h2 className="text-2xl font-orbitron font-bold text-gradient bg-gradient-glow flex items-center">
+          <CustomIcon name="enhance" className="mr-3 h-6 w-6 text-aurora-blue" />
           Select Video to Enhance
         </h2>
         <VideoSelectionGrid
@@ -92,7 +99,8 @@ export const VideoEnhancementSelector = () => {
 
       {selectedVideo && (
         <div className="space-y-6">
-          <h2 className="text-2xl font-orbitron font-bold text-gradient bg-gradient-glow">
+          <h2 className="text-2xl font-orbitron font-bold text-gradient bg-gradient-glow flex items-center">
+            <CustomIcon name="advanced" className="mr-3 h-6 w-6 text-aurora-purple" />
             Choose Enhancement
           </h2>
           <EnhancementOptionsGrid

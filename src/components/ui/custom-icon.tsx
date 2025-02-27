@@ -85,13 +85,15 @@ const CustomIcon: React.FC<CustomIconProps> = ({ name, className = "h-5 w-5" }) 
         </>
       )}
 
-      {/* Enhance Video Icon */}
+      {/* Enhance Video Icon - Enhanced with more details */}
       {name === 'enhance' && (
         <>
           <rect x="2" y="4" width="20" height="16" rx="2" ry="2" />
-          <path d="M10 10c.5-.5 1.2-.8 2-.8s1.5.3 2 .8 .8 1.2.8 2-.3 1.5-.8 2-1.2.8-2 .8-1.5-.3-2-.8-.8-1.2-.8-2 .3-1.5.8-2z" />
-          <path d="M6 8l4 4" />
-          <path d="M14 16l4-4" />
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 8v8" />
+          <path d="M8 12h8" />
+          <path d="M20 10l-2 2 2 2" />
+          <path d="M4 10l2 2-2 2" />
         </>
       )}
 
@@ -101,9 +103,6 @@ const CustomIcon: React.FC<CustomIconProps> = ({ name, className = "h-5 w-5" }) 
           <line x1="8" y1="6" x2="21" y2="6" />
           <line x1="8" y1="12" x2="21" y2="12" />
           <line x1="8" y1="18" x2="21" y2="18" />
-          <line x1="3" y1="6" x2="3.01" y2="6" />
-          <line x1="3" y1="12" x2="3.01" y2="12" />
-          <line x1="3" y1="18" x2="3.01" y2="18" />
           <circle cx="3" cy="6" r="1" />
           <circle cx="3" cy="12" r="1" />
           <circle cx="3" cy="18" r="1" />
@@ -146,14 +145,10 @@ const CustomIcon: React.FC<CustomIconProps> = ({ name, className = "h-5 w-5" }) 
       {/* Processing Icon */}
       {name === 'processing' && (
         <>
-          <line x1="12" y1="2" x2="12" y2="6" />
-          <line x1="12" y1="18" x2="12" y2="22" />
-          <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
-          <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
-          <line x1="2" y1="12" x2="6" y2="12" />
-          <line x1="18" y1="12" x2="22" y2="12" />
-          <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
-          <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 6v6l4 2" />
+          <path d="M16 16l-4-2" />
+          <path d="M8 16l4-2" />
         </>
       )}
       

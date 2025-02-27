@@ -8,7 +8,7 @@ export const EnhancementProcessingStatus = () => {
   const { enhancementProgress } = useVideoEnhancements();
   
   const activeJobs = Object.values(enhancementProgress).filter(
-    (job) => job.status === 'processing' || job.status === 'queued'
+    (job) => job.status === 'pending'
   );
   
   if (activeJobs.length === 0) {

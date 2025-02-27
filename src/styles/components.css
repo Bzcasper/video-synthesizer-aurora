@@ -67,38 +67,6 @@
   .fade-in-golden {
     animation: fadeIn calc(0.618s * var(--golden-ratio)) ease-out forwards;
   }
-  
-  /* Enhanced Animation Classes */
-  .hover-scale {
-    @apply transition-transform duration-300 hover:scale-105;
-  }
-  
-  .hover-lift {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
-  }
-  
-  .pulse-shadow {
-    animation: pulseShadow 2s infinite;
-  }
-  
-  .floating {
-    animation: float 6s ease-in-out infinite;
-  }
-  
-  .shimmer-text {
-    @apply text-gradient bg-gradient-glow;
-    background-size: 200% auto;
-    animation: textShimmer 3s linear infinite;
-  }
-  
-  .rotating {
-    animation: rotate 10s linear infinite;
-  }
-  
-  .staggered-entrance {
-    opacity: 0;
-    animation: staggerFadeIn 0.5s ease-out forwards;
-  }
 }
 
 /* Animation keyframes */
@@ -119,34 +87,5 @@
   }
   to {
     transform: rotate(360deg);
-  }
-}
-
-@keyframes pulseShadow {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(0, 166, 255, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
-  }
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes staggerFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

@@ -4,8 +4,16 @@ import { motion } from 'framer-motion';
 import CustomIcon from '@/components/ui/custom-icon';
 import { Button } from '@/components/ui/button';
 
+export interface BatchJob {
+  id: string;
+  title: string;
+  progress: number;
+  status: 'processing' | 'queued' | 'paused';
+  timeRemaining: string;
+}
+
 export const BatchQueueList = () => {
-  const [activeJobs, setActiveJobs] = React.useState([
+  const [activeJobs, setActiveJobs] = React.useState<BatchJob[]>([
     {
       id: 'job-1',
       title: 'Ocean waves at sunset',

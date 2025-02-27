@@ -1,0 +1,5 @@
+{
+    "useCustomPrompts": true,
+    "defaultPromptFile": "prompts/default-prompts.json",
+    "componentFolder": "src/components"
+}

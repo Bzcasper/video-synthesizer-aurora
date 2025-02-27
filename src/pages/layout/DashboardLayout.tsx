@@ -67,6 +67,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           animate={{ opacity: 1 }}
           className="p-6"
         >
+          {/* Single Aurora logo */}
           <Link to="/dashboard" className="flex items-center space-x-3 group">
             <div className="relative">
               <img
@@ -98,11 +99,11 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                   className={`flex items-center px-6 py-3 text-sm font-medium transition-golden relative
                              ${isActivePath(item.path)
                     ? 'text-aurora-blue bg-aurora-blue/10'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    : 'text-gray-200 hover:text-white hover:bg-white/5'
                   }`}
                 >
                   <div className={`mr-3 flex items-center justify-center w-8 h-8 rounded-md ${isActivePath(item.path) ? 'bg-aurora-blue/20' : 'bg-black/20'}`}>
-                    <CustomIcon name={item.icon} className={`h-5 w-5 ${isActivePath(item.path) ? 'text-aurora-blue' : 'text-gray-400'}`} />
+                    <CustomIcon name={item.icon} className={`h-5 w-5 ${isActivePath(item.path) ? 'text-aurora-blue' : 'text-gray-300'}`} />
                   </div>
                   {item.label}
                   {isActivePath(item.path) && (
@@ -123,13 +124,13 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         <div className="absolute bottom-8 w-full px-6">
           <motion.button
             onClick={handleLogout}
-            className="w-full flex items-center px-4 py-3 text-sm font-medium text-gray-400
+            className="w-full flex items-center px-4 py-3 text-sm font-medium text-gray-200
                      hover:text-white hover:bg-white/5 transition-golden rounded-md"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
             <div className="mr-3 flex items-center justify-center w-8 h-8 rounded-md bg-black/20">
-              <CustomIcon name="logout" className="h-5 w-5 text-gray-400" />
+              <CustomIcon name="logout" className="h-5 w-5 text-gray-300" />
             </div>
             Logout
           </motion.button>

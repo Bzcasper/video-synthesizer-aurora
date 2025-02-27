@@ -1,243 +1,296 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useNavigate, Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { motion } from 'framer-motion';
-import { z } from 'zod';
-import { Eye, EyeOff, AlertCircle } from 'lucide-react';
-import { Alert, AlertDescription } from "@/components/ui/alert";
-
-const loginSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" })
-});
-
-type FormErrors = {
-  email?: string;
-  password?: string;
-  general?: string;
-};
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { LogIn, Mail, Lock, ArrowLeft } from 'lucide-react';
+import { toast } from '@/components/ui/use-toast';
 
 const Login = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [showPassword, setShowPassword] = useState(false);
-  const redirectPath = location.state?.from || '/dashboard';
+  const [forgotPassword, setForgotPassword] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Check if user is already logged in
   useEffect(() => {
-    // Clear errors when form data changes
-    if (Object.keys(errors).length > 0) {
-      validateField(formData);
-    }
-  }, [formData]);
-
-  const validateField = (data: typeof formData) => {
-    try {
-      loginSchema.parse(data);
-      setErrors({});
-      return true;
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const newErrors: FormErrors = {};
-        error.errors.forEach(err => {
-          const path = err.path[0] as keyof typeof formData;
-          newErrors[path] = err.message;
-        });
-        setErrors(newErrors);
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        setIsAuthenticated(true);
+        navigate('/dashboard');
+      } else {
+        setIsAuthenticated(false);
       }
-      return false;
-    }
-  };
+    };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    checkSession();
+  }, [navigate]);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate form
-    if (!validateField(formData)) {
+    if (!email || !password) {
+      toast({
+        description: 'Please enter both email and password',
+        variant: 'destructive',
+      });
       return;
     }
     
     setIsLoading(true);
-    setErrors({});
-
+    
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
-
+      
       if (error) throw error;
       
-      toast.success("Welcome back!");
-      navigate(redirectPath);
-    } catch (error: any) {
-      setIsLoading(false);
-      
-      // Handle specific error messages
-      if (error.message.includes("Invalid login")) {
-        setErrors({ general: "Invalid email or password" });
-      } else if (error.message.includes("Email not confirmed")) {
-        setErrors({ general: "Please verify your email before signing in" });
-      } else {
-        setErrors({ general: error.message });
-      }
-
-      toast.error("Sign in failed", {
-        description: error.message
+      toast({
+        description: 'Logged in successfully',
+        variant: 'default',
       });
+      
+      // Redirect to dashboard after successful login
+      navigate('/dashboard');
+    } catch (error: any) {
+      toast({
+        description: error.message || 'Error logging in',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email) {
+      toast({
+        description: 'Please enter your email address',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      
+      if (error) throw error;
+      
+      setResetSent(true);
+      toast({
+        description: 'Password reset instructions sent to your email',
+        variant: 'default',
+      });
+    } catch (error: any) {
+      toast({
+        description: error.message || 'Error sending reset instructions',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  return (
-    <>
-      <div className="text-center mb-8">
-        <motion.h2 
-          className="text-3xl font-bold font-orbitron text-white mb-2"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          Welcome Back
-        </motion.h2>
-        <motion.p 
-          className="text-aurora-blue/90"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          Sign in to continue to Aurora
-        </motion.p>
+  const loginForm = (
+    <form onSubmit={handleLogin} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <div className="relative">
+          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+          <Input
+            id="email"
+            type="email"
+            placeholder="your@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="pl-10 bg-black/30 border-white/10 focus:border-aurora-blue/50"
+            autoComplete="email"
+            disabled={isLoading}
+          />
+        </div>
       </div>
-
-      {errors.general && (
-        <Alert variant="destructive" className="mb-6 bg-red-500/10 border-red-500/30 text-white">
-          <AlertCircle className="h-4 w-4 text-red-400" />
-          <AlertDescription className="text-red-100">
-            {errors.general}
-          </AlertDescription>
-        </Alert>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm font-medium text-gray-200">
-            Email
-          </Label>
-          <div className="relative">
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              className={`w-full pr-10 bg-white/5 border-${errors.email ? 'red-500/50' : 'white/10'} focus-visible:border-${errors.email ? 'red-500/70' : 'aurora-blue/50'} text-white`}
-              disabled={isLoading}
-            />
-            {errors.email && (
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                <AlertCircle className="h-5 w-5 text-red-500" />
-              </div>
-            )}
-          </div>
-          {errors.email && (
-            <p className="text-red-400 text-xs mt-1">{errors.email}</p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="password" className="text-sm font-medium text-gray-200">
-            Password
-          </Label>
-          <div className="relative">
-            <Input
-              id="password"
-              name="password"
-              type={showPassword ? 'text' : 'password'}
-              autoComplete="current-password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              className={`w-full pr-10 bg-white/5 border-${errors.password ? 'red-500/50' : 'white/10'} focus-visible:border-${errors.password ? 'red-500/70' : 'aurora-blue/50'} text-white`}
-              disabled={isLoading}
-            />
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white"
-            >
-              {showPassword ? (
-                <EyeOff className="h-5 w-5" />
-              ) : (
-                <Eye className="h-5 w-5" />
-              )}
-            </button>
-          </div>
-          {errors.password && (
-            <p className="text-red-400 text-xs mt-1">{errors.password}</p>
-          )}
-        </div>
-
-        <div className="flex items-center justify-between text-sm">
-          <Link
-            to="/reset-password"
-            className="font-medium text-aurora-blue/90 hover:text-aurora-blue transition-colors"
+      
+      <div className="space-y-2">
+        <div className="flex justify-between items-center">
+          <Label htmlFor="password">Password</Label>
+          <button
+            type="button"
+            onClick={() => setForgotPassword(true)}
+            className="text-xs text-aurora-blue hover:text-aurora-blue/80 transition-colors"
           >
             Forgot password?
-          </Link>
+          </button>
         </div>
-
-        <Button
-          type="submit"
-          className="w-full h-12 bg-gradient-to-r from-aurora-purple to-aurora-blue hover:from-aurora-blue hover:to-aurora-purple
-                   transition-golden shadow-lg shadow-aurora-blue/20 hover:shadow-aurora-blue/40"
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <div className="flex items-center justify-center">
-              <LoadingSpinner size="sm" />
-              <span className="ml-2">Signing in...</span>
-            </div>
-          ) : (
-            "Sign in"
-          )}
-        </Button>
-      </form>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
+        <div className="relative">
+          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+          <Input
+            id="password"
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="pl-10 bg-black/30 border-white/10 focus:border-aurora-blue/50"
+            autoComplete="current-password"
+            disabled={isLoading}
+          />
+        </div>
+      </div>
+      
+      <Button 
+        type="submit" 
+        className="w-full bg-gradient-to-r from-aurora-purple to-aurora-blue 
+                 hover:from-aurora-blue hover:to-aurora-purple shadow-lg transition-all"
+        disabled={isLoading}
       >
-        <p className="mt-6 text-center text-sm text-gray-400">
-          Don't have an account?{" "}
-          <Link
-            to="/signup"
-            className="font-medium text-aurora-blue/90 hover:text-aurora-blue transition-colors"
+        {isLoading ? 'Logging in...' : 'Log in'}
+        <LogIn className="ml-2 h-4 w-4" />
+      </Button>
+      
+      <div className="text-center text-sm text-gray-400">
+        Don't have an account?{' '}
+        <Link to="/signup" className="text-aurora-blue hover:text-aurora-blue/80 transition-colors">
+          Sign up
+        </Link>
+      </div>
+    </form>
+  );
+
+  const resetPasswordForm = (
+    <form onSubmit={handleResetPassword} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="reset-email">Email</Label>
+        <div className="relative">
+          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+          <Input
+            id="reset-email"
+            type="email"
+            placeholder="your@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="pl-10 bg-black/30 border-white/10 focus:border-aurora-blue/50"
+            autoComplete="email"
+            disabled={isLoading}
+          />
+        </div>
+      </div>
+      
+      <Button 
+        type="submit" 
+        className="w-full"
+        disabled={isLoading}
+      >
+        {isLoading ? 'Sending...' : 'Send Reset Instructions'}
+      </Button>
+      
+      <button
+        type="button"
+        onClick={() => setForgotPassword(false)}
+        className="w-full flex items-center justify-center text-sm text-gray-400 hover:text-white"
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to login
+      </button>
+    </form>
+  );
+
+  const resetSentConfirmation = (
+    <div className="text-center space-y-4">
+      <div className="mb-4 p-3 bg-green-500/20 text-green-400 rounded-lg">
+        Password reset instructions have been sent to your email.
+      </div>
+      
+      <p className="text-gray-400">
+        Please check your inbox and follow the instructions to reset your password.
+      </p>
+      
+      <button
+        type="button"
+        onClick={() => {
+          setForgotPassword(false);
+          setResetSent(false);
+        }}
+        className="w-full flex items-center justify-center text-sm text-gray-400 hover:text-white"
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to login
+      </button>
+    </div>
+  );
+
+  // If we're checking auth status or authenticated, show loading
+  if (isAuthenticated) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col min-h-screen bg-aurora-black">
+      <div className="flex flex-1 items-center justify-center p-6">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={forgotPassword ? (resetSent ? 'reset-sent' : 'reset') : 'login'}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="w-full max-w-md"
           >
-            Sign up
-          </Link>
-        </p>
-      </motion.div>
-    </>
+            <Card className="glass-panel border-aurora-blue/30 shadow-lg shadow-aurora-blue/10">
+              <CardHeader className="space-y-1">
+                <div className="flex justify-center mb-2">
+                  <div className="relative">
+                    <img
+                      src="/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png"
+                      alt="Aurora"
+                      className="h-12 w-12"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green opacity-50 blur-lg -z-10" />
+                  </div>
+                </div>
+                <CardTitle className="text-2xl text-center bg-clip-text text-transparent bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green">
+                  {forgotPassword ? (resetSent ? 'Check Your Email' : 'Reset Password') : 'Welcome Back'}
+                </CardTitle>
+                <CardDescription className="text-center text-gray-400">
+                  {forgotPassword 
+                    ? (resetSent 
+                      ? 'Instructions have been sent to reset your password' 
+                      : 'Enter your email to receive reset instructions')
+                    : 'Enter your credentials to access your account'}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {forgotPassword 
+                  ? (resetSent ? resetSentConfirmation : resetPasswordForm) 
+                  : loginForm}
+              </CardContent>
+              <CardFooter className="flex justify-center text-xs text-gray-500">
+                Protected by Aurora Security
+              </CardFooter>
+            </Card>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
   );
 };
 

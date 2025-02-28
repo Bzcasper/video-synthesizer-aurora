@@ -1,10 +1,17 @@
 
 import React from 'react';
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Scene, SceneType, CameraMotion } from './types';
+import { 
+  Tooltip, 
+  TooltipContent, 
+  TooltipProvider, 
+  TooltipTrigger 
+} from "@/components/ui/tooltip";
+import { InfoIcon } from "lucide-react";
 
 interface SceneFormFieldsProps {
   scene: Scene;
@@ -19,112 +26,165 @@ export const SceneFormFields: React.FC<SceneFormFieldsProps> = ({
   isLastScene,
   updateScene,
 }) => {
+  // Scene types with friendly labels
+  const sceneTypes: { value: SceneType; label: string }[] = [
+    { value: 'realistic_outdoor', label: 'Realistic Outdoor' },
+    { value: 'cinematic_close_up', label: 'Cinematic Close-up' },
+    { value: 'abstract_scene', label: 'Abstract Scene' },
+    { value: 'sci_fi_scene', label: 'Sci-fi Scene' },
+    { value: 'animation_scene', label: 'Animation Scene' },
+  ];
+
+  // Camera motion types with friendly labels
+  const cameraMotions: { value: CameraMotion; label: string }[] = [
+    { value: 'static', label: 'Static' },
+    { value: 'pan_left', label: 'Pan Left' },
+    { value: 'pan_right', label: 'Pan Right' },
+    { value: 'tilt_up', label: 'Tilt Up' },
+    { value: 'tilt_down', label: 'Tilt Down' },
+    { value: 'zoom_in', label: 'Zoom In' },
+    { value: 'zoom_out', label: 'Zoom Out' },
+    { value: 'dolly', label: 'Dolly' },
+  ];
+
+  // Transition types
+  const transitionTypes = [
+    { value: 'fade', label: 'Fade' },
+    { value: 'wipe', label: 'Wipe' },
+    { value: 'dissolve', label: 'Dissolve' },
+    { value: 'none', label: 'None' },
+  ];
+
+  const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    updateScene({ prompt: e.target.value });
+  };
+
+  const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateScene({ duration: Number(e.target.value) || 1 });
+  };
+
   return (
-    <>
-      <div className="flex-1">
-        <Label htmlFor={`scene-description-${index}`} className="text-sm font-medium mb-2 block">
-          Scene Description
-        </Label>
+    <div className="flex-1 space-y-4">
+      <div className="flex items-center gap-2">
+        <h4 className="text-sm font-medium text-gradient mb-0">Scene {index + 1}</h4>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <InfoIcon className="h-4 w-4 text-gray-400" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="max-w-xs">Each scene will be rendered as a separate segment in your final video.</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+
+      {/* Scene Description/Prompt */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <label htmlFor={`scene-prompt-${index}`} className="text-sm font-medium text-gray-200">
+            Scene Description
+          </label>
+          <span className="text-xs text-gray-400">
+            {scene.prompt.length}/200
+          </span>
+        </div>
         <Textarea
-          id={`scene-description-${index}`}
-          name={`scene-description-${index}`}
+          id={`scene-prompt-${index}`}
           value={scene.prompt}
-          onChange={(e) => updateScene({ prompt: e.target.value })}
-          placeholder="Describe the scene..."
-          className="h-[100px]"
-          aria-describedby={`scene-description-hint-${index}`}
+          onChange={handlePromptChange}
+          placeholder="Describe what should appear in this scene..."
+          className="bg-white/5 border-white/10 text-white resize-none h-20"
+          maxLength={200}
         />
-        <p id={`scene-description-hint-${index}`} className="sr-only">
-          Enter a detailed description of the scene you want to create
-        </p>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div>
-          <Label htmlFor={`scene-type-${index}`} className="text-sm font-medium mb-2 block">
-            Scene Type
-          </Label>
-          <Select
-            value={scene.sceneType}
-            onValueChange={(value: SceneType) => 
-              updateScene({ sceneType: value })}
-          >
-            <SelectTrigger id={`scene-type-${index}`} name={`scene-type-${index}`}>
-              <SelectValue placeholder="Select type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="cyberpunk">Cyberpunk</SelectItem>
-              <SelectItem value="fantasy">Fantasy</SelectItem>
-              <SelectItem value="realistic_outdoor">Realistic Outdoor</SelectItem>
-              <SelectItem value="scifi_interior">Sci-fi Interior</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      {/* Scene Type */}
+      <div className="space-y-2">
+        <label htmlFor={`scene-type-${index}`} className="text-sm font-medium text-gray-200">
+          Scene Type
+        </label>
+        <Select 
+          value={scene.sceneType} 
+          onValueChange={(value) => updateScene({ sceneType: value as SceneType })}
+        >
+          <SelectTrigger id={`scene-type-${index}`}>
+            <SelectValue placeholder="Select scene type" />
+          </SelectTrigger>
+          <SelectContent>
+            {sceneTypes.map((type) => (
+              <SelectItem key={type.value} value={type.value}>
+                {type.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-        <div>
-          <Label htmlFor={`camera-motion-${index}`} className="text-sm font-medium mb-2 block">
-            Camera Motion
-          </Label>
-          <Select
-            value={scene.cameraMotion}
-            onValueChange={(value: CameraMotion) => 
-              updateScene({ cameraMotion: value })}
-          >
-            <SelectTrigger id={`camera-motion-${index}`} name={`camera-motion-${index}`}>
-              <SelectValue placeholder="Select motion" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="static">Static</SelectItem>
-              <SelectItem value="pan_left">Pan Left</SelectItem>
-              <SelectItem value="pan_right">Pan Right</SelectItem>
-              <SelectItem value="zoom_in">Zoom In</SelectItem>
-              <SelectItem value="zoom_out">Zoom Out</SelectItem>
-              <SelectItem value="tracking">Tracking Shot</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      {/* Camera Motion */}
+      <div className="space-y-2">
+        <label htmlFor={`camera-motion-${index}`} className="text-sm font-medium text-gray-200">
+          Camera Motion
+        </label>
+        <Select 
+          value={scene.cameraMotion} 
+          onValueChange={(value) => updateScene({ cameraMotion: value as CameraMotion })}
+        >
+          <SelectTrigger id={`camera-motion-${index}`}>
+            <SelectValue placeholder="Select camera motion" />
+          </SelectTrigger>
+          <SelectContent>
+            {cameraMotions.map((motion) => (
+              <SelectItem key={motion.value} value={motion.value}>
+                {motion.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-        <div>
-          <Label htmlFor={`scene-duration-${index}`} className="text-sm font-medium mb-2 block">
+      {/* Duration */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <label htmlFor={`scene-duration-${index}`} className="text-sm font-medium text-gray-200">
             Duration (seconds)
-          </Label>
-          <Input
-            id={`scene-duration-${index}`}
-            name={`scene-duration-${index}`}
-            type="number"
-            min={1}
-            max={30}
-            value={scene.duration}
-            onChange={(e) => updateScene({ 
-              duration: Math.max(1, Math.min(30, parseInt(e.target.value) || 1))
-            })}
-          />
+          </label>
+          <span className="text-xs text-gray-400">{scene.duration}s</span>
         </div>
+        <Input
+          id={`scene-duration-${index}`}
+          type="number"
+          min={1}
+          max={30}
+          value={scene.duration}
+          onChange={handleDurationChange}
+          className="bg-white/5 border-white/10 text-white"
+        />
       </div>
 
+      {/* Transition Type (not for the last scene) */}
       {!isLastScene && (
-        <div>
-          <Label htmlFor={`transition-type-${index}`} className="text-sm font-medium mb-2 block">
-            Transition
-          </Label>
-          <Select
-            value={scene.transitionType || 'none'}
-            onValueChange={(value) => 
-              updateScene({ transitionType: value === 'none' ? undefined : value })}
+        <div className="space-y-2">
+          <label htmlFor={`transition-${index}`} className="text-sm font-medium text-gray-200">
+            Transition to Next Scene
+          </label>
+          <Select 
+            value={scene.transitionType || 'fade'} 
+            onValueChange={(value) => updateScene({ transitionType: value })}
           >
-            <SelectTrigger id={`transition-type-${index}`} name={`transition-type-${index}`}>
+            <SelectTrigger id={`transition-${index}`}>
               <SelectValue placeholder="Select transition" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="none">None</SelectItem>
-              <SelectItem value="fade">Fade</SelectItem>
-              <SelectItem value="dissolve">Dissolve</SelectItem>
-              <SelectItem value="wipe">Wipe</SelectItem>
-              <SelectItem value="zoom">Zoom</SelectItem>
+              {transitionTypes.map((transition) => (
+                <SelectItem key={transition.value} value={transition.value}>
+                  {transition.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
       )}
-    </>
+    </div>
   );
 };

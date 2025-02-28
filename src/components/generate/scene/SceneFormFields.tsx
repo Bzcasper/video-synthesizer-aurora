@@ -26,28 +26,21 @@ export const SceneFormFields: React.FC<SceneFormFieldsProps> = ({
   isLastScene,
   updateScene,
 }) => {
-  // Scene types with friendly labels
+  // Scene types with friendly labels - updated to match the enum values in types.ts
   const sceneTypes: { value: SceneType; label: string }[] = [
     { value: 'realistic_outdoor', label: 'Realistic Outdoor' },
-    { value: 'cinematic_close_up', label: 'Cinematic Close-up' },
-    { value: 'abstract_scene', label: 'Abstract Scene' },
-    { value: 'sci_fi_scene', label: 'Sci-fi Scene' },
-    { value: 'animation_scene', label: 'Animation Scene' },
     { value: 'cyberpunk', label: 'Cyberpunk' },
     { value: 'fantasy', label: 'Fantasy' },
     { value: 'scifi_interior', label: 'Sci-fi Interior' },
   ];
 
-  // Camera motion types with friendly labels
+  // Camera motion types with friendly labels - updated to match the enum values in types.ts
   const cameraMotions: { value: CameraMotion; label: string }[] = [
     { value: 'static', label: 'Static' },
     { value: 'pan_left', label: 'Pan Left' },
     { value: 'pan_right', label: 'Pan Right' },
-    { value: 'tilt_up', label: 'Tilt Up' },
-    { value: 'tilt_down', label: 'Tilt Down' },
     { value: 'zoom_in', label: 'Zoom In' },
     { value: 'zoom_out', label: 'Zoom Out' },
-    { value: 'dolly', label: 'Dolly' },
     { value: 'tracking', label: 'Tracking' },
   ];
 

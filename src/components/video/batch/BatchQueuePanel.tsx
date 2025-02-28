@@ -10,36 +10,31 @@ export const BatchQueuePanel: React.FC = () => {
       title: 'Ocean waves at sunset',
       progress: 45,
       status: 'processing',
-      timeRemaining: '12:30'
+      remainingTime: 750 // 12:30 in seconds
     },
     {
       id: 'job-2',
       title: 'Urban night timelapse',
       progress: 10,
-      status: 'queued',
-      timeRemaining: '25:45'
+      status: 'pending',
+      remainingTime: 1545 // 25:45 in seconds
     },
     {
       id: 'job-3',
       title: 'Mountain forest aerial',
       progress: 0,
-      status: 'queued',
-      timeRemaining: '32:15'
+      status: 'pending',
+      remainingTime: 1935 // 32:15 in seconds
     }
   ]);
   
-  const handlePause = (jobId: string) => {
-    setActiveJobs(
-      activeJobs.map(job => 
-        job.id === jobId 
-          ? { ...job, status: job.status === 'paused' ? 'processing' : 'paused' } 
-          : job
-      )
-    );
-  };
-  
   const handleCancel = (jobId: string) => {
     setActiveJobs(activeJobs.filter(job => job.id !== jobId));
+  };
+  
+  const handleSettings = (jobId: string) => {
+    // Settings functionality to be implemented
+    console.log(`Open settings for job: ${jobId}`);
   };
   
   if (activeJobs.length === 0) {
@@ -63,8 +58,8 @@ export const BatchQueuePanel: React.FC = () => {
         <BatchJobCard 
           key={job.id}
           job={job}
-          onPause={handlePause}
           onCancel={handleCancel}
+          onSettings={handleSettings}
           index={index}
         />
       ))}

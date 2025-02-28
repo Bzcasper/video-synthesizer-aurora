@@ -6,12 +6,15 @@ import { ProgressBar } from "@/components/video/common/ProgressBar";
 import { TimeRemaining } from "@/components/video/common/TimeRemaining";
 import { StatusBadge } from '@/components/video/StatusBadge';
 import { Cog, X } from 'lucide-react';
+import { type Database } from "@/integrations/supabase/types";
 
-interface BatchJob {
+export type VideoJobStatus = Database["public"]["Enums"]["video_job_status"];
+
+export interface BatchJob {
   id: string;
   title: string;
   progress: number;
-  status: string;
+  status: VideoJobStatus;
   remainingTime: number;
   thumbnailUrl?: string;
 }
@@ -20,15 +23,17 @@ interface BatchJobCardProps {
   job: BatchJob;
   onCancel: (id: string) => void;
   onSettings: (id: string) => void;
+  index?: number;
 }
 
 export const BatchJobCard: React.FC<BatchJobCardProps> = ({
   job,
   onCancel,
-  onSettings
+  onSettings,
+  index
 }) => {
   const handleCancel = () => {
-    if (job.status === 'processing' || job.status === 'queued') {
+    if (job.status === 'processing' || job.status === 'pending') {
       onCancel(job.id);
     }
   };
@@ -58,7 +63,7 @@ export const BatchJobCard: React.FC<BatchJobCardProps> = ({
         )}
         
         <div className="flex justify-end gap-2 mt-3">
-          {(job.status === 'processing' || job.status === 'queued') && (
+          {(job.status === 'processing' || job.status === 'pending') && (
             <Button 
               variant="ghost" 
               size="sm"

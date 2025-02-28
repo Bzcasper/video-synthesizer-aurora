@@ -1,127 +1,158 @@
 
-import { useState } from 'react';
-import { toast } from '@/components/ui/use-toast';
-import { VideoJobStatus } from '../video/types';
+import { useState, useRef } from 'react';
+import { toast } from "@/hooks/use-toast";
+import { type Database } from "@/integrations/supabase/types";
 
-interface VideoGenerationOptions {
+type SceneType = Database["public"]["Enums"]["scene_type"];
+type CameraMotion = Database["public"]["Enums"]["camera_motion_type"];
+
+interface Scene {
+  prompt: string;
+  sceneType: SceneType;
+  cameraMotion: CameraMotion;
+  duration: number;
+  sequenceOrder: number;
+  transitionType?: string;
+}
+
+interface VideoGenerationParams {
   prompt: string;
   duration: number;
   style: string;
-  resolution?: string;
-  aspectRatio?: string;
+  scenes: Scene[];
+  resolution?: [number, number];
+  fps?: number;
 }
 
-interface VideoGenerationResult {
-  videoId: string;
-  outputUrl: string | null;
-  status: VideoJobStatus;
-}
-
-export function useVideoGeneration() {
+export const useVideoGeneration = () => {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [currentStage, setCurrentStage] = useState<string>('');
+  const [generationProgress, setGenerationProgress] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(0);
-  const [result, setResult] = useState<VideoGenerationResult | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [currentStage, setCurrentStage] = useState('Initializing...');
+  
+  const isSubmitting = useRef(false);
+  const progressInterval = useRef<number | null>(null);
 
-  const generateVideo = async (options: VideoGenerationOptions) => {
-    if (!options.prompt) {
-      toast({
-        description: "Please provide a description for your video.",
-        variant: "destructive",
-      });
-      return null;
-    }
-
-    try {
-      setIsGenerating(true);
-      setProgress(0);
-      setTimeRemaining(options.duration * 6); // Rough estimate
-      setCurrentStage('Initializing');
-      setError(null);
-
-      // Mock progress updates for demonstration
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          const newProgress = prev + (1 + Math.random() * 2);
-          
-          // Update current stage based on progress
-          if (newProgress > 20 && newProgress <= 40) {
-            setCurrentStage('Generating scenes');
-          } else if (newProgress > 40 && newProgress <= 60) {
-            setCurrentStage('Adding effects');
-          } else if (newProgress > 60 && newProgress <= 80) {
-            setCurrentStage('Rendering frames');
-          } else if (newProgress > 80) {
-            setCurrentStage('Finalizing video');
-          }
-          
-          // Update time remaining
-          setTimeRemaining((prev) => Math.max(0, prev - 1));
-          
-          if (newProgress >= 100) {
-            clearInterval(interval);
-            
-            // Simulate completion after a short delay
-            setTimeout(() => {
-              setResult({
-                videoId: `vid-${Date.now().toString(36)}`,
-                outputUrl: 'https://example.com/video.mp4',
-                status: 'completed' as VideoJobStatus,
-              });
-              
-              toast({
-                description: "Video generated successfully!",
-                variant: "default",
-              });
-              
-              setIsGenerating(false);
-            }, 1000);
-            
-            return 100;
-          }
-          
-          return newProgress;
-        });
-      }, 500);
-      
-      // Simulate potential error (10% chance)
-      if (Math.random() < 0.1) {
-        setTimeout(() => {
-          clearInterval(interval);
-          setError('Generation failed. Please try again with a different prompt.');
-          setIsGenerating(false);
-        }, 5000 + Math.random() * 10000);
-      }
-      
-      return true;
-    } catch (err) {
-      console.error('Error generating video:', err);
-      setError('An unexpected error occurred.');
-      setIsGenerating(false);
-      return null;
+  // Cleanup function for intervals
+  const cleanupIntervals = () => {
+    if (progressInterval.current) {
+      clearInterval(progressInterval.current);
+      progressInterval.current = null;
     }
   };
 
-  const cancelGeneration = () => {
-    setIsGenerating(false);
-    setProgress(0);
-    setCurrentStage('');
-    toast({
-      description: "Video generation cancelled.",
-      variant: "default",
-    });
+  // Simulate progress updates
+  const simulateProgress = () => {
+    setGenerationProgress(0);
+    setTimeRemaining(60); // Start with 60 seconds estimate
+    
+    const stages = [
+      'Analyzing prompt...',
+      'Generating frames...',
+      'Applying style effects...',
+      'Rendering video...',
+      'Finalizing output...'
+    ];
+    
+    let stageIndex = 0;
+    setCurrentStage(stages[stageIndex]);
+    
+    // Update progress every second
+    progressInterval.current = window.setInterval(() => {
+      setGenerationProgress(prev => {
+        const newProgress = prev + (Math.random() * 2);
+        
+        // Move to next stage at certain thresholds
+        if (newProgress > 20 && stageIndex === 0) {
+          stageIndex = 1;
+          setCurrentStage(stages[stageIndex]);
+        } else if (newProgress > 40 && stageIndex === 1) {
+          stageIndex = 2;
+          setCurrentStage(stages[stageIndex]);
+        } else if (newProgress > 65 && stageIndex === 2) {
+          stageIndex = 3;
+          setCurrentStage(stages[stageIndex]);
+        } else if (newProgress > 85 && stageIndex === 3) {
+          stageIndex = 4;
+          setCurrentStage(stages[stageIndex]);
+        }
+        
+        // Ensure we don't exceed 99% until actual completion
+        return Math.min(newProgress, 99);
+      });
+      
+      // Update remaining time estimation
+      setTimeRemaining(prev => Math.max(0, prev - 1));
+    }, 1000);
+  };
+
+  const generateVideo = async (params: VideoGenerationParams) => {
+    // Prevent multiple submissions
+    if (isSubmitting.current || isGenerating) return;
+    isSubmitting.current = true;
+    setIsGenerating(true);
+    
+    try {
+      // Start progress simulation
+      simulateProgress();
+      
+      const response = await fetch('/api/video/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: params.prompt,
+          duration: params.duration,
+          style: params.style,
+          resolution: params.resolution || [1920, 1080],
+          fps: params.fps || 30,
+          scenes: params.scenes,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to generate video: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      // Complete progress
+      setGenerationProgress(100);
+      setTimeRemaining(0);
+      setCurrentStage('Complete!');
+      
+      // Notify user
+      toast({
+        title: "Video Generation Started",
+        description: "Your video is being generated. You'll be notified when it's ready.",
+      });
+
+      return data;
+    } catch (error) {
+      console.error('Video generation error:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to start video generation. Please try again.",
+        variant: "destructive"
+      });
+      
+      return null;
+    } finally {
+      // Clean up and reset state after a delay
+      setTimeout(() => {
+        setIsGenerating(false);
+        cleanupIntervals();
+        isSubmitting.current = false;
+      }, 1000);
+    }
   };
 
   return {
-    isGenerating,
-    progress,
-    currentStage,
-    timeRemaining,
-    result,
-    error,
     generateVideo,
-    cancelGeneration,
+    isGenerating,
+    generationProgress,
+    timeRemaining,
+    currentStage,
   };
-}
+};

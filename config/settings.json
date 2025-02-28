@@ -1,0 +1,15 @@
+
+{
+    "useCustomPrompts": true,
+    "defaultPromptFile": "prompts/default-prompts.json",
+    "componentFolder": "src/components",
+    "enhancedComponents": {
+        "videoGeneration": "src/components/generate/EnhancedGenerateForm.tsx",
+        "videoPlayer": "src/components/video/player/EnhancedVideoPlayer.tsx",
+        "processingStatus": "src/components/video/processing/VideoProcessingStatus.tsx",
+        "hero": "src/components/landing/EnhancedHeroSection.tsx"
+    },
+    "defaultTheme": "dark",
+    "showBuildErrors": true,
+    "analyticsEnabled": false
+}

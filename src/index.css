@@ -1,4 +1,7 @@
 
+/* Load Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
 @import "./styles/base.css";
 @import "./styles/animations.css";
 @import "./styles/components.css";
@@ -7,9 +10,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Load Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 /* Additional animations */
 @keyframes pulse-slow {

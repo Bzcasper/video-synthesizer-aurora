@@ -4,12 +4,27 @@ import { useVideoEnhancements } from '@/hooks/use-video-enhancements';
 import { EmptyState } from '../common/EmptyState';
 import { EnhancementJobCard } from './EnhancementJobCard';
 
+export interface EnhancementJob {
+  id: string;
+  progress: number;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  estimated_completion_time: string | null;
+  title: string;
+  remainingTime: string;
+}
+
 export const EnhancementProcessingPanel: React.FC = () => {
   const { enhancementProgress } = useVideoEnhancements();
   
-  const activeJobs = Object.values(enhancementProgress).filter(
-    (job) => job.status === 'processing' || job.status === 'pending'
-  );
+  const activeJobs = Object.values(enhancementProgress)
+    .filter((job) => job.status === 'processing' || job.status === 'pending')
+    .map(job => ({
+      ...job,
+      title: `Enhancement #${job.id}`,
+      remainingTime: job.estimated_completion_time 
+        ? new Date(job.estimated_completion_time).toLocaleTimeString() 
+        : 'Calculating...'
+    })) as EnhancementJob[];
   
   if (activeJobs.length === 0) {
     return (

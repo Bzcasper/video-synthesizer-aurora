@@ -1,32 +1,19 @@
 
-import React, { useRef, lazy, Suspense } from 'react';
-import { useScrollVisibility } from '@/hooks/useScrollVisibility';
+import React from 'react';
 import PageLayout from '@/components/landing/PageLayout';
-import StyleInitializer from '@/components/landing/StyleInitializer';
-
-// Immediately load critical components
-import BackgroundEffects from '@/components/landing/BackgroundEffects';
-import MainContentWrapper from '@/components/landing/MainContentWrapper';
 import HeroSection from '@/components/landing/HeroSection';
-
-// Lazy load non-critical components
-const ContentSections = lazy(() => import('@/components/landing/ContentSections'));
+import ContentSections from '@/components/landing/ContentSections';
+import NavigationBar from '@/components/landing/NavigationBar';
 
 const Index = () => {
-  const mainRef = useRef<HTMLDivElement>(null);
-  useScrollVisibility();
-
   return (
     <PageLayout>
-      <StyleInitializer />
-      <div ref={mainRef}>
-        <BackgroundEffects />
-        <MainContentWrapper>
+      <div className="min-h-screen w-full">
+        <NavigationBar />
+        <main className="flex-1 w-full">
           <HeroSection />
-          <Suspense fallback={<div className="min-h-[200px]"></div>}>
-            <ContentSections />
-          </Suspense>
-        </MainContentWrapper>
+          <ContentSections />
+        </main>
       </div>
     </PageLayout>
   );

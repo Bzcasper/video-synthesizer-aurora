@@ -1,69 +1,132 @@
-# Welcome to your Lovable project
 
-## Project info
+# Aurora Video Synthesizer 🎬✨
 
-**URL**: https://lovable.dev/projects/ccef2008-7c15-40d9-9521-012cb4b57420
+![Aurora Video Synthesizer](public/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png)
 
-## How can I edit this code?
+## Overview
 
-There are several ways of editing your application.
+Aurora Video Synthesizer is a powerful web application that uses advanced AI technology to generate stunning videos from text descriptions. Built with modern web technologies, it offers an intuitive UI for creating, enhancing, and managing AI-generated videos.
 
-**Use Lovable**
+## Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ccef2008-7c15-40d9-9521-012cb4b57420) and start prompting.
+✅ **AI Video Generation**: Transform text prompts into full videos with custom styles and settings  
+✅ **Video Enhancement**: Apply filters, speed adjustments, and other enhancements to your videos  
+✅ **Batch Processing**: Queue multiple video generation tasks  
+✅ **Responsive Design**: Perfect UI experience on any device from mobile to desktop  
+✅ **Real-time Status**: Track the progress of your video generation in real-time  
+✅ **User Dashboard**: Manage all your generated videos in one place  
 
-Changes made via Lovable will be committed automatically to this repo.
+## Tech Stack
 
-**Use your preferred IDE**
+- **Frontend**: React 18, TypeScript, Vite
+- **UI Library**: Tailwind CSS, Shadcn UI components
+- **State Management**: TanStack React Query
+- **Routing**: React Router v6
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Setup Instructions
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Prerequisites
 
-Follow these steps:
+- Node.js 16+ 
+- npm or yarn
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Installation
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. Clone the repository
+   ```bash
+   git clone https://github.com/yourusername/aurora-video-synthesizer.git
+   cd aurora-video-synthesizer
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+2. Install dependencies
+   ```bash
+   npm install
+   # or
+   yarn
+   ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+3. Start the development server
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. Open `http://localhost:5173` in your browser
+
+## Project Structure
+
+```
+aurora-video-synthesizer/
+├── public/              # Static assets
+├── src/
+│   ├── components/      # UI components
+│   │   ├── ui/          # Shadcn UI components
+│   │   ├── landing/     # Landing page components
+│   │   ├── video/       # Video-related components
+│   │   └── generate/    # Video generation components
+│   ├── hooks/           # Custom React hooks
+│   ├── lib/             # Utility functions
+│   ├── pages/           # Page components
+│   │   ├── auth/        # Authentication pages
+│   │   ├── dashboard/   # Dashboard pages
+│   │   └── layout/      # Layout components
+│   ├── styles/          # Global styles
+│   ├── App.tsx          # Main App component
+│   └── main.tsx         # Entry point
+├── supabase/            # Supabase functions and configuration
+├── docs/                # Documentation
+├── package.json
+└── tailwind.config.ts
 ```
 
-**Edit a file directly in GitHub**
+## Usage Guide
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Generating a Video
 
-**Use GitHub Codespaces**
+1. Navigate to the Dashboard > Generate page
+2. Enter a descriptive prompt for your video
+3. Configure settings (duration, style, resolution, etc.)
+4. Click "Generate Video" and wait for processing
+5. Your video will appear in the Dashboard > Videos section when ready
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Enhancing Videos
 
-## What technologies are used for this project?
+1. Navigate to Dashboard > Enhance
+2. Select a video from your library
+3. Choose enhancement options (color grading, stabilization, etc.)
+4. Apply changes and wait for processing
+5. Download or share your enhanced video
 
-This project is built with .
+## Deployment
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+This project can be deployed using any static site hosting service:
 
-## How can I deploy this project?
+- Vercel
+- Netlify
+- GitHub Pages
+- Firebase Hosting
 
-Simply open [Lovable](https://lovable.dev/projects/ccef2008-7c15-40d9-9521-012cb4b57420) and click on Share -> Publish.
+## Development Tasks
 
-## I want to use a custom domain - is that possible?
+Refer to the `docs/tasks.md` file for a detailed breakdown of UI improvement tasks.
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- [Shadcn UI](https://ui.shadcn.com/) for providing beautiful UI components
+- [Lucide](https://lucide.dev/) for the icon set
+- [TanStack Query](https://tanstack.com/query) for data fetching

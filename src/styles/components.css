@@ -1,7 +1,7 @@
 
 @layer components {
   .glass-panel {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-lg 
+    @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-lg w-full
            hover:border-aurora-blue/30 hover:bg-white/10 
            transition-all duration-golden;
   }

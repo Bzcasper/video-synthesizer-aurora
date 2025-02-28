@@ -64,6 +64,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       <MainContent 
         isTransitioning={isTransitioning} 
         handleContentClick={handleContentClick}
+        className="w-full"
       >
         {children}
       </MainContent>

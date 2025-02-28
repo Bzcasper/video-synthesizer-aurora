@@ -39,21 +39,23 @@ export const BatchQueuePanel: React.FC = () => {
   
   if (activeJobs.length === 0) {
     return (
-      <EmptyState 
-        icon="batch"
-        title="No active batch processing jobs"
-        description="Generate or enhance videos to add them to the queue"
-        actionButton={{
-          label: "Generate New Video",
-          icon: "generate",
-          onClick: () => window.location.href = '/dashboard/generate'
-        }}
-      />
+      <div className="w-full">
+        <EmptyState 
+          icon="batch"
+          title="No active batch processing jobs"
+          description="Generate or enhance videos to add them to the queue"
+          actionButton={{
+            label: "Generate New Video",
+            icon: "generate",
+            onClick: () => window.location.href = '/dashboard/generate'
+          }}
+        />
+      </div>
     );
   }
   
   return (
-    <div className="space-y-fib-3">
+    <div className="w-full space-y-fib-3">
       {activeJobs.map((job, index) => (
         <BatchJobCard 
           key={job.id}

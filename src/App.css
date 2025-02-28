@@ -53,6 +53,7 @@
   position: relative;
   z-index: 10;
   width: 100%;
+  max-width: 100%;
 }
 
 /* Ensure sections remain visible */
@@ -61,6 +62,7 @@ section {
   position: relative;
   z-index: 10;
   width: 100%;
+  max-width: 100%;
 }
 
 /* Global container width fix */
@@ -75,31 +77,31 @@ section {
 
 @media (min-width: 640px) {
   .container {
-    max-width: 640px;
+    max-width: 100%;
   }
 }
 
 @media (min-width: 768px) {
   .container {
-    max-width: 768px;
+    max-width: 100%;
   }
 }
 
 @media (min-width: 1024px) {
   .container {
-    max-width: 1024px;
+    max-width: 100%;
   }
 }
 
 @media (min-width: 1280px) {
   .container {
-    max-width: 1280px;
+    max-width: 100%;
   }
 }
 
 @media (min-width: 1536px) {
   .container {
-    max-width: 1536px;
+    max-width: 100%;
   }
 }
 

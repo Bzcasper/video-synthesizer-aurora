@@ -35,7 +35,7 @@ const MainContent: React.FC<MainContentProps> = ({
             stiffness: 100,
             damping: 15
           }}
-          className={`w-full max-w-full p-4 md:p-8 ${isTransitioning ? 'pointer-events-none' : ''}`}
+          className={`w-full h-full max-w-full p-4 md:p-8 ${isTransitioning ? 'pointer-events-none' : ''}`}
         >
           {children}
         </motion.div>

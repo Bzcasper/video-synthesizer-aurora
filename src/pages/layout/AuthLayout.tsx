@@ -122,9 +122,9 @@ const AuthLayout = ({ children, requireAuth = false }: AuthLayoutProps) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
-          className={`relative z-10 w-full max-w-md mx-auto ${isTransitioning ? 'pointer-events-none' : ''}`}
+          className={`relative z-10 w-full max-w-7xl mx-auto px-4 ${isTransitioning ? 'pointer-events-none' : ''}`}
         >
-          <div className="glass-panel p-8 shadow-xl">
+          <div className="glass-panel p-8 shadow-xl w-full">
             {children}
           </div>
         </motion.div>

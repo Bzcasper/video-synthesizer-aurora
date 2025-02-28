@@ -22,7 +22,10 @@ export const sceneSchema = z.object({
     "cinematic_close_up", 
     "abstract_scene", 
     "sci_fi_scene", 
-    "animation_scene"
+    "animation_scene",
+    "cyberpunk",
+    "fantasy",
+    "scifi_interior"
   ] as const),
   cameraMotion: z.enum([
     "static", 
@@ -32,7 +35,8 @@ export const sceneSchema = z.object({
     "tilt_down", 
     "zoom_in", 
     "zoom_out", 
-    "dolly"
+    "dolly",
+    "tracking"
   ] as const),
   duration: z.number().min(1, "Duration must be at least 1 second").max(30, "Duration cannot exceed 30 seconds"),
   sequenceOrder: z.number().int().min(0),

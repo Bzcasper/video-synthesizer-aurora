@@ -63,5 +63,7 @@ const CustomIcon: React.FC<CustomIconProps> = ({ name, className = "h-5 w-5" }) 
   }
 };
 
+// Add a default export to maintain compatibility with existing code
+export default CustomIcon;
 export { CustomIcon };
 export type { CustomIconProps };

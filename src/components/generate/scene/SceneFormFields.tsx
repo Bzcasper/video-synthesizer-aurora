@@ -33,6 +33,9 @@ export const SceneFormFields: React.FC<SceneFormFieldsProps> = ({
     { value: 'abstract_scene', label: 'Abstract Scene' },
     { value: 'sci_fi_scene', label: 'Sci-fi Scene' },
     { value: 'animation_scene', label: 'Animation Scene' },
+    { value: 'cyberpunk', label: 'Cyberpunk' },
+    { value: 'fantasy', label: 'Fantasy' },
+    { value: 'scifi_interior', label: 'Sci-fi Interior' },
   ];
 
   // Camera motion types with friendly labels
@@ -45,6 +48,7 @@ export const SceneFormFields: React.FC<SceneFormFieldsProps> = ({
     { value: 'zoom_in', label: 'Zoom In' },
     { value: 'zoom_out', label: 'Zoom Out' },
     { value: 'dolly', label: 'Dolly' },
+    { value: 'tracking', label: 'Tracking' },
   ];
 
   // Transition types

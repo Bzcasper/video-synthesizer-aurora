@@ -32,7 +32,7 @@
   }
 
   * {
-    @apply border-border selection:bg-aurora-blue/20;
+    @apply border-border selection:bg-aurora-blue/20 box-border;
   }
 
   html {
@@ -45,7 +45,7 @@
   }
 
   #root {
-    @apply min-h-screen bg-aurora-black;
+    @apply min-h-screen bg-aurora-black flex flex-col;
   }
 
   /* Typography scaling using Fibonacci sequence */
@@ -90,7 +90,26 @@
 
   /* Container widths using Fibonacci */
   .container {
-    @apply max-w-[1440px] mx-auto px-fib-3;
+    @apply max-w-[1440px] mx-auto px-fib-3 sm:px-fib-4 md:px-fib-5;
+  }
+
+  /* Improved scrollbars */
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    @apply bg-black/20;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    @apply bg-aurora-blue/50 rounded-full;
+    border: 2px solid transparent;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    @apply bg-aurora-blue;
   }
 
   /* Form elements */

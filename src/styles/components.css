@@ -67,6 +67,26 @@
   .fade-in-golden {
     animation: fadeIn calc(0.618s * var(--golden-ratio)) ease-out forwards;
   }
+
+  /* Content container classes */
+  .content-container {
+    @apply container mx-auto px-4 sm:px-6 py-8;
+  }
+
+  /* Section spacing */
+  .section-spacing {
+    @apply py-8 md:py-12 lg:py-16;
+  }
+
+  /* Card styling */
+  .aurora-card {
+    @apply glass-panel p-6 rounded-lg transition-all duration-300;
+  }
+
+  /* Form group */
+  .form-group {
+    @apply space-y-2 mb-4;
+  }
 }
 
 /* Animation keyframes */

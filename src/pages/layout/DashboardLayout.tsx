@@ -36,6 +36,13 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Close sidebar on mobile when changing routes
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setSidebarOpen(false);
+    }
+  }, [location.pathname]);
+
   const handleLogout = async () => {
     setIsTransitioning(true);
     try {
@@ -62,7 +69,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     { icon: <Wand2 className="h-5 w-5" />, label: 'Enhance Video', path: '/dashboard/enhance' },
     { icon: <SquareStack className="h-5 w-5" />, label: 'Batch Queue', path: '/dashboard/batch' },
     { icon: <Film className="h-5 w-5" />, label: 'My Videos', path: '/dashboard/videos' },
-    { icon: <BarChart2 className="h-5 w-5" />, label: 'Processing Stats', path: '/dashboard/stats' },
+    { icon: <BarChart2 className="h-5 w-5" />, label: 'Stats', path: '/dashboard/stats' },
     { icon: <Settings className="h-5 w-5" />, label: 'Settings', path: '/dashboard/settings' },
   ];
 
@@ -76,7 +83,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <div className="min-h-screen bg-aurora-black flex">
+    <div className="min-h-screen bg-aurora-black flex overflow-hidden">
       {/* Mobile menu button */}
       <Button
         variant="ghost"
@@ -105,9 +112,9 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         initial={{ x: -280 }}
         animate={{ x: isSidebarOpen ? 0 : -280 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className={`fixed md:relative w-64 h-full border-r border-white/10 bg-black/20 backdrop-blur-xl z-40 md:translate-x-0`}
+        className="fixed md:relative w-64 h-screen z-40 md:translate-x-0 flex flex-col bg-black/90 backdrop-blur-lg border-r border-white/10"
       >
-        <div className="p-6">
+        <div className="p-6 border-b border-white/10">
           {/* Aurora logo */}
           <Link to="/dashboard" className="flex items-center space-x-3 group">
             <div className="relative">
@@ -126,7 +133,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           </Link>
         </div>
 
-        <nav className="mt-6 px-2">
+        <nav className="flex-1 overflow-y-auto py-6 px-3">
           <ul className="space-y-1">
             <AnimatePresence>
               {navItems.map((item, index) => {
@@ -172,7 +179,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           </ul>
         </nav>
 
-        <div className="absolute bottom-8 w-full px-6">
+        <div className="p-4 border-t border-white/10">
           <Button
             onClick={handleLogout}
             variant="ghost"
@@ -189,7 +196,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       </motion.aside>
 
       {/* Main content */}
-      <main className="flex-1 overflow-x-hidden" onClick={handleContentClick}>
+      <main className="flex-1 overflow-y-auto" onClick={handleContentClick}>
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -197,7 +204,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className={`container mx-auto px-6 py-8 ${isTransitioning ? 'pointer-events-none' : ''}`}
+            className={`container mx-auto px-4 py-6 md:px-6 md:py-8 ${isTransitioning ? 'pointer-events-none' : ''}`}
           >
             {children}
           </motion.div>

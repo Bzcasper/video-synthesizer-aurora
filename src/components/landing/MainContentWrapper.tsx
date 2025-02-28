@@ -9,10 +9,12 @@ interface MainContentWrapperProps {
 
 const MainContentWrapper = ({ children }: MainContentWrapperProps) => {
   return (
-    <div className="z-10">
+    <div className="flex flex-col min-h-screen">
       <NavigationBar />
-      <main>
-        {children}
+      <main className="flex-1">
+        <div className="container mx-auto px-fib-3 py-fib-4 md:py-fib-5">
+          {children}
+        </div>
       </main>
       <StickyCTA />
     </div>

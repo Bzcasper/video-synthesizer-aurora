@@ -4,14 +4,13 @@ import { useVideoEnhancements } from '@/hooks/use-video-enhancements';
 import { EmptyState } from '../common/EmptyState';
 import { EnhancementJobCard } from './EnhancementJobCard';
 
-// Define an interface for the enhancement job that includes the missing properties
-interface EnhancementJob {
+export interface EnhancementJob {
   id: string;
   progress: number;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   estimated_completion_time: string | null;
-  title: string; // Add the missing property
-  remainingTime: string; // Add the missing property
+  title: string;
+  remainingTime: string;
 }
 
 export const EnhancementProcessingPanel: React.FC = () => {
@@ -21,7 +20,7 @@ export const EnhancementProcessingPanel: React.FC = () => {
     .filter((job) => job.status === 'processing' || job.status === 'pending')
     .map(job => ({
       ...job,
-      title: `Enhancement #${job.id}`, // Provide a default title
+      title: `Enhancement #${job.id}`,
       remainingTime: job.estimated_completion_time 
         ? new Date(job.estimated_completion_time).toLocaleTimeString() 
         : 'Calculating...'

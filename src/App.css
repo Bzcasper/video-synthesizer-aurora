@@ -7,7 +7,8 @@
   padding: 0;
   background-color: #0A0A0A;
   text-align: left;
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
@@ -60,3 +61,13 @@ section {
   z-index: 10;
 }
 
+/* Layout improvements */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+}

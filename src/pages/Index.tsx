@@ -19,11 +19,13 @@ const Index = () => {
   return (
     <PageLayout>
       <StyleInitializer />
-      <div ref={mainRef}>
+      <div ref={mainRef} className="flex flex-col min-h-screen">
         <BackgroundEffects />
         <MainContentWrapper>
           <HeroSection />
-          <Suspense fallback={<div className="min-h-[200px]"></div>}>
+          <Suspense fallback={<div className="min-h-[200px] flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-aurora-blue"></div>
+          </div>}>
             <ContentSections />
           </Suspense>
         </MainContentWrapper>

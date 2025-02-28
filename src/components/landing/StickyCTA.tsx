@@ -2,25 +2,12 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Users } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from "@/integrations/supabase/client";
 
 const StickyCTA = () => {
-  const navigate = useNavigate();
-
-  const handleGetStarted = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      navigate('/dashboard');
-    } else {
-      navigate('/login');
-    }
-  };
-
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-aurora-black/80 
                     backdrop-blur-xl border-t border-aurora-blue/10 
-                    py-4 z-50">
+                    py-4 z-50 animate-slide-up">
       <div className="container mx-auto px-4 flex flex-col sm:flex-row 
                       items-center justify-between gap-4">
         <div className="flex items-center text-aurora-white/90">
@@ -29,7 +16,6 @@ const StickyCTA = () => {
         </div>
         <Button 
           size="lg"
-          onClick={handleGetStarted}
           className="bg-gradient-to-r from-aurora-purple to-aurora-blue
                      hover:from-aurora-blue hover:to-aurora-purple
                      shadow-lg hover:shadow-aurora-blue/50 

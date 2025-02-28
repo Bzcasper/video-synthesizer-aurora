@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { LoginForm } from '@/components/auth/LoginForm';
-import { ForgotPassword } from '@/components/auth/ForgotPassword';
+import { ForgotPassword } from '@/components/auth/ForgotPassword.tsx'; // Added .tsx extension explicitly
 import { AuthHeader } from '@/components/auth/AuthHeader';
 import { LoginSuccessMessage } from '@/components/auth/LoginSuccessMessage';
 import { toast } from '@/components/ui/use-toast';

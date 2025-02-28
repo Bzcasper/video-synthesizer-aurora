@@ -2,26 +2,8 @@
 import { type Database } from "@/integrations/supabase/types";
 import { z } from "zod";
 
-export type SceneType = 
-  | "realistic_outdoor" 
-  | "cinematic_close_up"
-  | "abstract_scene"
-  | "sci_fi_scene"
-  | "animation_scene"
-  | "cyberpunk"
-  | "fantasy"
-  | "scifi_interior";
-
-export type CameraMotion = 
-  | "static"
-  | "pan_left"
-  | "pan_right"
-  | "tilt_up"
-  | "tilt_down"
-  | "zoom_in"
-  | "zoom_out"
-  | "dolly"
-  | "tracking";
+export type SceneType = Database["public"]["Enums"]["scene_type"];
+export type CameraMotion = Database["public"]["Enums"]["camera_motion_type"];
 
 export interface Scene {
   prompt: string;

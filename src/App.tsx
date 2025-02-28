@@ -1,31 +1,13 @@
 
 import * as React from "react";
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthLayout from "./pages/layout/AuthLayout";
 import DashboardLayout from "./pages/layout/DashboardLayout";
-
-// Auth check component
-const AuthCheck = ({ children }: { children: React.ReactNode }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  
-  useEffect(() => {
-    // This is a placeholder for actual auth check logic
-    const isAuthenticated = localStorage.getItem('supabase.auth.token') !== null;
-    const isAuthRoute = ['/login', '/signup', '/reset-password', '/verify-email'].includes(location.pathname);
-    
-    if (!isAuthenticated && !isAuthRoute && !location.pathname.startsWith('/')) {
-      navigate('/login', { replace: true });
-    }
-  }, [navigate, location]);
-
-  return <>{children}</>;
-};
 
 // Eagerly load only the most critical pages
 import Index from "./pages/Index";

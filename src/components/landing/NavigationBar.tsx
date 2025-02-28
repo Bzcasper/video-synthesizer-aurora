@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
 import { AnimatePresence } from "framer-motion";
 
@@ -14,7 +14,6 @@ import MobileMenu from './navigation/MobileMenu';
 
 const NavigationBar: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,25 +47,15 @@ const NavigationBar: React.FC = () => {
     };
   }, []);
 
-  // Handle dashboard redirect for logged in users
-  const handleDashboardClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (session) {
-      navigate('/dashboard');
-    } else {
-      navigate('/login');
-    }
-  };
-
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/#features', label: 'Features' },
     { href: '/#pricing', label: 'Pricing' },
-    { href: '/dashboard', label: 'Dashboard', onClick: handleDashboardClick },
+    { href: '/#testimonials', label: 'Testimonials' },
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all ${
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-golden ${
       isScrolled ? 'bg-aurora-black/80 backdrop-blur-xl shadow-[0_0_20px_rgba(138,43,226,0.3)]' 
                  : 'bg-transparent'
     }`}>

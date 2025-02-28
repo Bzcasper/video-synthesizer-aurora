@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
@@ -9,29 +9,59 @@ import { LoginForm } from '@/components/auth/LoginForm';
 import { ForgotPassword } from '@/components/auth/ForgotPassword';
 import { AuthHeader } from '@/components/auth/AuthHeader';
 import { LoginSuccessMessage } from '@/components/auth/LoginSuccessMessage';
+import { toast } from '@/components/ui/use-toast';
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [forgotPassword, setForgotPassword] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
+  
+  // Redirect destination - default to dashboard, but use previous location if available
+  const redirectTo = location.state?.from || '/dashboard';
 
   // Check if user is already logged in
   useEffect(() => {
     const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data.session) {
-        setIsAuthenticated(true);
-        navigate('/dashboard');
-      } else {
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        
+        if (error) throw error;
+        
+        if (data.session) {
+          setIsAuthenticated(true);
+          navigate(redirectTo);
+          toast({
+            description: "You're already logged in",
+          });
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error: any) {
+        console.error('Session check error:', error.message);
         setIsAuthenticated(false);
       }
     };
 
     checkSession();
-  }, [navigate]);
+    
+    // Subscribe to auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+          navigate(redirectTo);
+        }
+      }
+    );
+    
+    // Cleanup the subscription
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate, redirectTo]);
 
   const handleLoginSuccess = () => {
     setIsLoggingIn(true);
@@ -39,7 +69,7 @@ const Login = () => {
     
     // Show success message briefly before redirecting
     setTimeout(() => {
-      navigate('/dashboard');
+      navigate(redirectTo);
     }, 1500);
   };
 

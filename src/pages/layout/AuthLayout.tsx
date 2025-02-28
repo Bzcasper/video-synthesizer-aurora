@@ -20,9 +20,15 @@ const AuthLayout = ({ children, requireAuth = false }: AuthLayoutProps) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data, error } = await supabase.auth.getSession();
         
-        if (requireAuth && !session) {
+        if (error) {
+          throw error;
+        }
+        
+        const hasSession = !!data.session;
+
+        if (requireAuth && !hasSession) {
           // User needs to be authenticated but isn't
           setIsTransitioning(true);
           toast({
@@ -30,10 +36,12 @@ const AuthLayout = ({ children, requireAuth = false }: AuthLayoutProps) => {
             description: "Please sign in to access this page",
             variant: "destructive",
           });
+          
+          // Store the current path to redirect back after login
           setTimeout(() => navigate('/login', { 
             state: { from: location.pathname } 
           }), 300);
-        } else if (!requireAuth && session && 
+        } else if (!requireAuth && hasSession && 
                   (location.pathname === '/login' || 
                    location.pathname === '/signup' || 
                    location.pathname === '/reset-password')) {
@@ -45,8 +53,8 @@ const AuthLayout = ({ children, requireAuth = false }: AuthLayoutProps) => {
           });
           setTimeout(() => navigate('/dashboard'), 300);
         }
-      } catch (error) {
-        console.error('Auth check error:', error);
+      } catch (error: any) {
+        console.error('Auth check error:', error.message);
         toast({
           title: "Authentication Error",
           description: "There was a problem verifying your session",
@@ -59,6 +67,7 @@ const AuthLayout = ({ children, requireAuth = false }: AuthLayoutProps) => {
 
     checkAuth();
 
+    // Listen for authentication state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (requireAuth && !session) {
         setIsTransitioning(true);
@@ -74,7 +83,9 @@ const AuthLayout = ({ children, requireAuth = false }: AuthLayoutProps) => {
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [navigate, requireAuth, location.pathname]);
 
   if (isLoading) {

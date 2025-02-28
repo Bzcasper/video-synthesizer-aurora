@@ -36,13 +36,7 @@ export default defineConfig(({ mode }) => ({
     cssCodeSplit: true,
     chunkSizeWarningLimit: 1000,
     sourcemap: false,
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      },
-    },
+    minify: 'esbuild', // Changed from 'terser' to 'esbuild' which is built-in
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],

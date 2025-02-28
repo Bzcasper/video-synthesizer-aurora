@@ -1,13 +1,27 @@
 
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
+import { supabase } from "@/integrations/supabase/client";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  
+  // Verify authentication
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/login', { replace: true });
+      }
+    };
+    
+    checkAuth();
+  }, [navigate]);
   
   // Set sidebar to open by default on larger screens, closed on mobile
   useEffect(() => {

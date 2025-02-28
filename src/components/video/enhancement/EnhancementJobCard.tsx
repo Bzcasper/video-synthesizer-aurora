@@ -8,7 +8,7 @@ import { StatusBadge } from '@/components/video/StatusBadge';
 import { Cog, X } from 'lucide-react';
 import { type VideoJobStatus } from '@/hooks/video/types';
 
-interface EnhancementJob {
+export interface EnhancementJob {
   id: string;
   title: string;
   progress: number;
@@ -19,8 +19,8 @@ interface EnhancementJob {
 
 interface EnhancementJobCardProps {
   job: EnhancementJob;
-  onCancel: (id: string) => void;
-  onSettings: (id: string) => void;
+  onCancel?: (id: string) => void;
+  onSettings?: (id: string) => void;
 }
 
 export const EnhancementJobCard: React.FC<EnhancementJobCardProps> = ({
@@ -29,13 +29,15 @@ export const EnhancementJobCard: React.FC<EnhancementJobCardProps> = ({
   onSettings
 }) => {
   const handleCancel = () => {
-    if (job.status === 'processing' || job.status === 'pending') {
+    if (onCancel && (job.status === 'processing' || job.status === 'pending')) {
       onCancel(job.id);
     }
   };
 
   const handleSettings = () => {
-    onSettings(job.id);
+    if (onSettings) {
+      onSettings(job.id);
+    }
   };
 
   return (
@@ -53,13 +55,13 @@ export const EnhancementJobCard: React.FC<EnhancementJobCardProps> = ({
               status="processing" 
             />
             <TimeRemaining 
-              timeRemaining={parseInt(String(job.remainingTime))} 
+              timeRemaining={job.remainingTime} 
             />
           </>
         )}
         
         <div className="flex justify-end gap-2 mt-3">
-          {(job.status === 'processing' || job.status === 'pending') && (
+          {onCancel && (job.status === 'processing' || job.status === 'pending') && (
             <Button 
               variant="ghost" 
               size="sm"
@@ -70,15 +72,17 @@ export const EnhancementJobCard: React.FC<EnhancementJobCardProps> = ({
               <span className="text-xs">Cancel</span>
             </Button>
           )}
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={handleSettings}
-            aria-label="Enhancement settings"
-          >
-            <Cog className="w-4 h-4 mr-1" />
-            <span className="text-xs">Settings</span>
-          </Button>
+          {onSettings && (
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={handleSettings}
+              aria-label="Enhancement settings"
+            >
+              <Cog className="w-4 h-4 mr-1" />
+              <span className="text-xs">Settings</span>
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

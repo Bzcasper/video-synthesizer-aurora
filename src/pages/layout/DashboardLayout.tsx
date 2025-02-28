@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from '@/components/dashboard/layout/Sidebar';
 import MainContent from '@/components/dashboard/layout/MainContent';
 import MobileMenuButton from '@/components/dashboard/layout/MobileMenuButton';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -39,13 +40,19 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       />
 
       {/* Backdrop for mobile */}
-      {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-30 md:hidden"
-          onClick={() => setSidebarOpen(false)}
-          aria-hidden="true"
-        />
-      )}
+      <AnimatePresence>
+        {isSidebarOpen && window.innerWidth < 768 && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/50 z-30 md:hidden"
+            onClick={() => setSidebarOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+      </AnimatePresence>
 
       {/* Sidebar */}
       <Sidebar 

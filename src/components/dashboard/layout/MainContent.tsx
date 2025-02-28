@@ -7,24 +7,34 @@ interface MainContentProps {
   children: React.ReactNode;
   isTransitioning: boolean;
   handleContentClick: () => void;
+  className?: string;
 }
 
 const MainContent: React.FC<MainContentProps> = ({ 
   children, 
   isTransitioning, 
-  handleContentClick 
+  handleContentClick,
+  className = '' 
 }) => {
   const location = useLocation();
 
   return (
-    <main className="flex-1 w-full overflow-x-hidden" onClick={handleContentClick}>
+    <main 
+      className={`flex-1 w-full overflow-x-hidden ${className}`.trim()} 
+      onClick={handleContentClick}
+    >
       <AnimatePresence mode="wait">
         <motion.div
           key={location.pathname}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
+          transition={{ 
+            duration: 0.3,
+            type: "spring",
+            stiffness: 100,
+            damping: 15
+          }}
           className={`w-full max-w-full p-4 md:p-8 ${isTransitioning ? 'pointer-events-none' : ''}`}
         >
           {children}

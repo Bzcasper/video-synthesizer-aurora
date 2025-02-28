@@ -11,18 +11,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Reset and global fixes */
-html, body, #root {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-}
-
 /* Additional animations */
 @keyframes pulse-slow {
   0%, 100% {

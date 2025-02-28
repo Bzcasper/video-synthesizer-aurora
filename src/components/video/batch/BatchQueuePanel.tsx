@@ -10,58 +10,61 @@ export const BatchQueuePanel: React.FC = () => {
       title: 'Ocean waves at sunset',
       progress: 45,
       status: 'processing',
-      remainingTime: 750 // 12:30 in seconds
+      timeRemaining: '12:30'
     },
     {
       id: 'job-2',
       title: 'Urban night timelapse',
       progress: 10,
-      status: 'pending',
-      remainingTime: 1545 // 25:45 in seconds
+      status: 'queued',
+      timeRemaining: '25:45'
     },
     {
       id: 'job-3',
       title: 'Mountain forest aerial',
       progress: 0,
-      status: 'pending',
-      remainingTime: 1935 // 32:15 in seconds
+      status: 'queued',
+      timeRemaining: '32:15'
     }
   ]);
+  
+  const handlePause = (jobId: string) => {
+    setActiveJobs(
+      activeJobs.map(job => 
+        job.id === jobId 
+          ? { ...job, status: job.status === 'paused' ? 'processing' : 'paused' } 
+          : job
+      )
+    );
+  };
   
   const handleCancel = (jobId: string) => {
     setActiveJobs(activeJobs.filter(job => job.id !== jobId));
   };
   
-  const handleSettings = (jobId: string) => {
-    // Settings functionality to be implemented
-    console.log(`Open settings for job: ${jobId}`);
-  };
-  
   if (activeJobs.length === 0) {
     return (
-      <div className="w-full">
-        <EmptyState 
-          icon="batch"
-          title="No active batch processing jobs"
-          description="Generate or enhance videos to add them to the queue"
-          actionButton={{
-            label: "Generate New Video",
-            icon: "generate",
-            onClick: () => window.location.href = '/dashboard/generate'
-          }}
-        />
-      </div>
+      <EmptyState 
+        icon="batch"
+        title="No active batch processing jobs"
+        description="Generate or enhance videos to add them to the queue"
+        actionButton={{
+          label: "Generate New Video",
+          icon: "generate",
+          onClick: () => window.location.href = '/dashboard/generate'
+        }}
+      />
     );
   }
   
   return (
-    <div className="w-full space-y-fib-3">
+    <div className="space-y-fib-3">
       {activeJobs.map((job, index) => (
         <BatchJobCard 
           key={job.id}
           job={job}
+          onPause={handlePause}
           onCancel={handleCancel}
-          onSettings={handleSettings}
           index={index}
         />
       ))}

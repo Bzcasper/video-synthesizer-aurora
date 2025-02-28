@@ -1,34 +1,19 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
 
 interface MainContentWrapperProps {
   children: React.ReactNode;
-  className?: string;
 }
 
-const MainContentWrapper = ({ children, className = '' }: MainContentWrapperProps) => {
-  // Animation variants for child elements
-  const childVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { 
-        type: "spring", 
-        stiffness: 100, 
-        damping: 15 
-      }
-    }
-  };
-
+const MainContentWrapper = ({ children }: MainContentWrapperProps) => {
   return (
-    <motion.div 
-      className={`w-full max-w-full relative z-10 bg-aurora-black overflow-x-hidden ${className}`.trim()}
-      variants={childVariants}
-    >
-      {children}
-    </motion.div>
+    <div className="flex flex-col min-h-screen w-full">
+      <main className="flex-1 w-full">
+        <div className="w-full max-w-[2000px] mx-auto px-4 sm:px-6 md:px-8 py-4 md:py-6">
+          {children}
+        </div>
+      </main>
+    </div>
   );
 };
 

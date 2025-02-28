@@ -1,13 +1,27 @@
 
 import React, { useState, useEffect } from 'react';
-import Sidebar from '@/components/dashboard/layout/Sidebar';
-import MainContent from '@/components/dashboard/layout/MainContent';
-import MobileMenuButton from '@/components/dashboard/layout/MobileMenuButton';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
+import { supabase } from "@/integrations/supabase/client";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  
+  // Verify authentication
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/login', { replace: true });
+      }
+    };
+    
+    checkAuth();
+  }, [navigate]);
   
   // Set sidebar to open by default on larger screens, closed on mobile
   useEffect(() => {
@@ -20,54 +34,47 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Close sidebar when clicking outside on mobile
+  // Close sidebar on mobile when changing routes
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setSidebarOpen(false);
+    }
+  }, [location.pathname]);
+
+  // Handle content click to close sidebar on mobile
   const handleContentClick = () => {
     if (window.innerWidth < 768 && isSidebarOpen) {
       setSidebarOpen(false);
     }
   };
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
-
   return (
-    <div className="min-h-screen bg-aurora-black flex w-full">
-      {/* Mobile menu button */}
-      <MobileMenuButton 
-        isSidebarOpen={isSidebarOpen} 
-        toggleSidebar={toggleSidebar} 
+    <div className="flex min-h-screen w-full bg-aurora-black overflow-hidden">
+      <DashboardSidebar 
+        isSidebarOpen={isSidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        isTransitioning={isTransitioning}
+        setIsTransitioning={setIsTransitioning}
       />
 
-      {/* Backdrop for mobile */}
-      <AnimatePresence>
-        {isSidebarOpen && window.innerWidth < 768 && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/50 z-30 md:hidden"
-            onClick={() => setSidebarOpen(false)}
-            aria-hidden="true"
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Sidebar */}
-      <Sidebar 
-        isSidebarOpen={isSidebarOpen} 
-        setSidebarOpen={setSidebarOpen} 
-      />
-
-      {/* Main content */}
-      <MainContent 
-        isTransitioning={isTransitioning} 
-        handleContentClick={handleContentClick}
-        className="w-full"
+      {/* Main content - full width */}
+      <main 
+        className="flex-1 w-full overflow-y-auto overflow-x-hidden" 
+        onClick={handleContentClick}
       >
-        {children}
-      </MainContent>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className={`w-full max-w-[2000px] mx-auto px-4 py-6 md:px-6 md:py-8 lg:px-8 ${isTransitioning ? 'pointer-events-none' : ''}`}
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
+      </main>
     </div>
   );
 };

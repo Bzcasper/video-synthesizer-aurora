@@ -13,6 +13,9 @@ import { VideoSelectionGrid } from '@/components/video/selection/VideoSelectionG
 import { EmptyVideos } from '@/components/video/EmptyVideos';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useQuery } from '@tanstack/react-query';
+import { VideoJobStatus } from '@/hooks/video/types';
+
+type StatusFilter = 'all' | VideoJobStatus | 'favorites';
 
 // Mock data for video list
 const mockVideos = [
@@ -22,7 +25,7 @@ const mockVideos = [
     thumbnailUrl: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXVyb3JhJTIwYm9yZWFsaXN8ZW58MHx8MHx8fDA%3D',
     duration: 32,
     createdAt: '2023-03-15T10:30:00Z',
-    status: 'completed',
+    status: 'completed' as VideoJobStatus,
     views: 245,
     fileSize: '28.5 MB',
   },
@@ -32,7 +35,7 @@ const mockVideos = [
     thumbnailUrl: 'https://images.unsplash.com/photo-1634060685514-bd3ab1be902d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bW91bnRhaW4lMjBzdW5zZXR8ZW58MHx8MHx8fDA%3D',
     duration: 18,
     createdAt: '2023-03-17T14:20:00Z',
-    status: 'completed',
+    status: 'completed' as VideoJobStatus,
     views: 132,
     fileSize: '15.2 MB',
   },
@@ -42,7 +45,7 @@ const mockVideos = [
     thumbnailUrl: 'https://images.unsplash.com/photo-1504333638930-c8787321eee0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG5lYnVsYXxlbnwwfHwwfHx8MA%3D%3D',
     duration: 45,
     createdAt: '2023-03-18T09:15:00Z',
-    status: 'processing',
+    status: 'processing' as VideoJobStatus,
     views: 0,
     fileSize: '42.7 MB',
   },
@@ -52,7 +55,7 @@ const mockVideos = [
     thumbnailUrl: 'https://images.unsplash.com/photo-1617001100859-3de6d1f2f86c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8b2NlYW4lMjB3YXZlc3xlbnwwfHwwfHx8MA%3D%3D',
     duration: 28,
     createdAt: '2023-03-19T16:45:00Z',
-    status: 'completed',
+    status: 'completed' as VideoJobStatus,
     views: 87,
     fileSize: '24.1 MB',
   },
@@ -62,7 +65,7 @@ const mockVideos = [
     thumbnailUrl: 'https://images.unsplash.com/photo-1669664404906-6398e31e2a5f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGNpdHklMjBuaWdodCUyMHRpbWVsYXBzZXxlbnwwfHwwfHx8MA%3D%3D',
     duration: 22,
     createdAt: '2023-03-20T21:10:00Z',
-    status: 'completed',
+    status: 'completed' as VideoJobStatus,
     views: 156,
     fileSize: '19.8 MB',
   },
@@ -72,7 +75,7 @@ const mockVideos = [
     thumbnailUrl: 'https://images.unsplash.com/photo-1607457561901-e6ec3a6d16cf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YWJzdHJhY3QlMjBmbHVpZHxlbnwwfHwwfHx8MA%3D%3D',
     duration: 15,
     createdAt: '2023-03-21T11:25:00Z',
-    status: 'failed',
+    status: 'failed' as VideoJobStatus,
     views: 0,
     fileSize: '0 MB',
   },
@@ -82,13 +85,13 @@ const mockVideos = [
     thumbnailUrl: 'https://images.unsplash.com/photo-1576702438167-5341503c5ec4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZGVzZXJ0JTIwYWVyaWFsfGVufDB8fDB8fHww',
     duration: 38,
     createdAt: '2023-03-22T13:40:00Z',
-    status: 'completed',
+    status: 'completed' as VideoJobStatus,
     views: 92,
     fileSize: '34.3 MB',
   }
 ];
 
-const fetchUserVideos = async (filter = 'all') => {
+const fetchUserVideos = async (filter: StatusFilter = 'all') => {
   // Simulate API call with 1s delay
   await new Promise(resolve => setTimeout(resolve, 1000));
   
@@ -108,7 +111,7 @@ const fetchUserVideos = async (filter = 'all') => {
 
 const VideosPage = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState<StatusFilter>('all');
   const [searchQuery, setSearchQuery] = useState('');
   
   const { data: videos, isLoading, error, refetch } = useQuery({
@@ -163,7 +166,7 @@ const VideosPage = () => {
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <Tabs defaultValue="all" onValueChange={setActiveTab}>
+          <Tabs defaultValue="all" onValueChange={(value) => setActiveTab(value as StatusFilter)}>
             <div className="px-6">
               <TabsList className="bg-black/20 w-full justify-start">
                 <TabsTrigger value="all">All Videos</TabsTrigger>
@@ -217,7 +220,7 @@ const VideosPage = () => {
                         </Button>
                       </div>
                     ) : (
-                      <EmptyVideos />
+                      <EmptyVideos statusFilter={activeTab} />
                     )}
                   </motion.div>
                 ) : (

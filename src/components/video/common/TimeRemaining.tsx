@@ -1,22 +1,29 @@
 
 import React from 'react';
+import { Clock } from 'lucide-react';
 
-interface TimeRemainingProps {
-  timeRemaining: string | null;
-  className?: string;
-  prefix?: string;
+export interface TimeRemainingProps {
+  timeRemaining: number;
 }
 
-export const TimeRemaining: React.FC<TimeRemainingProps> = ({ 
-  timeRemaining, 
-  className = "text-xs text-gray-400",
-  prefix = "Estimated completion: "
-}) => {
-  if (!timeRemaining) return null;
-  
+export const TimeRemaining: React.FC<TimeRemainingProps> = ({ timeRemaining }) => {
+  // Format seconds into minutes and seconds
+  const formatTime = (seconds: number): string => {
+    if (seconds <= 0) return 'Complete';
+    
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    
+    if (minutes > 0) {
+      return `${minutes}m ${remainingSeconds}s remaining`;
+    }
+    return `${remainingSeconds}s remaining`;
+  };
+
   return (
-    <p className={className}>
-      {prefix}{timeRemaining}
-    </p>
+    <div className="flex items-center text-sm text-gray-400 mt-1">
+      <Clock className="h-4 w-4 mr-2 text-aurora-blue" />
+      <span>{formatTime(timeRemaining)}</span>
+    </div>
   );
 };

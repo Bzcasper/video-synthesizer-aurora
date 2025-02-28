@@ -17,6 +17,7 @@ import DurationSlider from './DurationSlider';
 import { Checkbox } from '@/components/ui/checkbox';
 import VideoDescriptionInput from './VideoDescriptionInput';
 import { useVideoGeneration } from '@/hooks/video/use-video-generation';
+import { VideoJobStatus } from '@/hooks/video/types';
 
 interface Style {
   id: string;
@@ -84,13 +85,17 @@ const EnhancedGenerateForm = () => {
   const [aspectRatio, setAspectRatio] = useState('16:9');
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [useAI, setUseAI] = useState(true);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [timeRemaining, setTimeRemaining] = useState(0);
-  const [currentStage, setCurrentStage] = useState('');
-  const [error, setError] = useState('');
+  const {
+    isGenerating,
+    progress,
+    currentStage,
+    timeRemaining,
+    error,
+    generateVideo,
+    cancelGeneration
+  } = useVideoGeneration();
 
-  // Simulate generation process
+  // Start video generation
   const startGeneration = () => {
     if (!description) {
       toast({
@@ -100,59 +105,13 @@ const EnhancedGenerateForm = () => {
       return;
     }
 
-    setIsGenerating(true);
-    setProgress(0);
-    setTimeRemaining(duration * 6); // Rough estimate
-    setCurrentStage('Initializing');
-    setError('');
-
-    // Simulate progress updates
-    const interval = setInterval(() => {
-      setProgress(prev => {
-        const newProgress = prev + (1 + Math.random() * 2);
-        
-        // Update current stage based on progress
-        if (newProgress > 20 && newProgress <= 40) {
-          setCurrentStage('Generating scenes');
-        } else if (newProgress > 40 && newProgress <= 60) {
-          setCurrentStage('Adding effects');
-        } else if (newProgress > 60 && newProgress <= 80) {
-          setCurrentStage('Rendering frames');
-        } else if (newProgress > 80) {
-          setCurrentStage('Finalizing video');
-        }
-        
-        // Update time remaining
-        setTimeRemaining(prev => Math.max(0, prev - 1));
-        
-        if (newProgress >= 100) {
-          clearInterval(interval);
-          
-          // Simulate completion after a short delay
-          setTimeout(() => {
-            toast({
-              description: "Video generated successfully!",
-              variant: "default",
-            });
-            setIsGenerating(false);
-            // Reset form or navigate to video view
-          }, 1000);
-          
-          return 100;
-        }
-        
-        return newProgress;
-      });
-    }, 500);
-    
-    // Simulate potential error (10% chance)
-    if (Math.random() < 0.1) {
-      setTimeout(() => {
-        clearInterval(interval);
-        setError('Generation failed. Please try again with a different prompt.');
-        setIsGenerating(false);
-      }, 5000 + Math.random() * 10000);
-    }
+    generateVideo({
+      prompt: description,
+      duration,
+      style: selectedStyle,
+      resolution,
+      aspectRatio
+    });
   };
 
   return (
@@ -179,9 +138,9 @@ const EnhancedGenerateForm = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                <StatusIndicator status={currentStage} />
+                <StatusIndicator status={currentStage as VideoJobStatus} />
                 <ProgressBar progress={progress} />
-                <TimeRemaining seconds={timeRemaining} />
+                <TimeRemaining timeRemaining={timeRemaining} />
 
                 <div className="mt-4 p-4 bg-black/30 rounded-lg">
                   <h3 className="text-sm font-medium text-gray-300 mb-2">Your Prompt</h3>
@@ -192,16 +151,16 @@ const EnhancedGenerateForm = () => {
             <CardFooter className="flex justify-between">
               {error ? (
                 <Button 
-                  onClick={() => setIsGenerating(false)}
+                  onClick={() => window.location.reload()}
                   variant="default"
                 >
                   Try Again
                 </Button>
               ) : (
                 <Button 
-                  onClick={() => setIsGenerating(false)}
+                  onClick={cancelGeneration}
                   variant="outline"
-                  disabled={progress < 100}
+                  disabled={progress >= 100}
                 >
                   Cancel Generation
                 </Button>

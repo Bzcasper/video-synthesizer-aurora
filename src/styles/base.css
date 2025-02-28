@@ -36,16 +36,16 @@
   }
 
   html {
-    @apply bg-aurora-black scroll-smooth;
+    @apply bg-aurora-black scroll-smooth w-full overflow-x-hidden;
   }
 
   body {
-    @apply bg-aurora-black text-aurora-white font-inter antialiased min-h-screen;
+    @apply bg-aurora-black text-aurora-white font-inter antialiased min-h-screen w-full overflow-x-hidden;
     line-height: var(--golden-ratio);
   }
 
   #root {
-    @apply min-h-screen bg-aurora-black flex flex-col;
+    @apply min-h-screen bg-aurora-black flex flex-col w-full;
   }
 
   /* Typography scaling using Fibonacci sequence */
@@ -85,12 +85,12 @@
 
   /* Content Sections */
   section {
-    @apply py-fib-6;
+    @apply py-fib-6 w-full;
   }
 
   /* Container widths using Fibonacci */
   .container {
-    @apply max-w-[1440px] mx-auto px-fib-3 sm:px-fib-4 md:px-fib-5;
+    @apply w-full max-w-[2000px] mx-auto px-4 sm:px-6 md:px-8;
   }
 
   /* Improved scrollbars */

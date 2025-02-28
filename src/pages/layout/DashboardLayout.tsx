@@ -35,7 +35,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <div className="min-h-screen bg-aurora-black flex overflow-hidden">
+    <div className="flex min-h-screen w-full bg-aurora-black overflow-hidden">
       <DashboardSidebar 
         isSidebarOpen={isSidebarOpen}
         setSidebarOpen={setSidebarOpen}
@@ -43,8 +43,11 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         setIsTransitioning={setIsTransitioning}
       />
 
-      {/* Main content */}
-      <main className="flex-1 overflow-y-auto" onClick={handleContentClick}>
+      {/* Main content - full width */}
+      <main 
+        className="flex-1 w-full overflow-y-auto overflow-x-hidden" 
+        onClick={handleContentClick}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -52,7 +55,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className={`container mx-auto px-4 py-6 md:px-6 md:py-8 ${isTransitioning ? 'pointer-events-none' : ''}`}
+            className={`w-full max-w-[2000px] mx-auto px-4 py-6 md:px-6 md:py-8 lg:px-8 ${isTransitioning ? 'pointer-events-none' : ''}`}
           >
             {children}
           </motion.div>

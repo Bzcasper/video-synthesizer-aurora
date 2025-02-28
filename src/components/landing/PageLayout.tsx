@@ -13,7 +13,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
           <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-aurora-blue"></div>
         </div>
       }>
-        <div className="flex-1 relative z-10 overflow-x-hidden">
+        <div className="flex-1 w-full relative z-10 overflow-x-hidden">
           {children}
         </div>
       </Suspense>

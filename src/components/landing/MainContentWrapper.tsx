@@ -9,10 +9,10 @@ interface MainContentWrapperProps {
 
 const MainContentWrapper = ({ children }: MainContentWrapperProps) => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen w-full">
       <NavigationBar />
-      <main className="flex-1">
-        <div className="container mx-auto px-fib-3 py-fib-4 md:py-fib-5">
+      <main className="flex-1 w-full">
+        <div className="w-full max-w-[2000px] mx-auto px-4 sm:px-6 md:px-8 py-fib-4 md:py-fib-5">
           {children}
         </div>
       </main>

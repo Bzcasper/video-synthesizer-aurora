@@ -1,75 +1,86 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import type { EnhancementProgress } from '@/hooks/use-video-enhancements';
-import { ProgressBar } from '../common/ProgressBar';
-import { TimeRemaining } from '../common/TimeRemaining';
-import { CurrentStageInfo } from './CurrentStageInfo';
-import { EnhancementStageIndicator } from './EnhancementStageIndicator';
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ProgressBar } from "@/components/video/common/ProgressBar";
+import { TimeRemaining } from "@/components/video/common/TimeRemaining";
+import { StatusBadge } from '@/components/video/StatusBadge';
+import { Cog, X } from 'lucide-react';
+import { type VideoJobStatus } from '@/hooks/video/types';
 
-interface EnhancementJobCardProps {
-  job: EnhancementProgress;
+interface EnhancementJob {
+  id: string;
+  title: string;
+  progress: number;
+  status: VideoJobStatus;
+  remainingTime: number;
+  thumbnailUrl?: string;
 }
 
-export const EnhancementJobCard: React.FC<EnhancementJobCardProps> = ({ job }) => {
-  // Calculate current frame based on progress
-  const currentFrame = Math.round((job.progress / 100) * 240);
-  
-  // Define processing stages
-  const stages = [
-    {
-      id: 'frame-gen',
-      label: 'Frame Generation',
-      isActive: false,
-      isCompleted: true
-    },
-    {
-      id: 'enhance',
-      label: 'Enhancing Frames',
-      isActive: true,
-      isCompleted: false
-    },
-    {
-      id: 'assembly',
-      label: 'Final Assembly',
-      isActive: false,
-      isCompleted: false
+interface EnhancementJobCardProps {
+  job: EnhancementJob;
+  onCancel: (id: string) => void;
+  onSettings: (id: string) => void;
+}
+
+export const EnhancementJobCard: React.FC<EnhancementJobCardProps> = ({
+  job,
+  onCancel,
+  onSettings
+}) => {
+  const handleCancel = () => {
+    if (job.status === 'processing' || job.status === 'pending') {
+      onCancel(job.id);
     }
-  ];
-  
+  };
+
+  const handleSettings = () => {
+    onSettings(job.id);
+  };
+
   return (
-    <div className="glass-panel p-fib-4 rounded-lg">
-      <div className="flex flex-col space-y-fib-3">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <span className="text-aurora-white font-medium">Overall Progress:</span>
-            <span className="text-aurora-blue font-semibold">{job.progress}%</span>
-          </div>
-          
-          <div className="text-gray-400 text-sm">
-            {job.estimated_completion_time && (
-              <TimeRemaining 
-                timeRemaining={job.estimated_completion_time} 
-                prefix="~"
-                className="text-gray-400 text-sm"
-              />
-            )}
-          </div>
+    <Card className="w-full glass-panel hover-glow">
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between mb-2">
+          <h3 className="font-medium text-sm sm:text-base truncate mr-4">{job.title}</h3>
+          <StatusBadge status={job.status} />
         </div>
         
-        {/* Progress bar */}
-        <ProgressBar progress={job.progress} />
+        {job.status === 'processing' && (
+          <>
+            <ProgressBar 
+              progress={job.progress} 
+              status="processing" 
+            />
+            <TimeRemaining 
+              timeRemaining={parseInt(String(job.remainingTime))} 
+            />
+          </>
+        )}
         
-        {/* Current stage info */}
-        <CurrentStageInfo 
-          stageName="Enhancing Frames" 
-          currentFrame={currentFrame}
-          totalFrames={240}
-        />
-        
-        {/* Processing stages visualization */}
-        <EnhancementStageIndicator stages={stages} />
-      </div>
-    </div>
+        <div className="flex justify-end gap-2 mt-3">
+          {(job.status === 'processing' || job.status === 'pending') && (
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={handleCancel}
+              aria-label="Cancel enhancement"
+            >
+              <X className="w-4 h-4 mr-1" />
+              <span className="text-xs">Cancel</span>
+            </Button>
+          )}
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={handleSettings}
+            aria-label="Enhancement settings"
+          >
+            <Cog className="w-4 h-4 mr-1" />
+            <span className="text-xs">Settings</span>
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 };

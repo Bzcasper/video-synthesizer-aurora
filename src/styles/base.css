@@ -33,40 +33,56 @@
 
   * {
     @apply border-border selection:bg-aurora-blue/20;
+    box-sizing: border-box;
   }
 
   html {
     @apply bg-aurora-black scroll-smooth;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-aurora-black text-aurora-white font-inter antialiased min-h-screen;
     line-height: var(--golden-ratio);
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
   }
 
   #root {
     @apply min-h-screen bg-aurora-black;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
   /* Typography scaling using Fibonacci sequence */
   h1 {
     @apply text-fib-xl font-orbitron font-bold tracking-tight;
     margin-bottom: calc(1rem * var(--golden-ratio));
+    width: 100%;
   }
 
   h2 {
     @apply text-fib-lg font-orbitron font-semibold;
     margin-bottom: calc(0.8rem * var(--golden-ratio));
+    width: 100%;
   }
 
   h3 {
     @apply text-fib-base font-orbitron font-medium;
     margin-bottom: calc(0.6rem * var(--golden-ratio));
+    width: 100%;
   }
 
   p {
     @apply text-fib-sm leading-relaxed;
     margin-bottom: calc(1rem * var(--inverse-golden-ratio));
+    width: 100%;
   }
 
   /* Force dark mode */
@@ -86,20 +102,32 @@
   /* Content Sections */
   section {
     @apply py-fib-6;
+    width: 100%;
   }
 
   /* Container widths using Fibonacci */
   .container {
-    @apply max-w-[1440px] mx-auto px-fib-3;
+    width: 100%;
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   /* Form elements */
   input, textarea, select {
     @apply h-fib-4 px-fib-2 rounded-lg;
+    width: 100%;
   }
 
   /* Buttons */
   button {
     @apply min-h-fib-4 px-fib-3 rounded-lg transition-all duration-golden;
+  }
+  
+  /* Fix panels widths */
+  .glass-panel {
+    width: 100%;
   }
 }

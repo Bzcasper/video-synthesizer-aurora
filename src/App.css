@@ -40,6 +40,7 @@
 
 .card {
   padding: 2em;
+  width: 100%;
 }
 
 .read-the-docs {
@@ -51,6 +52,7 @@
   background-color: #0A0A0A;
   position: relative;
   z-index: 10;
+  width: 100%;
 }
 
 /* Ensure sections remain visible */
@@ -58,5 +60,51 @@ section {
   background-color: #0A0A0A;
   position: relative;
   z-index: 10;
+  width: 100%;
 }
 
+/* Global container width fix */
+.container {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+/* Fix for glass panels to not be cut off */
+.glass-panel {
+  width: 100%;
+  max-width: 100%;
+}

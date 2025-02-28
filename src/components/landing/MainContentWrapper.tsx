@@ -1,7 +1,5 @@
 
 import React from 'react';
-import NavigationBar from './NavigationBar';
-import StickyCTA from './StickyCTA';
 
 interface MainContentWrapperProps {
   children: React.ReactNode;
@@ -9,12 +7,8 @@ interface MainContentWrapperProps {
 
 const MainContentWrapper = ({ children }: MainContentWrapperProps) => {
   return (
-    <div className="z-10">
-      <NavigationBar />
-      <main>
-        {children}
-      </main>
-      <StickyCTA />
+    <div className="w-full max-w-full relative z-10 bg-aurora-black overflow-x-hidden">
+      {children}
     </div>
   );
 };

@@ -76,7 +76,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <div className="min-h-screen bg-aurora-black flex">
+    <div className="min-h-screen bg-aurora-black flex w-full">
       {/* Mobile menu button */}
       <Button
         variant="ghost"
@@ -105,7 +105,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         initial={{ x: -280 }}
         animate={{ x: isSidebarOpen ? 0 : -280 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className={`fixed md:relative w-64 h-full border-r border-white/10 bg-black/20 backdrop-blur-xl z-40 md:translate-x-0`}
+        className={`fixed md:static w-64 h-full border-r border-white/10 bg-black/20 backdrop-blur-xl z-40 md:translate-x-0`}
       >
         <div className="p-6">
           {/* Aurora logo */}
@@ -189,7 +189,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       </motion.aside>
 
       {/* Main content */}
-      <main className="flex-1 overflow-x-hidden" onClick={handleContentClick}>
+      <main className="flex-1 w-full overflow-x-hidden" onClick={handleContentClick}>
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -197,7 +197,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className={`container mx-auto px-6 py-8 ${isTransitioning ? 'pointer-events-none' : ''}`}
+            className={`w-full max-w-full p-4 md:p-8 ${isTransitioning ? 'pointer-events-none' : ''}`}
           >
             {children}
           </motion.div>

@@ -6,6 +6,7 @@ import { EmptyState } from '../common/EmptyState';
 import { BatchJobCard, BatchJob } from './BatchJobCard';
 import { PanelHeader } from '../common/PanelHeader';
 import { StatusIndicator } from '../common/StatusIndicator';
+import { Pause, RefreshCw } from 'lucide-react';
 
 export const BatchQueuePanel: React.FC = () => {
   const [activeJobs, setActiveJobs] = React.useState<BatchJob[]>([
@@ -57,7 +58,7 @@ export const BatchQueuePanel: React.FC = () => {
   }
   
   return (
-    <Card className="glass-panel p-fib-4">
+    <Card className="glass-panel p-fib-4 hover-glow">
       <PanelHeader
         title="Processing Queue"
         description="Your videos are being processed in the order shown below"
@@ -71,15 +72,17 @@ export const BatchQueuePanel: React.FC = () => {
           <Button 
             variant="outline" 
             size="sm"
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 text-gray-300 hover:text-aurora-purple hover:border-aurora-purple/50 hover:shadow-[0_0_8px_rgba(138,43,226,0.3)] transition-all duration-300"
           >
+            <Pause className="w-4 h-4" />
             Pause All
           </Button>
           <Button 
             variant="outline" 
             size="sm"
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 text-gray-300 hover:text-aurora-blue hover:border-aurora-blue/50 hover:shadow-[0_0_8px_rgba(0,166,255,0.3)] transition-all duration-300"
           >
+            <RefreshCw className="w-4 h-4" />
             Refresh
           </Button>
         </div>

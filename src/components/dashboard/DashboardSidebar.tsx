@@ -132,16 +132,18 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                     <Link
                       to={item.path}
                       className={cn(
-                        "flex items-center px-4 py-3 rounded-md text-sm font-medium relative transition-colors",
+                        "flex items-center px-4 py-3 rounded-md text-sm font-medium relative transition-all duration-300",
                         isActive 
                           ? "text-aurora-blue bg-aurora-blue/10" 
-                          : "text-gray-200 hover:bg-white/5 hover:text-white"
+                          : "text-gray-200 hover:bg-white/5 hover:text-aurora-blue hover:shadow-[0_0_10px_rgba(0,166,255,0.3)]"
                       )}
                       aria-current={isActive ? 'page' : undefined}
                     >
                       <div className={cn(
-                        "mr-3 flex items-center justify-center w-8 h-8 rounded-md",
-                        isActive ? "bg-aurora-blue/20" : "bg-black/20"
+                        "mr-3 flex items-center justify-center w-8 h-8 rounded-md transition-all duration-300",
+                        isActive 
+                          ? "bg-aurora-blue/20 shadow-[0_0_10px_rgba(0,166,255,0.2)]" 
+                          : "bg-black/20 group-hover:bg-aurora-blue/10 group-hover:shadow-[0_0_8px_rgba(0,166,255,0.15)]"
                       )}>
                         {item.icon}
                       </div>
@@ -163,17 +165,20 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           </ul>
         </nav>
 
-        <div className="p-4 border-t border-white/10">
+        {/* Logout button - centered at bottom */}
+        <div className="p-4 border-t border-white/10 flex justify-center">
           <Button
             onClick={handleLogout}
-            variant="ghost"
-            className="w-full flex items-center px-4 py-3 text-sm font-medium text-gray-200
-                     hover:text-white hover:bg-white/5"
+            variant="outline"
+            className="w-4/5 flex items-center justify-center gap-2 py-2 text-sm font-medium
+                     bg-gradient-to-r hover:from-aurora-blue/20 hover:to-aurora-purple/20
+                     border border-white/10 hover:border-aurora-blue/50
+                     text-gray-200 hover:text-aurora-blue
+                     transition-all duration-300
+                     hover:shadow-[0_0_15px_rgba(0,166,255,0.3)]"
             disabled={isTransitioning}
           >
-            <div className="mr-3 flex items-center justify-center w-8 h-8 rounded-md bg-black/20">
-              <LogOut className="h-5 w-5 text-gray-300" />
-            </div>
+            <LogOut className="h-5 w-5" />
             <span>Logout</span>
           </Button>
         </div>

@@ -41,7 +41,7 @@ export const BatchJobCard: React.FC<BatchJobCardProps> = ({
   };
 
   return (
-    <Card className="w-full glass-panel hover-glow">
+    <Card className="w-full glass-panel hover-glow transition-all duration-300">
       <CardContent className="p-4">
         <div className="flex items-start justify-between mb-2">
           <h3 className="font-medium text-sm sm:text-base truncate mr-4">{job.title}</h3>
@@ -67,7 +67,7 @@ export const BatchJobCard: React.FC<BatchJobCardProps> = ({
               size="sm"
               onClick={handleCancel}
               aria-label="Cancel processing"
-              className="flex items-center gap-1"
+              className="flex items-center gap-1 text-gray-300 hover:text-red-400 hover:bg-red-400/10 hover:shadow-[0_0_8px_rgba(248,113,113,0.4)] transition-all duration-300"
             >
               <X className="w-4 h-4" />
               <span className="text-xs">Cancel</span>
@@ -78,7 +78,7 @@ export const BatchJobCard: React.FC<BatchJobCardProps> = ({
             size="sm"
             onClick={handleSettings}
             aria-label="Batch job settings"
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 text-gray-300 hover:text-aurora-blue hover:bg-aurora-blue/10 hover:shadow-[0_0_8px_rgba(0,166,255,0.4)] transition-all duration-300"
           >
             <Cog className="w-4 h-4" />
             <span className="text-xs">Settings</span>

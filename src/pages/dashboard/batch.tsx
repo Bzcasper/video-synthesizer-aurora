@@ -27,7 +27,7 @@ const BatchQueuePage = () => {
       
       {/* Stats Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-fib-4">
-        <Card className="glass-panel p-fib-4 rounded-lg">
+        <Card className="glass-panel p-fib-4 rounded-lg hover-glow">
           <div className="flex flex-col">
             <span className="text-gray-400 text-sm">API Usage</span>
             <div className="flex items-end justify-between">
@@ -37,12 +37,12 @@ const BatchQueuePage = () => {
               </div>
             </div>
             <div className="mt-2 h-1.5 bg-black/30 rounded-full overflow-hidden">
-              <div className="bg-gradient-to-r from-aurora-purple to-aurora-blue h-full rounded-full" style={{ width: '6.4%' }}></div>
+              <div className="bg-gradient-to-r from-aurora-purple to-aurora-blue h-full rounded-full shadow-[0_0_8px_rgba(0,166,255,0.4)]" style={{ width: '6.4%' }}></div>
             </div>
           </div>
         </Card>
         
-        <Card className="glass-panel p-fib-4 rounded-lg">
+        <Card className="glass-panel p-fib-4 rounded-lg hover-glow">
           <div className="flex flex-col">
             <span className="text-gray-400 text-sm">Storage</span>
             <div className="flex items-end justify-between">
@@ -52,12 +52,12 @@ const BatchQueuePage = () => {
               </div>
             </div>
             <div className="mt-2 h-1.5 bg-black/30 rounded-full overflow-hidden">
-              <div className="bg-gradient-to-r from-aurora-blue to-aurora-green h-full rounded-full" style={{ width: '2.56%' }}></div>
+              <div className="bg-gradient-to-r from-aurora-blue to-aurora-green h-full rounded-full shadow-[0_0_8px_rgba(0,255,170,0.4)]" style={{ width: '2.56%' }}></div>
             </div>
           </div>
         </Card>
         
-        <Card className="glass-panel p-fib-4 rounded-lg">
+        <Card className="glass-panel p-fib-4 rounded-lg hover-glow">
           <div className="flex flex-col">
             <span className="text-gray-400 text-sm">Processing Speed</span>
             <div className="flex items-end justify-between">
@@ -67,14 +67,14 @@ const BatchQueuePage = () => {
               </div>
             </div>
             <div className="mt-2 h-1.5 bg-black/30 rounded-full overflow-hidden">
-              <div className="bg-gradient-to-r from-aurora-green to-aurora-purple h-full rounded-full" style={{ width: '50%' }}></div>
+              <div className="bg-gradient-to-r from-aurora-green to-aurora-purple h-full rounded-full shadow-[0_0_8px_rgba(138,43,226,0.4)]" style={{ width: '50%' }}></div>
             </div>
           </div>
         </Card>
       </div>
       
       {/* Job History */}
-      <Card className="glass-panel p-fib-4 rounded-lg">
+      <Card className="glass-panel p-fib-4 rounded-lg hover-glow">
         <div className="flex items-center gap-3 mb-fib-4">
           <CustomIcon name="stats" className="h-fib-3 w-fib-3 text-aurora-blue" />
           <h2 className="text-2xl font-orbitron font-bold text-gradient bg-gradient-glow">
@@ -83,25 +83,25 @@ const BatchQueuePage = () => {
         </div>
         
         <div className="space-y-3">
-          <Card className="glass-panel p-4 rounded-lg">
+          <Card className="glass-panel p-4 rounded-lg transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,166,255,0.3)]">
             <div className="flex justify-between items-center">
               <div>
                 <h3 className="text-aurora-white font-medium">Cinematic mountain landscape</h3>
                 <div className="text-xs text-aurora-green mt-1">Completed • 02/24/2025 10:30 AM</div>
               </div>
-              <Button variant="default" className="bg-gradient-to-r from-aurora-blue to-aurora-green text-white">
+              <Button variant="default" className="bg-gradient-to-r from-aurora-blue to-aurora-green text-white shadow-[0_0_10px_rgba(0,166,255,0.3)] hover:shadow-[0_0_15px_rgba(0,166,255,0.5)]">
                 View
               </Button>
             </div>
           </Card>
           
-          <Card className="glass-panel p-4 rounded-lg">
+          <Card className="glass-panel p-4 rounded-lg transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,166,255,0.3)]">
             <div className="flex justify-between items-center">
               <div>
                 <h3 className="text-aurora-white font-medium">Futuristic cityscape with neon</h3>
                 <div className="text-xs text-red-400 mt-1">Failed • 02/24/2025 5:45 PM</div>
               </div>
-              <Button variant="default" className="bg-gradient-to-r from-red-500 to-aurora-purple text-white">
+              <Button variant="default" className="bg-gradient-to-r from-red-500 to-aurora-purple text-white shadow-[0_0_10px_rgba(138,43,226,0.3)] hover:shadow-[0_0_15px_rgba(138,43,226,0.5)]">
                 Retry
               </Button>
             </div>

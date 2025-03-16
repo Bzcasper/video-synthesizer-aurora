@@ -3,5 +3,9 @@ import React from 'react';
 import { BatchQueuePanel } from './batch/BatchQueuePanel';
 
 export const BatchQueueList = () => {
-  return <BatchQueuePanel />;
+  return (
+    <div className="w-full">
+      <BatchQueuePanel />
+    </div>
+  );
 };

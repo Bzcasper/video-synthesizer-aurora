@@ -67,8 +67,9 @@ export const BatchJobCard: React.FC<BatchJobCardProps> = ({
               size="sm"
               onClick={handleCancel}
               aria-label="Cancel processing"
+              className="flex items-center gap-1"
             >
-              <X className="w-4 h-4 mr-1" />
+              <X className="w-4 h-4" />
               <span className="text-xs">Cancel</span>
             </Button>
           )}
@@ -77,8 +78,9 @@ export const BatchJobCard: React.FC<BatchJobCardProps> = ({
             size="sm"
             onClick={handleSettings}
             aria-label="Batch job settings"
+            className="flex items-center gap-1"
           >
-            <Cog className="w-4 h-4 mr-1" />
+            <Cog className="w-4 h-4" />
             <span className="text-xs">Settings</span>
           </Button>
         </div>

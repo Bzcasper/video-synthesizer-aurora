@@ -1,7 +1,11 @@
 
 import React from 'react';
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { EmptyState } from '../common/EmptyState';
 import { BatchJobCard, BatchJob } from './BatchJobCard';
+import { PanelHeader } from '../common/PanelHeader';
+import { StatusIndicator } from '../common/StatusIndicator';
 
 export const BatchQueuePanel: React.FC = () => {
   const [activeJobs, setActiveJobs] = React.useState<BatchJob[]>([
@@ -53,16 +57,45 @@ export const BatchQueuePanel: React.FC = () => {
   }
   
   return (
-    <div className="space-y-fib-3">
-      {activeJobs.map((job, index) => (
-        <BatchJobCard 
-          key={job.id}
-          job={job}
-          onCancel={handleCancel}
-          onSettings={handleSettings}
-          index={index}
-        />
-      ))}
-    </div>
+    <Card className="glass-panel p-fib-4">
+      <PanelHeader
+        title="Processing Queue"
+        description="Your videos are being processed in the order shown below"
+        icon="batch"
+      />
+      
+      <div className="flex items-center justify-between mb-fib-4">
+        <StatusIndicator status="processing" showLabel={true} />
+        
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            className="flex items-center gap-2"
+          >
+            Pause All
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            className="flex items-center gap-2"
+          >
+            Refresh
+          </Button>
+        </div>
+      </div>
+      
+      <div className="space-y-fib-3">
+        {activeJobs.map((job, index) => (
+          <BatchJobCard 
+            key={job.id}
+            job={job}
+            onCancel={handleCancel}
+            onSettings={handleSettings}
+            index={index}
+          />
+        ))}
+      </div>
+    </Card>
   );
 };

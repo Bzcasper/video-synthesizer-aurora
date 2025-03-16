@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { BatchJobCard, BatchJob } from './BatchJobCard';
 import { PanelHeader } from '../common/PanelHeader';
 import { StatusIndicator } from '../common/StatusIndicator';
 import { Pause, RefreshCw } from 'lucide-react';
+import { CustomIcon } from '@/components/ui/custom-icon';
 
 export const BatchQueuePanel: React.FC = () => {
   const [activeJobs, setActiveJobs] = React.useState<BatchJob[]>([
@@ -74,16 +74,20 @@ export const BatchQueuePanel: React.FC = () => {
             size="sm"
             className="flex items-center gap-2 text-gray-300 hover:text-aurora-purple hover:border-aurora-purple/50 hover:shadow-[0_0_8px_rgba(138,43,226,0.3)] transition-all duration-300"
           >
-            <Pause className="w-4 h-4" />
-            Pause All
+            <span className="w-4 h-4">
+              <CustomIcon name="pause" />
+            </span>
+            <span className="font-medium">Pause All</span>
           </Button>
           <Button 
             variant="outline" 
             size="sm"
             className="flex items-center gap-2 text-gray-300 hover:text-aurora-blue hover:border-aurora-blue/50 hover:shadow-[0_0_8px_rgba(0,166,255,0.3)] transition-all duration-300"
           >
-            <RefreshCw className="w-4 h-4" />
-            Refresh
+            <span className="w-4 h-4">
+              <CustomIcon name="refresh" />
+            </span>
+            <span className="font-medium">Refresh</span>
           </Button>
         </div>
       </div>

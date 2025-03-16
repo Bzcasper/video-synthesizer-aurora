@@ -1,10 +1,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import CustomIcon from '@/components/ui/custom-icon';
-import { Button } from '@/components/ui/button';
-import { BatchQueueList } from '@/components/video/BatchQueueList';
-import { Card } from '@/components/ui/card';
+import { BatchQueuePanel } from '@/components/video/batch/BatchQueuePanel';
+import { BatchStats } from '@/components/video/batch/BatchStats';
+import { BatchHistory } from '@/components/video/batch/BatchHistory';
 
 const BatchQueuePage = () => {
   return (
@@ -12,7 +11,7 @@ const BatchQueuePage = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="container mx-auto px-4 space-y-fib-5"
+      className="container px-4 py-fib-5 space-y-fib-5 max-w-[1920px] mx-auto w-full"
     >
       <div className="flex flex-col items-start space-y-2">
         <h1 className="text-3xl md:text-4xl font-orbitron font-bold text-gradient bg-gradient-glow">
@@ -23,91 +22,9 @@ const BatchQueuePage = () => {
         </p>
       </div>
 
-      <BatchQueueList />
-      
-      {/* Stats Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-fib-4">
-        <Card className="glass-panel p-fib-4 rounded-lg hover-glow">
-          <div className="flex flex-col">
-            <span className="text-gray-400 text-sm">API Usage</span>
-            <div className="flex items-end justify-between">
-              <span className="text-2xl font-bold text-aurora-white">32/500</span>
-              <div className="text-xs text-aurora-green">
-                <span className="font-medium">468</span> credits remaining
-              </div>
-            </div>
-            <div className="mt-2 h-1.5 bg-black/30 rounded-full overflow-hidden">
-              <div className="bg-gradient-to-r from-aurora-purple to-aurora-blue h-full rounded-full shadow-[0_0_8px_rgba(0,166,255,0.4)]" style={{ width: '6.4%' }}></div>
-            </div>
-          </div>
-        </Card>
-        
-        <Card className="glass-panel p-fib-4 rounded-lg hover-glow">
-          <div className="flex flex-col">
-            <span className="text-gray-400 text-sm">Storage</span>
-            <div className="flex items-end justify-between">
-              <span className="text-2xl font-bold text-aurora-white">128MB/5GB</span>
-              <div className="text-xs text-aurora-blue">
-                <span className="font-medium">4.87GB</span> free
-              </div>
-            </div>
-            <div className="mt-2 h-1.5 bg-black/30 rounded-full overflow-hidden">
-              <div className="bg-gradient-to-r from-aurora-blue to-aurora-green h-full rounded-full shadow-[0_0_8px_rgba(0,255,170,0.4)]" style={{ width: '2.56%' }}></div>
-            </div>
-          </div>
-        </Card>
-        
-        <Card className="glass-panel p-fib-4 rounded-lg hover-glow">
-          <div className="flex flex-col">
-            <span className="text-gray-400 text-sm">Processing Speed</span>
-            <div className="flex items-end justify-between">
-              <span className="text-2xl font-bold text-aurora-white">Standard</span>
-              <div className="text-xs text-aurora-purple">
-                <span className="font-medium">Pro Plan</span> for 2x speed
-              </div>
-            </div>
-            <div className="mt-2 h-1.5 bg-black/30 rounded-full overflow-hidden">
-              <div className="bg-gradient-to-r from-aurora-green to-aurora-purple h-full rounded-full shadow-[0_0_8px_rgba(138,43,226,0.4)]" style={{ width: '50%' }}></div>
-            </div>
-          </div>
-        </Card>
-      </div>
-      
-      {/* Job History */}
-      <Card className="glass-panel p-fib-4 rounded-lg hover-glow">
-        <div className="flex items-center gap-3 mb-fib-4">
-          <CustomIcon name="stats" className="h-fib-3 w-fib-3 text-aurora-blue" />
-          <h2 className="text-2xl font-orbitron font-bold text-gradient bg-gradient-glow">
-            Job History
-          </h2>
-        </div>
-        
-        <div className="space-y-3">
-          <Card className="glass-panel p-4 rounded-lg transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,166,255,0.3)]">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-aurora-white font-medium">Cinematic mountain landscape</h3>
-                <div className="text-xs text-aurora-green mt-1">Completed • 02/24/2025 10:30 AM</div>
-              </div>
-              <Button variant="default" className="bg-gradient-to-r from-aurora-blue to-aurora-green text-white shadow-[0_0_10px_rgba(0,166,255,0.3)] hover:shadow-[0_0_15px_rgba(0,166,255,0.5)]">
-                View
-              </Button>
-            </div>
-          </Card>
-          
-          <Card className="glass-panel p-4 rounded-lg transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,166,255,0.3)]">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-aurora-white font-medium">Futuristic cityscape with neon</h3>
-                <div className="text-xs text-red-400 mt-1">Failed • 02/24/2025 5:45 PM</div>
-              </div>
-              <Button variant="default" className="bg-gradient-to-r from-red-500 to-aurora-purple text-white shadow-[0_0_10px_rgba(138,43,226,0.3)] hover:shadow-[0_0_15px_rgba(138,43,226,0.5)]">
-                Retry
-              </Button>
-            </div>
-          </Card>
-        </div>
-      </Card>
+      <BatchQueuePanel />
+      <BatchStats />
+      <BatchHistory />
     </motion.div>
   );
 };

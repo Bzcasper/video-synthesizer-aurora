@@ -7,15 +7,7 @@ import { TimeRemaining } from "@/components/video/common/TimeRemaining";
 import { StatusBadge } from '@/components/video/StatusBadge';
 import { Cog, X } from 'lucide-react';
 import { type VideoJobStatus } from '@/hooks/video/types';
-
-interface EnhancementJob {
-  id: string;
-  title: string;
-  progress: number;
-  status: VideoJobStatus;
-  remainingTime: number;
-  thumbnailUrl?: string;
-}
+import { EnhancementJob } from './EnhancementProcessingPanel';
 
 interface EnhancementJobCardProps {
   job: EnhancementJob;
@@ -53,7 +45,7 @@ export const EnhancementJobCard: React.FC<EnhancementJobCardProps> = ({
               status="processing" 
             />
             <TimeRemaining 
-              timeRemaining={parseInt(String(job.remainingTime))} 
+              timeRemaining={job.remainingTime} 
             />
           </>
         )}

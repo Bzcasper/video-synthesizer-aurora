@@ -6,13 +6,14 @@ import { ProgressBar } from "@/components/video/common/ProgressBar";
 import { TimeRemaining } from "@/components/video/common/TimeRemaining";
 import { StatusBadge } from '@/components/video/StatusBadge';
 import { Cog, X } from 'lucide-react';
+import { type VideoJobStatus } from '@/hooks/video/types';
 
-interface BatchJob {
+export interface BatchJob {
   id: string;
   title: string;
   progress: number;
-  status: string;
-  remainingTime: number;
+  status: VideoJobStatus;
+  timeRemaining: string | number;
   thumbnailUrl?: string;
 }
 
@@ -20,15 +21,17 @@ interface BatchJobCardProps {
   job: BatchJob;
   onCancel: (id: string) => void;
   onSettings: (id: string) => void;
+  index?: number;
 }
 
 export const BatchJobCard: React.FC<BatchJobCardProps> = ({
   job,
   onCancel,
-  onSettings
+  onSettings,
+  index
 }) => {
   const handleCancel = () => {
-    if (job.status === 'processing' || job.status === 'queued') {
+    if (job.status === 'processing' || job.status === 'pending') {
       onCancel(job.id);
     }
   };
@@ -52,13 +55,13 @@ export const BatchJobCard: React.FC<BatchJobCardProps> = ({
               status="processing"
             />
             <TimeRemaining 
-              timeRemaining={parseInt(String(job.remainingTime))} 
+              timeRemaining={typeof job.timeRemaining === 'string' ? parseInt(job.timeRemaining) : job.timeRemaining} 
             />
           </>
         )}
         
         <div className="flex justify-end gap-2 mt-3">
-          {(job.status === 'processing' || job.status === 'queued') && (
+          {(job.status === 'processing' || job.status === 'pending') && (
             <Button 
               variant="ghost" 
               size="sm"

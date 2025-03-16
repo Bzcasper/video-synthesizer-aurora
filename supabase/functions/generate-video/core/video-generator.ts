@@ -1,7 +1,7 @@
 
 import { createClient } from '@supabase/supabase-js';
-import { ErrorHandler } from './ErrorHandler';
-import { ProgressTracker } from './ProgressTracker';
+import { ErrorHandler } from './errorhandler';
+import { ProgressTracker } from './progresstracker';
 import { FrameGenerator } from './frame-generator';
 import { FrameEnhancer } from './frame-enhancer';
 import { VideoAssembler } from './video-assembler';

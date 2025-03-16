@@ -1,8 +1,7 @@
-
 import { createClient } from '@supabase/supabase-js';
 import { SYSTEM, DB_TABLES } from '../config/constants';
-import { VideoGenerator, VideoJob } from './VideoGenerator';
-import { ErrorHandler } from './ErrorHandler';
+import { VideoGenerator } from './video-generator';
+import { ErrorHandler } from './errorhandler';
 import { JobValidator } from './job-validator';
 import { JobStatusManager } from './job-status-manager';
 import { QueueStats } from './queue-stats';

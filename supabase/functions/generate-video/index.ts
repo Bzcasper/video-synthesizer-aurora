@@ -1,13 +1,14 @@
+
 // supabase/functions/generate-video/index.ts
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4';
 import { corsHeaders } from '../_shared/cors.ts';
-import { VideoGenerator } from './core/VideoGenerator.ts';
+import { VideoGenerator } from './core/video-generator.ts';
 import { AssetManager } from './core/AssetManager.ts';
-import { QueueManager } from './core/QueueManager.ts';
-import { ProgressTracker } from './core/ProgressTracker.ts';
-import { ErrorHandler } from './core/ErrorHandler.ts';
+import { QueueManager } from './core/queuemanager.ts';
+import { ProgressTracker } from './core/progresstracker.ts';
+import { ErrorHandler } from './core/errorhandler.ts';
 import { validateRequest, normalizeSettings, VideoGenerationRequest } from './config/validation.ts';
 import { logger } from './utils/logging.ts';
 import { StorageUtils } from './utils/storage.ts';
@@ -23,7 +24,7 @@ const supabaseClient = createClient(
 const errorHandler = new ErrorHandler(supabaseClient);
 const progressTracker = new ProgressTracker(supabaseClient, errorHandler);
 const assetManager = new AssetManager(supabaseClient, errorHandler);
-const videoGenerator = new VideoGenerator(progressTracker, assetManager, errorHandler);
+const videoGenerator = new VideoGenerator(supabaseClient, errorHandler, progressTracker);
 const queueManager = new QueueManager(supabaseClient, videoGenerator, errorHandler);
 const storageUtils = new StorageUtils(supabaseClient, errorHandler);
 

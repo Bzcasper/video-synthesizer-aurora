@@ -1,15 +1,16 @@
+
 import React from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { SceneFormValues } from './types';
+import { Scene } from './types';
 
 interface SceneFormFieldsProps {
-  scene: SceneFormValues;
+  scene: Scene;
   index: number;
-  onSceneChange: (index: number, field: keyof SceneFormValues, value: any) => void;
+  onSceneChange: (index: number, field: keyof Scene, value: any) => void;
 }
 
 export const SceneFormFields: React.FC<SceneFormFieldsProps> = ({ 
@@ -37,38 +38,27 @@ export const SceneFormFields: React.FC<SceneFormFieldsProps> = ({
 
   return (
     <div className="space-y-4 p-4 border border-white/10 rounded-md bg-black/20">
-      {/* Scene title field */}
+      {/* Scene prompt field */}
       <div className="space-y-2">
-        <Label htmlFor={`scene-${index}-title`}>Scene Title</Label>
-        <Input
-          id={`scene-${index}-title`}
-          value={scene.title}
-          onChange={(e) => onSceneChange(index, 'title', e.target.value)}
-          placeholder="Scene title"
-        />
-      </div>
-
-      {/* Scene description field */}
-      <div className="space-y-2">
-        <Label htmlFor={`scene-${index}-description`}>Scene Description</Label>
+        <Label htmlFor={`scene-${index}-prompt`}>Scene Description</Label>
         <Textarea
-          id={`scene-${index}-description`}
-          value={scene.description}
-          onChange={(e) => onSceneChange(index, 'description', e.target.value)}
+          id={`scene-${index}-prompt`}
+          value={scene.prompt}
+          onChange={(e) => onSceneChange(index, 'prompt', e.target.value)}
           placeholder="Describe what happens in this scene"
           rows={3}
         />
       </div>
 
-      {/* Visual style selector */}
+      {/* Scene type selector */}
       <div className="space-y-2">
-        <Label htmlFor={`scene-${index}-style`}>Visual Style</Label>
+        <Label htmlFor={`scene-${index}-type`}>Scene Type</Label>
         <Select
-          value={scene.style}
-          onValueChange={(value) => onSceneChange(index, 'style', value)}
+          value={scene.sceneType}
+          onValueChange={(value) => onSceneChange(index, 'sceneType', value)}
         >
-          <SelectTrigger id={`scene-${index}-style`}>
-            <SelectValue placeholder="Select a style" />
+          <SelectTrigger id={`scene-${index}-type`}>
+            <SelectValue placeholder="Select a scene type" />
           </SelectTrigger>
           <SelectContent>
             {styleOptions.map((style) => (
@@ -84,8 +74,8 @@ export const SceneFormFields: React.FC<SceneFormFieldsProps> = ({
       <div className="space-y-2">
         <Label htmlFor={`scene-${index}-camera`}>Camera Movement</Label>
         <Select
-          value={scene.camera_movement}
-          onValueChange={(value) => onSceneChange(index, 'camera_movement', value)}
+          value={scene.cameraMotion}
+          onValueChange={(value) => onSceneChange(index, 'cameraMotion', value)}
         >
           <SelectTrigger id={`scene-${index}-camera`}>
             <SelectValue placeholder="Select camera movement" />

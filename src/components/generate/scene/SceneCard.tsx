@@ -1,10 +1,11 @@
 
 import React from 'react';
-import { Card, CardContent } from "@/components/ui/card";
-import { SceneControls } from './SceneControls';
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 import { SceneFormFields } from './SceneFormFields';
 import { Scene } from './types';
-import { motion } from "framer-motion";
 
 interface SceneCardProps {
   scene: Scene;
@@ -23,44 +24,60 @@ export const SceneCard: React.FC<SceneCardProps> = ({
   onRemoveScene,
   onUpdateScene,
 }) => {
-  const handleUpdateScene = (updates: Partial<Scene>) => {
-    onUpdateScene(index, updates);
+  const handleSceneChange = (index: number, field: keyof Scene, value: any) => {
+    onUpdateScene(index, { [field]: value });
   };
 
-  const isPromptValid = scene.prompt.length >= 10;
+  const isFirst = index === 0;
+  const isLast = index === totalScenes - 1;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
+      exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
       transition={{ duration: 0.3 }}
     >
-      <Card 
-        key={index} 
-        className={`glass-panel hover-glow transition-colors duration-300 ${
-          !isPromptValid ? 'border-red-500/50' : 'border-white/10'
-        }`}
-      >
-        <CardContent className="pt-4 space-y-4">
-          <div className="flex justify-between gap-4">
-            <SceneFormFields 
-              scene={scene}
-              index={index}
-              isLastScene={index === totalScenes - 1}
-              updateScene={handleUpdateScene}
-            />
-            
-            <SceneControls 
-              index={index}
-              totalScenes={totalScenes}
-              onMoveUp={() => onMoveScene(index, 'up')}
-              onMoveDown={() => onMoveScene(index, 'down')}
-              onRemove={() => onRemoveScene(index)}
-            />
+      <Card className="glass-panel">
+        <CardHeader className="p-4 pb-0 flex flex-row justify-between items-center">
+          <h3 className="text-lg font-medium">Scene {index + 1}</h3>
+          <div className="flex space-x-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onMoveScene(index, 'up')}
+              disabled={isFirst}
+              aria-label="Move scene up"
+            >
+              <ArrowUp className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onMoveScene(index, 'down')}
+              disabled={isLast}
+              aria-label="Move scene down"
+            >
+              <ArrowDown className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onRemoveScene(index)}
+              aria-label="Remove scene"
+            >
+              <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
           </div>
+        </CardHeader>
+        <CardContent className="p-4">
+          <SceneFormFields 
+            scene={scene} 
+            index={index} 
+            onSceneChange={handleSceneChange} 
+          />
         </CardContent>
       </Card>
     </motion.div>
   );
-};
+}

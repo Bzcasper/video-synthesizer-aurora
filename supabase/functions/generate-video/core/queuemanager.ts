@@ -1,3 +1,4 @@
+
 import { createClient } from '@supabase/supabase-js';
 import { SYSTEM, DB_TABLES } from '../config/constants';
 import { VideoGenerator } from './video-generator';
@@ -6,6 +7,7 @@ import { JobValidator } from './job-validator';
 import { JobStatusManager } from './job-status-manager';
 import { QueueStats } from './queue-stats';
 import { logger } from '../utils/logging';
+import { VideoJob } from './types';
 
 export interface JobPriority {
   level: 'low' | 'normal' | 'high';

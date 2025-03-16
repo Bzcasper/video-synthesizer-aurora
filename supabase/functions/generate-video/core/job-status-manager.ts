@@ -1,9 +1,9 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { DB_TABLES } from '../config/constants';
-import { ErrorHandler } from './ErrorHandler';
+import { ErrorHandler } from './errorhandler';
 import { logger } from '../utils/logging';
-import { VideoJob } from './VideoGenerator';
+import { VideoJob } from './types';
 
 export class JobStatusManager {
   constructor(

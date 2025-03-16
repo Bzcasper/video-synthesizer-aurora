@@ -2,6 +2,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
+import { SidebarLogoutButton } from "./sidebar-utilities"
 
 export const SidebarHeader = React.forwardRef<
   HTMLDivElement,
@@ -20,15 +21,26 @@ SidebarHeader.displayName = "SidebarHeader"
 
 export const SidebarFooter = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<"div">
->(({ className, ...props }, ref) => {
+  React.ComponentProps<"div"> & {
+    showLogout?: boolean
+  }
+>(({ className, showLogout = true, ...props }, ref) => {
   return (
     <div
       ref={ref}
       data-sidebar="footer"
-      className={cn("flex flex-col gap-2 p-2", className)}
+      className={cn("flex flex-col gap-2 p-2 mt-auto", className)}
       {...props}
-    />
+    >
+      {showLogout && (
+        <>
+          <SidebarSeparator />
+          <div className="mx-auto w-full max-w-48 flex justify-center px-2">
+            <SidebarLogoutButton />
+          </div>
+        </>
+      )}
+    </div>
   )
 })
 SidebarFooter.displayName = "SidebarFooter"

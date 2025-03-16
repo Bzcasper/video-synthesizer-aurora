@@ -2,7 +2,7 @@
 import * as React from "react"
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state"
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
+const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 30 // 30 days
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 export const SIDEBAR_WIDTH = "16rem"
@@ -17,6 +17,8 @@ type SidebarContext = {
   setOpenMobile: (open: boolean) => void
   isMobile: boolean
   toggleSidebar: () => void
+  theme: "dark" | "light" | "system"
+  setTheme: (theme: "dark" | "light" | "system") => void
 }
 
 const SidebarContext = React.createContext<SidebarContext | null>(null)

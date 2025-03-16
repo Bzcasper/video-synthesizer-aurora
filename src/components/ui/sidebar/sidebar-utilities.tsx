@@ -1,10 +1,11 @@
 
 import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
 import { cn } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { PanelLeft } from "lucide-react"
+import { PanelLeft, LogOut } from "lucide-react"
 import { useSidebar } from "./use-sidebar"
 
 export const SidebarInput = React.forwardRef<
@@ -16,7 +17,7 @@ export const SidebarInput = React.forwardRef<
       ref={ref}
       data-sidebar="input"
       className={cn(
-        "h-8 w-full bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
+        "h-8 w-full bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-aurora-blue",
         className
       )}
       {...props}
@@ -103,8 +104,8 @@ export const SidebarMenuSubButton = React.forwardRef<
       data-size={size}
       data-active={isActive}
       className={cn(
-        "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-none ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground",
-        "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground",
+        "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-none ring-aurora-blue hover:bg-sidebar-accent hover:text-aurora-blue hover:shadow-neon-blue transition-all duration-golden focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground",
+        "data-[active=true]:bg-sidebar-accent data-[active=true]:text-aurora-blue data-[active=true]:shadow-neon-blue",
         size === "sm" && "text-xs",
         size === "md" && "text-sm",
         "group-data-[collapsible=icon]:hidden",
@@ -128,7 +129,7 @@ export const SidebarTrigger = React.forwardRef<
       data-sidebar="trigger"
       variant="ghost"
       size="icon"
-      className={cn("h-7 w-7", className)}
+      className={cn("h-7 w-7 hover:bg-aurora-blue/10 hover:text-aurora-blue transition-all duration-golden", className)}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
@@ -141,3 +142,25 @@ export const SidebarTrigger = React.forwardRef<
   )
 })
 SidebarTrigger.displayName = "SidebarTrigger"
+
+export const SidebarLogoutButton = React.forwardRef<
+  React.ElementRef<typeof Button>,
+  React.ComponentProps<typeof Button>
+>(({ className, ...props }, ref) => {
+  return (
+    <Button
+      ref={ref}
+      data-sidebar="logout"
+      variant="ghost"
+      className={cn(
+        "w-full flex items-center justify-center gap-2 py-2 text-muted-foreground hover:text-aurora-blue hover:bg-aurora-blue/10 hover:shadow-neon-blue transition-all duration-golden", 
+        className
+      )}
+      {...props}
+    >
+      <LogOut size={16} />
+      <span>Logout</span>
+    </Button>
+  )
+})
+SidebarLogoutButton.displayName = "SidebarLogoutButton"

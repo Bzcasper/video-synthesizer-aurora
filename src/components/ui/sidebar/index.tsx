@@ -31,6 +31,7 @@ export {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarMenuSubButton,
-  SidebarTrigger
+  SidebarTrigger,
+  SidebarLogoutButton
 } from "./sidebar-utilities"
 export { SidebarRail } from "./sidebar-rail"

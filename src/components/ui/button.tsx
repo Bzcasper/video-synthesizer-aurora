@@ -9,11 +9,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-aurora-blue text-white hover:bg-aurora-blue/90 shadow-neon",
+        default: "bg-aurora-blue text-white hover:bg-aurora-blue/90 hover:shadow-neon-blue transition-all duration-golden",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-aurora-blue/50 bg-background hover:border-aurora-blue hover:bg-aurora-blue/10 hover:text-aurora-blue shadow-neon",
-        secondary: "bg-aurora-purple text-white hover:bg-aurora-purple/90",
-        ghost: "hover:bg-aurora-blue/10 hover:text-aurora-blue",
+        outline: "border border-aurora-blue/50 bg-background hover:border-aurora-blue hover:bg-aurora-blue/10 hover:text-aurora-blue hover:shadow-neon-blue transition-all duration-golden",
+        secondary: "bg-aurora-purple text-white hover:bg-aurora-purple/90 hover:shadow-neon-purple transition-all duration-golden",
+        ghost: "hover:bg-aurora-blue/10 hover:text-aurora-blue transition-all duration-golden",
         link: "text-aurora-blue underline-offset-4 hover:underline",
       },
       size: {

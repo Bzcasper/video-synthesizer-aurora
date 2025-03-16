@@ -18,6 +18,7 @@ import { MenuIcon } from './menu-icon';
 import { TemplateIcon } from './template-icon';
 import { ApiIcon } from './api-icon';
 import { DefaultIcon } from './default-icon';
+import { ClockIcon } from './clock-icon';
 
 // Interface for the CustomIcon component
 interface CustomIconProps {
@@ -58,6 +59,8 @@ const CustomIcon: React.FC<CustomIconProps> = ({ name, className = "h-5 w-5" }) 
       return <TemplateIcon className={className} />;
     case 'api':
       return <ApiIcon className={className} />;
+    case 'clock':
+      return <ClockIcon className={className} />;
     default:
       return <DefaultIcon className={className} />;
   }
@@ -83,5 +86,6 @@ export {
   MenuIcon,
   TemplateIcon,
   ApiIcon,
+  ClockIcon,
   DefaultIcon
 };

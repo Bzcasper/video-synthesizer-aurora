@@ -2,28 +2,32 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Card } from "@/components/ui/card";
-import { Play, Check } from 'lucide-react';
-import type { Video } from '@/hooks/video/types';
+import type { Video } from '@/hooks/use-video-enhancements';
+import { CustomIcon } from '@/components/ui/icons';
 
 interface VideoCardProps {
   video: Video;
   isSelected: boolean;
-  onClick: () => void;
+  onSelect: () => void;
 }
 
-export const VideoCard: React.FC<VideoCardProps> = ({ video, isSelected, onClick }) => {
+export const VideoCard: React.FC<VideoCardProps> = ({ 
+  video, 
+  isSelected, 
+  onSelect 
+}) => {
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
       <Card
-        className={`group cursor-pointer p-4 transition-all duration-300 ${
+        className={`cursor-pointer p-4 transition-all duration-300 ${
           isSelected 
             ? 'bg-gradient-to-r from-aurora-purple to-aurora-blue border-none shadow-neon' 
             : 'bg-white/5 border border-white/10 hover:border-aurora-blue/50'
         }`}
-        onClick={onClick}
+        onClick={onSelect}
       >
         <div className="aspect-video relative rounded-lg overflow-hidden mb-4">
           {video.output_url ? (
@@ -38,18 +42,11 @@ export const VideoCard: React.FC<VideoCardProps> = ({ video, isSelected, onClick
             </div>
           )}
           
-          {/* Hover overlay */}
-          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-            {isSelected ? (
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                <Check className="w-5 h-5 text-aurora-blue" />
-              </div>
-            ) : (
-              <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all group-hover:bg-white/30">
-                <Play className="w-5 h-5 text-white" />
-              </div>
-            )}
-          </div>
+          {isSelected && (
+            <div className="absolute top-2 right-2 bg-aurora-blue/90 rounded-full p-1">
+              <CustomIcon name="play" className="h-4 w-4 text-white" />
+            </div>
+          )}
         </div>
         <div className="font-medium truncate">{video.prompt}</div>
       </Card>

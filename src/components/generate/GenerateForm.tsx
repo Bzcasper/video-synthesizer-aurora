@@ -1,16 +1,13 @@
+
 import React, { useCallback, useState, useEffect } from 'react';
 import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import VideoDescriptionInput from './VideoDescriptionInput';
-import GenerateButton from './GenerateButton';
-import ActionButtons from './ActionButtons';
-import { Card } from "@/components/ui/card";
-import { SceneEditor } from './SceneEditor';
-import DurationSlider from './DurationSlider';
-import VideoStyleOption from './VideoStyleOption';
-import { Scene, VideoGenerationFormValues, videoGenerationSchema } from './scene/types';
 import { toast } from "@/hooks/use-toast";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
+import VideoDescriptionInput from './VideoDescriptionInput';
+import { Scene, VideoGenerationFormValues, videoGenerationSchema } from './scene/types';
+import FormActions from './form/FormActions';
+import AdvancedSettings from './form/AdvancedSettings';
 
 export const videoStyles = [
   {
@@ -117,94 +114,47 @@ const GenerateForm = ({
         onSubmit={methods.handleSubmit(handleSubmitWithValidation)}
         aria-label="Video generation form"
       >
-        {/* Main Form Section */}
-        <div className="space-y-6">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <VideoDescriptionInput 
-              value={prompt} 
-              onChange={(val) => {
-                setPrompt(val);
-                methods.setValue('prompt', val, { shouldValidate: true });
-              }}
-              disabled={isGenerating} 
-            />
-          </motion.div>
+        <VideoDescriptionInput 
+          value={prompt} 
+          onChange={(val) => {
+            setPrompt(val);
+            methods.setValue('prompt', val, { shouldValidate: true });
+          }}
+          disabled={isGenerating} 
+        />
 
-          {/* Main Generate Button */}
-          <GenerateButton 
-            isGenerating={isGenerating} 
-            disabled={!isFormValid || methods.formState.isSubmitting} 
-          />
+        <FormActions 
+          isGenerating={isGenerating} 
+          isFormValid={isFormValid}
+          onAdvancedToggle={toggleAdvancedSettings}
+          showingDetails={showAdvancedSettings}
+          onEnhance={() => {
+            toast({
+              title: "AI Enhancement",
+              description: "AI is analyzing your prompt to suggest improvements.",
+            });
+          }}
+        />
 
-          {/* Secondary Action Buttons */}
-          <ActionButtons 
-            disabled={isGenerating}
-            onDetailsClick={toggleAdvancedSettings}
-            showingDetails={showAdvancedSettings}
-            onEnhanceClick={() => {
-              // Keep this for future enhancement functionality
-              toast({
-                title: "AI Enhancement",
-                description: "AI is analyzing your prompt to suggest improvements.",
-              });
-            }}
-          />
-        </div>
-
-        {/* Advanced Settings (conditionally displayed) */}
         <AnimatePresence>
           {showAdvancedSettings && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Card className="p-6 bg-white/5 border-white/10 space-y-6 overflow-hidden">
-                {/* Style Selection */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Video Style</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {videoStyles.map((styleOption) => (
-                      <VideoStyleOption
-                        key={styleOption.id}
-                        {...styleOption}
-                        isSelected={style === styleOption.id}
-                        onSelect={(id) => {
-                          setStyle(id);
-                          methods.setValue('style', id, { shouldValidate: true });
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Duration Slider */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Video Duration</h3>
-                  <DurationSlider 
-                    duration={duration} 
-                    onDurationChange={(val) => {
-                      setDuration(val);
-                      methods.setValue('duration', val, { shouldValidate: true });
-                    }} 
-                  />
-                </div>
-
-                {/* Scene Editor */}
-                <SceneEditor 
-                  scenes={scenes} 
-                  setScenes={(newScenes) => {
-                    setScenes(newScenes);
-                    methods.setValue('scenes', newScenes, { shouldValidate: true });
-                  }} 
-                />
-              </Card>
-            </motion.div>
+            <AdvancedSettings
+              duration={duration}
+              setDuration={(val) => {
+                setDuration(val);
+                methods.setValue('duration', val, { shouldValidate: true });
+              }}
+              style={style}
+              setStyle={(id) => {
+                setStyle(id);
+                methods.setValue('style', id, { shouldValidate: true });
+              }}
+              scenes={scenes}
+              setScenes={(newScenes) => {
+                setScenes(newScenes);
+                methods.setValue('scenes', newScenes, { shouldValidate: true });
+              }}
+            />
           )}
         </AnimatePresence>
       </form>

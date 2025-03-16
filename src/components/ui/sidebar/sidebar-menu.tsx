@@ -1,7 +1,7 @@
 
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
-import { BadgeCheck, ChevronRight } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -107,20 +107,11 @@ export const SidebarMenuAction = React.forwardRef<
 SidebarMenuAction.displayName = "SidebarMenuAction"
 
 export const SidebarMenuBadge = React.forwardRef<
-  React.ElementRef<typeof Badge>,
-  React.ComponentProps<typeof Badge> & {
-    variant?:
-      | "default"
-      | "destructive"
-      | "outline"
-      | "secondary"
-      | "accent"
-      | "success"
-  }
+  HTMLDivElement,
+  React.ComponentProps<typeof Badge>
 >(({ className, variant = "secondary", ...props }, ref) => {
   return (
     <Badge
-      ref={ref}
       data-sidebar="menu-badge"
       variant={variant}
       className={cn(

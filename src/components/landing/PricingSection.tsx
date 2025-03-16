@@ -1,7 +1,10 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from '@/components/ui/use-toast';
 
 const plans = [
   {
@@ -43,6 +46,38 @@ const plans = [
 ];
 
 const PricingSection = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleGetStarted = async (planName: string) => {
+    if (planName === "Free") {
+      // Check if user is logged in
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session) {
+        navigate('/dashboard');
+      } else {
+        navigate('/signup');
+      }
+    } else if (planName === "Pro") {
+      // Check if user is logged in
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session) {
+        navigate('/checkout');
+      } else {
+        toast({
+          title: "Authentication required",
+          description: "Please create an account to subscribe to the Pro plan",
+        });
+        navigate('/signup', { state: { redirectAfter: '/checkout' } });
+      }
+    } else if (planName === "Enterprise") {
+      // Open a mailto link for enterprise inquiries
+      window.open('mailto:enterprise@auroravideosynth.com?subject=Enterprise%20Plan%20Inquiry', '_blank');
+    }
+  };
+
   return (
     <section className="py-20 bg-gradient-to-b from-background to-background/90">
       <div className="container mx-auto px-4">
@@ -85,8 +120,9 @@ const PricingSection = () => {
                     ? 'bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500'
                     : 'bg-white/10 hover:bg-white/20'
                 }`}
+                onClick={() => handleGetStarted(plan.name)}
               >
-                Get Started
+                {plan.name === "Enterprise" ? "Contact Sales" : "Get Started"}
               </Button>
             </div>
           ))}

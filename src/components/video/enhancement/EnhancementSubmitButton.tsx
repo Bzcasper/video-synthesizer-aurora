@@ -1,18 +1,16 @@
-
-import React from 'react';
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { Sparkles } from 'lucide-react';
+import { Sparkles } from "lucide-react";
 
 interface EnhancementSubmitButtonProps {
   isSubmitting: boolean;
   onSubmit: () => void;
 }
 
-export const EnhancementSubmitButton: React.FC<EnhancementSubmitButtonProps> = ({
-  isSubmitting,
-  onSubmit
-}) => {
+export const EnhancementSubmitButton: React.FC<
+  EnhancementSubmitButtonProps
+> = ({ isSubmitting, onSubmit }) => {
   return (
     <Button
       onClick={onSubmit}

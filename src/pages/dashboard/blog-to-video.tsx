@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { BlogToVideoConverter } from '@/components/social/BlogToVideoConverter';
+import React from "react";
+import { BlogToVideoConverter } from "@/components/social/BlogToVideoConverter";
 
 const BlogToVideoPage = () => {
   return (

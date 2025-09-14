@@ -1,10 +1,9 @@
-
-import React from 'react';
-import { Image as ImageIcon, FileAudio } from 'lucide-react';
-import FileUpload from '@/components/FileUpload';
+import React from "react";
+import { Image as ImageIcon, FileAudio } from "lucide-react";
+import FileUpload from "@/components/FileUpload";
 
 interface AssetUploadPanelProps {
-  onUpload: (files: FileList, type: 'image' | 'audio') => Promise<void>;
+  onUpload: (files: FileList, type: "image" | "audio") => Promise<void>;
 }
 
 const AssetUploadPanel = ({ onUpload }: AssetUploadPanelProps) => {
@@ -14,14 +13,14 @@ const AssetUploadPanel = ({ onUpload }: AssetUploadPanelProps) => {
         label="Reference Images"
         accept="image/*"
         icon={<ImageIcon className="w-5 h-5" />}
-        onChange={(files) => onUpload(files, 'image')}
+        onChange={(files) => onUpload(files, "image")}
       />
-      
+
       <FileUpload
         label="Audio Track"
         accept="audio/*"
         icon={<FileAudio className="w-5 h-5" />}
-        onChange={(files) => onUpload(files, 'audio')}
+        onChange={(files) => onUpload(files, "audio")}
       />
     </div>
   );

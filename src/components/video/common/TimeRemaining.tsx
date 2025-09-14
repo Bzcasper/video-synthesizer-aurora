@@ -1,19 +1,20 @@
-
-import React from 'react';
-import { Clock } from 'lucide-react';
+import React from "react";
+import { Clock } from "lucide-react";
 
 export interface TimeRemainingProps {
   timeRemaining: number;
 }
 
-export const TimeRemaining: React.FC<TimeRemainingProps> = ({ timeRemaining }) => {
+export const TimeRemaining: React.FC<TimeRemainingProps> = ({
+  timeRemaining,
+}) => {
   // Format seconds into minutes and seconds
   const formatTime = (seconds: number): string => {
-    if (seconds <= 0) return 'Complete';
-    
+    if (seconds <= 0) return "Complete";
+
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    
+
     if (minutes > 0) {
       return `${minutes}m ${remainingSeconds}s remaining`;
     }

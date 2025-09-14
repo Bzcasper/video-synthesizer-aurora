@@ -1,15 +1,14 @@
-
-import React, { useState } from 'react';
-import TrimVideoControl from './TrimVideoControl';
-import FilterVideoControl from './FilterVideoControl';
-import SpeedVideoControl from './SpeedVideoControl';
-import SubtitleVideoControl from './SubtitleVideoControl';
+import React, { useState } from "react";
+import TrimVideoControl from "./TrimVideoControl";
+import FilterVideoControl from "./FilterVideoControl";
+import SpeedVideoControl from "./SpeedVideoControl";
+import SubtitleVideoControl from "./SubtitleVideoControl";
 import { Card } from "@/components/ui/card";
 
 interface EditingControlsPanelProps {
   videoId: string;
   onEditSubmit: (editData: {
-    type: 'trim' | 'filter' | 'speed' | 'subtitle';
+    type: "trim" | "filter" | "speed" | "subtitle";
     params: Record<string, any>;
   }) => void;
 }
@@ -24,7 +23,7 @@ const EditingControlsPanel: React.FC<EditingControlsPanelProps> = ({
   const duration = 60; // This should ideally come from the video metadata
 
   // State for FilterVideoControl
-  const [currentFilter, setCurrentFilter] = useState('none');
+  const [currentFilter, setCurrentFilter] = useState("none");
   const [isProcessing, setIsProcessing] = useState(false);
 
   return (
@@ -38,7 +37,7 @@ const EditingControlsPanel: React.FC<EditingControlsPanelProps> = ({
           duration={duration}
           onStartTimeChange={setStartTime}
           onEndTimeChange={setEndTime}
-          onSubmit={(params) => onEditSubmit({ type: 'trim', params })}
+          onSubmit={(params) => onEditSubmit({ type: "trim", params })}
           isProcessing={isProcessing}
         />
       </Card>
@@ -56,7 +55,7 @@ const EditingControlsPanel: React.FC<EditingControlsPanelProps> = ({
         <h3 className="text-lg font-semibold mb-4 text-white">Adjust Speed</h3>
         <SpeedVideoControl
           videoId={videoId}
-          onSubmit={(params) => onEditSubmit({ type: 'speed', params })}
+          onSubmit={(params) => onEditSubmit({ type: "speed", params })}
         />
       </Card>
 
@@ -64,7 +63,7 @@ const EditingControlsPanel: React.FC<EditingControlsPanelProps> = ({
         <h3 className="text-lg font-semibold mb-4 text-white">Add Subtitles</h3>
         <SubtitleVideoControl
           videoId={videoId}
-          onSubmit={(params) => onEditSubmit({ type: 'subtitle', params })}
+          onSubmit={(params) => onEditSubmit({ type: "subtitle", params })}
         />
       </Card>
     </div>

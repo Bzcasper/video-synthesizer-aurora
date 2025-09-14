@@ -1,7 +1,8 @@
+/** @format */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap");
 
 @layer base {
   :root {
@@ -25,7 +26,52 @@
     --input: 240 3.7% 15.9%;
     --ring: 180 100% 50%;
     --radius: 0.5rem;
-    
+
+    /* Enhanced Aurora Color System */
+    --aurora-blue: #00a6ff;
+    --aurora-purple: #8a2be2;
+    --aurora-green: #00ffaa;
+    --aurora-cyan: #00ffff;
+    --aurora-orange: #ff6b35;
+    --aurora-black: #0a0a0a;
+    --aurora-white: #f5f5f5;
+
+    /* Semantic Colors */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 240 5.9% 10%;
+    --error: 0 84% 60%;
+    --error-foreground: 0 0% 98%;
+    --info: 217 91% 60%;
+    --info-foreground: 240 5.9% 10%;
+
+    /* Enhanced Neutral Scale with WCAG AA compliance */
+    --neutral-50: 0 0% 98%;
+    --neutral-100: 0 0% 96%;
+    --neutral-200: 0 0% 90%;
+    --neutral-300: 0 0% 83%;
+    --neutral-400: 0 0% 64%;
+    --neutral-500: 0 0% 45%;
+    --neutral-600: 0 0% 32%;
+    --neutral-700: 0 0% 25%;
+    --neutral-800: 0 0% 15%;
+    --neutral-900: 0 0% 9%;
+    --neutral-950: 0 0% 4%;
+
+    /* Surface System with multiple background layers */
+    --surface-50: 0 0% 98%;
+    --surface-100: 0 0% 96%;
+    --surface-200: 0 0% 93%;
+    --surface-300: 0 0% 89%;
+    --surface-400: 0 0% 74%;
+    --surface-500: 0 0% 56%;
+    --surface-600: 0 0% 39%;
+    --surface-700: 0 0% 27%;
+    --surface-800: 0 0% 16%;
+    --surface-900: 0 0% 10%;
+    --surface-950: 0 0% 4%;
+
     /* Golden Ratio Constants */
     --golden-ratio: 1.618;
     --inverse-golden-ratio: 0.618;
@@ -48,25 +94,49 @@
     @apply min-h-screen bg-aurora-black flex flex-col w-full;
   }
 
-  /* Typography scaling using Fibonacci sequence */
+  /* Typography scaling using new 8-step scale */
   h1 {
-    @apply text-fib-xl font-orbitron font-bold tracking-tight;
-    margin-bottom: calc(1rem * var(--golden-ratio));
+    @apply text-6xl font-orbitron font-bold tracking-tight;
+    margin-bottom: 1.5rem;
   }
 
   h2 {
-    @apply text-fib-lg font-orbitron font-semibold;
-    margin-bottom: calc(0.8rem * var(--golden-ratio));
+    @apply text-5xl font-orbitron font-semibold;
+    margin-bottom: 1.25rem;
   }
 
   h3 {
-    @apply text-fib-base font-orbitron font-medium;
-    margin-bottom: calc(0.6rem * var(--golden-ratio));
+    @apply text-4xl font-orbitron font-medium;
+    margin-bottom: 1rem;
+  }
+
+  h4 {
+    @apply text-3xl font-orbitron font-medium;
+    margin-bottom: 0.875rem;
+  }
+
+  h5 {
+    @apply text-2xl font-orbitron font-medium;
+    margin-bottom: 0.75rem;
+  }
+
+  h6 {
+    @apply text-xl font-orbitron font-medium;
+    margin-bottom: 0.625rem;
   }
 
   p {
-    @apply text-fib-sm leading-relaxed;
-    margin-bottom: calc(1rem * var(--inverse-golden-ratio));
+    @apply text-base leading-relaxed;
+    margin-bottom: 1rem;
+  }
+
+  /* Code and inline elements */
+  code {
+    @apply text-sm font-mono bg-neutral-800 px-1.5 py-0.5 rounded;
+  }
+
+  pre {
+    @apply text-sm font-mono bg-neutral-900 p-4 rounded-lg overflow-x-auto;
   }
 
   /* Force dark mode */
@@ -85,10 +155,10 @@
 
   /* Content Sections */
   section {
-    @apply py-fib-6 w-full;
+    @apply py-8 w-full;
   }
 
-  /* Container widths using Fibonacci */
+  /* Container widths */
   .container {
     @apply w-full max-w-[2000px] mx-auto px-4 sm:px-6 md:px-8;
   }
@@ -113,12 +183,14 @@
   }
 
   /* Form elements */
-  input, textarea, select {
-    @apply h-fib-4 px-fib-2 rounded-lg;
+  input,
+  textarea,
+  select {
+    @apply h-10 px-3 rounded-lg;
   }
 
   /* Buttons */
   button {
-    @apply min-h-fib-4 px-fib-3 rounded-lg transition-all duration-golden;
+    @apply min-h-10 px-4 rounded-lg transition-all duration-300;
   }
 }

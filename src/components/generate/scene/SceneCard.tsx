@@ -1,17 +1,16 @@
-
-import React from 'react';
+import React from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
-import { SceneFormFields } from './SceneFormFields';
-import { Scene } from './types';
+import { SceneFormFields } from "./SceneFormFields";
+import { Scene } from "./types";
 
 interface SceneCardProps {
   scene: Scene;
   index: number;
   totalScenes: number;
-  onMoveScene: (index: number, direction: 'up' | 'down') => void;
+  onMoveScene: (index: number, direction: "up" | "down") => void;
   onRemoveScene: (index: number) => void;
   onUpdateScene: (index: number, updates: Partial<Scene>) => void;
 }
@@ -35,7 +34,7 @@ export const SceneCard: React.FC<SceneCardProps> = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
+      exit={{ opacity: 0, height: 0, overflow: "hidden" }}
       transition={{ duration: 0.3 }}
     >
       <Card className="glass-panel">
@@ -45,7 +44,7 @@ export const SceneCard: React.FC<SceneCardProps> = ({
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onMoveScene(index, 'up')}
+              onClick={() => onMoveScene(index, "up")}
               disabled={isFirst}
               aria-label="Move scene up"
             >
@@ -54,7 +53,7 @@ export const SceneCard: React.FC<SceneCardProps> = ({
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onMoveScene(index, 'down')}
+              onClick={() => onMoveScene(index, "down")}
               disabled={isLast}
               aria-label="Move scene down"
             >
@@ -71,13 +70,13 @@ export const SceneCard: React.FC<SceneCardProps> = ({
           </div>
         </CardHeader>
         <CardContent className="p-4">
-          <SceneFormFields 
-            scene={scene} 
-            index={index} 
-            onSceneChange={handleSceneChange} 
+          <SceneFormFields
+            scene={scene}
+            index={index}
+            onSceneChange={handleSceneChange}
           />
         </CardContent>
       </Card>
     </motion.div>
   );
-}
+};

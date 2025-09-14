@@ -1,9 +1,8 @@
-
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
 import { Progress } from "@/components/ui/progress";
-import { TimeRemaining } from '@/components/video/common/TimeRemaining';
-import { Loader2 } from 'lucide-react';
+import { TimeRemaining } from "@/components/video/common/TimeRemaining";
+import { Loader2 } from "lucide-react";
 
 interface GenerationProgressProps {
   showProgress: boolean;
@@ -23,7 +22,7 @@ const GenerationProgress: React.FC<GenerationProgressProps> = ({
   return (
     <motion.div
       initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: 'auto' }}
+      animate={{ opacity: 1, height: "auto" }}
       exit={{ opacity: 0, height: 0 }}
       className="bg-black/30 rounded-lg p-4 mb-6 border border-white/10"
     >

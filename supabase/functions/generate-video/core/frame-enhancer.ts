@@ -1,10 +1,12 @@
-
-import { logger } from '../utils/logging';
+import { logger } from "../utils/logging";
 
 export class FrameEnhancer {
   constructor() {}
 
-  async enhanceFrames(frames: Uint8Array[], jobId: string): Promise<Uint8Array[]> {
+  async enhanceFrames(
+    frames: Uint8Array[],
+    jobId: string,
+  ): Promise<Uint8Array[]> {
     logger.info(`Enhancing frames for job ${jobId}`);
 
     try {
@@ -15,7 +17,7 @@ export class FrameEnhancer {
       for (let i = 0; i < frames.length; i++) {
         const enhanced = await enhancer.upscale(frames[i], {
           scale: 1.5,
-          denoise: 0.3
+          denoise: 0.3,
         });
 
         enhancedFrames.push(enhanced);
@@ -29,12 +31,12 @@ export class FrameEnhancer {
   }
 
   private async initializeSDXL() {
-    logger.info('Initializing SDXL model');
+    logger.info("Initializing SDXL model");
     return {
       upscale: async (frame: Uint8Array, options: any) => {
         // Placeholder for actual frame enhancement
         return frame;
-      }
+      },
     };
   }
 }

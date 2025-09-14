@@ -11,27 +11,31 @@ The **Video Generation API** is designed for **high-performance computing (HPC) 
 ### 🛠️ Core System Components ⚙️
 
 ### 1️⃣ Resource Management 🗄️🔋
-   - **Three-tiered data storage architecture:**
-     - 📁 `storage-volume`: Persistent storage for final video outputs and metadata.
-     - 🔄 `media-cache-volume`: Temporary storage allocated for intermediary assets.
-     - 🧠 `model-cache-volume`: Repository for AI models, ensuring minimal cold-start delays.
-   - ⚡ **Optimized GPU acceleration** leveraging **NVIDIA A100** hardware with preloaded inference models.
-   - 🔧 **Dynamic container orchestration**, incorporating an automated idle timeout of **one minute** to mitigate resource wastage.
+
+- **Three-tiered data storage architecture:**
+  - 📁 `storage-volume`: Persistent storage for final video outputs and metadata.
+  - 🔄 `media-cache-volume`: Temporary storage allocated for intermediary assets.
+  - 🧠 `model-cache-volume`: Repository for AI models, ensuring minimal cold-start delays.
+- ⚡ **Optimized GPU acceleration** leveraging **NVIDIA A100** hardware with preloaded inference models.
+- 🔧 **Dynamic container orchestration**, incorporating an automated idle timeout of **one minute** to mitigate resource wastage.
 
 ### 2️⃣ AI Model Integration 🧠🎞️
-   - 🤖 **Text-to-video synthesis** powered by **ModelScope (DAMO-VILAB)**.
-   - 📈 **Frame super-resolution enhancement** utilizing **Stable Diffusion XL**.
-   - 🎤 **Precision audio-visual alignment** via **LLaVA speech recognition** models.
+
+- 🤖 **Text-to-video synthesis** powered by **ModelScope (DAMO-VILAB)**.
+- 📈 **Frame super-resolution enhancement** utilizing **Stable Diffusion XL**.
+- 🎤 **Precision audio-visual alignment** via **LLaVA speech recognition** models.
 
 ### 3️⃣ Containerization and Computational Efficiency 🏗️⚡
-   - 🚀 **Preloaded AI models** to eliminate startup latency.
-   - 📊 **On-demand scalability**, dynamically adjusting compute resources based on workload requirements.
-   - 🔄 **Asynchronous execution architecture**, optimizing throughput for high-volume processing.
+
+- 🚀 **Preloaded AI models** to eliminate startup latency.
+- 📊 **On-demand scalability**, dynamically adjusting compute resources based on workload requirements.
+- 🔄 **Asynchronous execution architecture**, optimizing throughput for high-volume processing.
 
 ### 4️⃣ API Framework 🌐📡
-   - 🔗 **RESTful architecture** enabling video generation, retrieval, and management.
-   - 🔍 **Strict data validation protocols** enforced through **Pydantic**.
-   - 🔄 **Event-driven callbacks** to facilitate seamless workflow automation within n8n.
+
+- 🔗 **RESTful architecture** enabling video generation, retrieval, and management.
+- 🔍 **Strict data validation protocols** enforced through **Pydantic**.
+- 🔄 **Event-driven callbacks** to facilitate seamless workflow automation within n8n.
 
 ## 🔗 Usage and Integration 🎯
 
@@ -40,28 +44,31 @@ This API is designed for **seamless integration with n8n workflows**, enabling s
 ### ⚡ Core Functionalities 🚀
 
 #### 1️⃣ Video Generation Request 🎥📝
-   - **Example POST request:**
 
-   ```json
-   {
-     "images": ["https://example.com/image1.jpg", "base64_encoded_image_data"],
-     "audio_file": "https://example.com/audio.mp3",
-     "transcript": "This is the spoken text synchronized with the video",
-     "prompt": "Cinematic landscape with mountains and lakes, 8K resolution",
-     "duration": 10.0,
-     "resolution": [1920, 1080],
-     "fps": 30,
-     "enhance_frames": true,
-     "style": "cinematic",
-     "callback_url": "https://your-n8n-workflow.com/webhook"
-   }
-   ```
+- **Example POST request:**
+
+```json
+{
+  "images": ["https://example.com/image1.jpg", "base64_encoded_image_data"],
+  "audio_file": "https://example.com/audio.mp3",
+  "transcript": "This is the spoken text synchronized with the video",
+  "prompt": "Cinematic landscape with mountains and lakes, 8K resolution",
+  "duration": 10.0,
+  "resolution": [1920, 1080],
+  "fps": 30,
+  "enhance_frames": true,
+  "style": "cinematic",
+  "callback_url": "https://your-n8n-workflow.com/webhook"
+}
+```
 
 #### 2️⃣ Retrieving the Generated Video 📥🎞️
-   - **Example GET request:**
-   ```
-   GET /get_video?job_id=your-job-id
-   ```
+
+- **Example GET request:**
+
+```
+GET /get_video?job_id=your-job-id
+```
 
 ### 🔄 n8n Workflow Automation 🔧🤖
 
@@ -95,4 +102,3 @@ The system autonomously provisions all required volumes, prefetches AI models, a
 - 🎥 **WebRTC-enabled live preview functionality** for enhanced user interaction.
 
 This implementation provides a **highly scalable, computationally efficient, and advanced** framework for video generation while leveraging **Modal Labs' cutting-edge AI infrastructure** to maximize performance and throughput. 🚀🎬🔧
-

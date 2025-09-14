@@ -1,22 +1,25 @@
+/** @format */
 
-import { useState } from 'react';
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import type { Enhancement, EnhancementProgress, FilterType } from './types';
+import type { Enhancement, EnhancementProgress, FilterType } from "./types";
 
 /**
  * Hook to handle enhancement submission
- * 
+ *
  * @param setEnhancementProgress Function to update the enhancement progress
  * @returns Functions and state for enhancement submission
  */
 export function useSubmitEnhancement(
-  setEnhancementProgress: React.Dispatch<React.SetStateAction<Record<string, EnhancementProgress>>>
+  setEnhancementProgress: React.Dispatch<
+    React.SetStateAction<Record<string, EnhancementProgress>>
+  >
 ) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmitEnhancement = async (
-    selectedVideo: string | null, 
+    selectedVideo: string | null,
     selectedEnhancement: Enhancement | null,
     selectedFilter: FilterType,
     speedFactor: number
@@ -25,16 +28,23 @@ export function useSubmitEnhancement(
 
     setIsSubmitting(true);
     try {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) {
+        throw new Error("User not authenticated");
+      }
+
       const { data, error } = await supabase
-        .from('video_enhancements')
+        .from("video_enhancements")
         .insert({
           video_id: selectedVideo,
           enhancement_type: selectedEnhancement.id,
-          filter_type: selectedEnhancement.id === 'filter' ? selectedFilter : null,
-          speed_factor: selectedEnhancement.id === 'speed_adjustment' ? speedFactor : null,
-          status: 'pending',
+          filter_type:
+            selectedEnhancement.id === "filter" ? selectedFilter : null,
+          speed_factor:
+            selectedEnhancement.id === "speed_adjustment" ? speedFactor : null,
+          status: "pending",
           progress: 0,
-          user_id: (await supabase.auth.getUser()).data.user?.id,
+          user_id: userData.user.id,
         })
         .select()
         .single();
@@ -43,30 +53,34 @@ export function useSubmitEnhancement(
 
       toast({
         title: "Enhancement submitted",
-        description: "Your video enhancement is being processed. You'll see progress updates in real-time.",
+        description:
+          "Your video enhancement is being processed. You'll see progress updates in real-time.",
       });
 
       if (data) {
-        setEnhancementProgress(prev => ({
+        setEnhancementProgress((prev) => ({
           ...prev,
           [data.id]: {
             id: data.id,
             progress: 0,
-            status: 'pending',
-            estimated_completion_time: null
-          }
+            status: "pending",
+            estimated_completion_time: null,
+          },
         }));
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Error submitting enhancement",
-        description: error.message,
-        variant: "destructive"
+        description:
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred while submitting the enhancement",
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
     }
-    
+
     return true;
   };
 

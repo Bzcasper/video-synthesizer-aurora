@@ -1,22 +1,27 @@
-
-import React from 'react';
-import { Play } from 'lucide-react';
+import React from "react";
+import { Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const DemoSection = () => {
   return (
     <section className="py-20 relative overflow-hidden">
       <div className="container mx-auto px-4">
-        <div className="glass-panel p-8 relative overflow-hidden rounded-xl border border-white/10 backdrop-blur-xl
+        <div
+          className="glass-panel p-8 relative overflow-hidden rounded-xl border border-white/10 backdrop-blur-xl
                       bg-gradient-to-br from-white/5 to-white/10
-                      shadow-[0_0_40px_10px_rgba(0,0,0,0.1)]">
-          <div className="aspect-video relative rounded-lg overflow-hidden backdrop-blur-xl
+                      shadow-[0_0_40px_10px_rgba(0,0,0,0.1)]"
+        >
+          <div
+            className="aspect-video relative rounded-lg overflow-hidden backdrop-blur-xl
                         border border-white/20 shadow-[0_0_30px_10px_rgba(8,0,32,0.3)]
-                        animate-fade-in">
+                        animate-fade-in"
+          >
             {/* Placeholder for demo video */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-emerald-900/20 
-                          flex items-center justify-center">
-              <Button 
+            <div
+              className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-emerald-900/20 
+                          flex items-center justify-center"
+            >
+              <Button
                 size="lg"
                 variant="secondary"
                 className="bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/20
@@ -28,7 +33,7 @@ const DemoSection = () => {
               </Button>
             </div>
           </div>
-          
+
           <div className="mt-8 text-center">
             <Button
               size="lg"

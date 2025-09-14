@@ -1,10 +1,24 @@
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Clock, Calendar, Edit2, Loader2, Play, Share2, Heart, Trash2, Star } from "lucide-react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Clock,
+  Calendar,
+  Edit2,
+  Loader2,
+  Play,
+  Share2,
+  Heart,
+  Trash2,
+  Star,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { StatusBadge } from "./StatusBadge";
 import { toast } from "@/hooks/use-toast";
 import { type Database } from "@/integrations/supabase/types";
@@ -27,11 +41,15 @@ interface VideoCardProps {
   onDeleteVideo?: (id: string) => void;
 }
 
-export const VideoCard = ({ video, onFavoriteToggle, onDeleteVideo }: VideoCardProps) => {
+export const VideoCard = ({
+  video,
+  onFavoriteToggle,
+  onDeleteVideo,
+}: VideoCardProps) => {
   const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = React.useRef<HTMLVideoElement>(null);
-  
+
   const handlePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (video.output_url && videoRef.current) {
@@ -44,7 +62,7 @@ export const VideoCard = ({ video, onFavoriteToggle, onDeleteVideo }: VideoCardP
       }
     }
   };
-  
+
   const handleShare = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (video.output_url) {
@@ -55,14 +73,14 @@ export const VideoCard = ({ video, onFavoriteToggle, onDeleteVideo }: VideoCardP
       });
     }
   };
-  
+
   const handleFavoriteToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onFavoriteToggle) {
       onFavoriteToggle(video.id, !video.isFavorite);
     }
   };
-  
+
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onDeleteVideo) {
@@ -74,7 +92,7 @@ export const VideoCard = ({ video, onFavoriteToggle, onDeleteVideo }: VideoCardP
     <Card className="group relative overflow-hidden bg-black/50 border-white/10 hover:border-aurora-blue/50 transition-all duration-300 card-hover-effect">
       <div className="aspect-video relative overflow-hidden rounded-t-lg">
         {video.output_url ? (
-          <video 
+          <video
             ref={videoRef}
             src={video.output_url}
             className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
@@ -86,7 +104,7 @@ export const VideoCard = ({ video, onFavoriteToggle, onDeleteVideo }: VideoCardP
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        
+
         {/* Video actions on hover */}
         <div className="absolute bottom-0 left-0 right-0 p-4 video-card-actions flex items-center justify-between">
           <TooltipProvider>
@@ -97,7 +115,7 @@ export const VideoCard = ({ video, onFavoriteToggle, onDeleteVideo }: VideoCardP
                     onClick={handlePlay}
                     size="icon"
                     className="bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full"
-                    disabled={!video.output_url || video.status !== 'completed'}
+                    disabled={!video.output_url || video.status !== "completed"}
                   >
                     <Play className="h-4 w-4" />
                   </Button>
@@ -106,14 +124,14 @@ export const VideoCard = ({ video, onFavoriteToggle, onDeleteVideo }: VideoCardP
                   <p>Play</p>
                 </TooltipContent>
               </Tooltip>
-              
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
                     onClick={handleShare}
                     size="icon"
                     className="bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full"
-                    disabled={!video.output_url || video.status !== 'completed'}
+                    disabled={!video.output_url || video.status !== "completed"}
                   >
                     <Share2 className="h-4 w-4" />
                   </Button>
@@ -122,7 +140,7 @@ export const VideoCard = ({ video, onFavoriteToggle, onDeleteVideo }: VideoCardP
                   <p>Share</p>
                 </TooltipContent>
               </Tooltip>
-              
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -138,11 +156,15 @@ export const VideoCard = ({ video, onFavoriteToggle, onDeleteVideo }: VideoCardP
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{video.isFavorite ? 'Remove from favorites' : 'Add to favorites'}</p>
+                  <p>
+                    {video.isFavorite
+                      ? "Remove from favorites"
+                      : "Add to favorites"}
+                  </p>
                 </TooltipContent>
               </Tooltip>
             </div>
-            
+
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -160,16 +182,19 @@ export const VideoCard = ({ video, onFavoriteToggle, onDeleteVideo }: VideoCardP
           </TooltipProvider>
         </div>
       </div>
-      
+
       <div className="p-4 space-y-3">
         <h3 className="font-medium text-lg text-white line-clamp-1 group-hover:text-aurora-blue transition-colors">
           {video.prompt || "Untitled Video"}
         </h3>
-        
+
         <div className="flex items-center gap-4 text-sm text-gray-400">
           <div className="flex items-center gap-1">
             <Clock className="w-4 h-4" />
-            <span>{Math.floor(video.duration / 60)}:{(video.duration % 60).toString().padStart(2, '0')}</span>
+            <span>
+              {Math.floor(video.duration / 60)}:
+              {(video.duration % 60).toString().padStart(2, "0")}
+            </span>
           </div>
           {video.created_at && (
             <div className="flex items-center gap-1">
@@ -181,7 +206,7 @@ export const VideoCard = ({ video, onFavoriteToggle, onDeleteVideo }: VideoCardP
 
         <div className="flex items-center justify-between">
           <StatusBadge status={video.status} />
-          
+
           <Button
             onClick={(e) => {
               e.stopPropagation();
@@ -189,9 +214,11 @@ export const VideoCard = ({ video, onFavoriteToggle, onDeleteVideo }: VideoCardP
             }}
             className="bg-aurora-blue hover:bg-aurora-blue/80 text-white shadow-neon transform transition-all duration-300 hover:scale-105 group-hover:shadow-[0_0_20px_rgba(0,166,255,0.4)]"
             size="sm"
-            disabled={video.status === 'processing' || video.status === 'failed'}
+            disabled={
+              video.status === "processing" || video.status === "failed"
+            }
           >
-            {video.status === 'processing' ? (
+            {video.status === "processing" ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 Processing

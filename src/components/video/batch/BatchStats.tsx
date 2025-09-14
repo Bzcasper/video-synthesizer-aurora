@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import { Card } from "@/components/ui/card";
 
 interface StatItemProps {
@@ -21,7 +20,7 @@ export const StatItem: React.FC<StatItemProps> = ({
   progressPercent,
   gradientFrom,
   gradientTo,
-  shadowColor
+  shadowColor,
 }) => {
   return (
     <Card className="glass-panel p-fib-4 rounded-lg hover-glow">
@@ -34,12 +33,12 @@ export const StatItem: React.FC<StatItemProps> = ({
           </div>
         </div>
         <div className="mt-2 h-1.5 bg-black/30 rounded-full overflow-hidden">
-          <div 
+          <div
             className="h-full rounded-full transition-all duration-300"
-            style={{ 
+            style={{
               width: `${progressPercent}%`,
               background: `linear-gradient(to right, ${gradientFrom}, ${gradientTo})`,
-              boxShadow: `0 0 8px ${shadowColor}`
+              boxShadow: `0 0 8px ${shadowColor}`,
             }}
           ></div>
         </div>

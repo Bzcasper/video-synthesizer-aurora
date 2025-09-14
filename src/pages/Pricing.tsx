@@ -1,7 +1,6 @@
-
-import React from 'react';
-import PricingSection from '@/components/landing/PricingSection';
-import NavigationBar from '@/components/landing/NavigationBar';
+import React from "react";
+import PricingSection from "@/components/landing/PricingSection";
+import NavigationBar from "@/components/landing/NavigationBar";
 
 const Pricing = () => {
   return (

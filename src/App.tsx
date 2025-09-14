@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -15,18 +14,18 @@ import Login from "./pages/auth/Login";
 import NotFound from "./pages/NotFound";
 
 // Use React.lazy for all other pages
-const Signup = React.lazy(() => import('./pages/auth/Signup'));
-const ResetPassword = React.lazy(() => import('./pages/auth/ResetPassword'));
-const VerifyEmail = React.lazy(() => import('./pages/auth/VerifyEmail'));
-const Dashboard = React.lazy(() => import('./pages/dashboard'));
-const Generate = React.lazy(() => import('./pages/dashboard/generate'));
-const Enhance = React.lazy(() => import('./pages/dashboard/enhance'));
-const BatchQueue = React.lazy(() => import('./pages/dashboard/batch'));
-const Videos = React.lazy(() => import('./pages/dashboard/videos'));
-const Stats = React.lazy(() => import('./pages/dashboard/stats'));
-const Settings = React.lazy(() => import('./pages/dashboard/settings'));
-const Pricing = React.lazy(() => import('./pages/Pricing'));
-const Checkout = React.lazy(() => import('./pages/Checkout'));
+const Signup = React.lazy(() => import("./pages/auth/Signup"));
+const ResetPassword = React.lazy(() => import("./pages/auth/ResetPassword"));
+const VerifyEmail = React.lazy(() => import("./pages/auth/VerifyEmail"));
+const Dashboard = React.lazy(() => import("./pages/dashboard"));
+const Generate = React.lazy(() => import("./pages/dashboard/generate"));
+const Enhance = React.lazy(() => import("./pages/dashboard/enhance"));
+const BatchQueue = React.lazy(() => import("./pages/dashboard/batch"));
+const Videos = React.lazy(() => import("./pages/dashboard/videos"));
+const Stats = React.lazy(() => import("./pages/dashboard/stats"));
+const Settings = React.lazy(() => import("./pages/dashboard/settings"));
+const Pricing = React.lazy(() => import("./pages/Pricing"));
+const Checkout = React.lazy(() => import("./pages/Checkout"));
 
 // Create QueryClient with optimized settings
 const queryClient = new QueryClient({
@@ -62,83 +61,119 @@ const App = () => (
           <Routes>
             {/* Public routes */}
             <Route path="/" element={<Index />} />
-            <Route path="/login" element={
-              <AuthLayout>
-                <Login />
-              </AuthLayout>
-            } />
-            <Route path="/signup" element={
-              <AuthLayout>
-                <Signup />
-              </AuthLayout>
-            } />
-            <Route path="/reset-password" element={
-              <AuthLayout>
-                <ResetPassword />
-              </AuthLayout>
-            } />
-            <Route path="/verify-email" element={
-              <AuthLayout>
-                <VerifyEmail />
-              </AuthLayout>
-            } />
+            <Route
+              path="/login"
+              element={
+                <AuthLayout>
+                  <Login />
+                </AuthLayout>
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <AuthLayout>
+                  <Signup />
+                </AuthLayout>
+              }
+            />
+            <Route
+              path="/reset-password"
+              element={
+                <AuthLayout>
+                  <ResetPassword />
+                </AuthLayout>
+              }
+            />
+            <Route
+              path="/verify-email"
+              element={
+                <AuthLayout>
+                  <VerifyEmail />
+                </AuthLayout>
+              }
+            />
             <Route path="/pricing" element={<Pricing />} />
 
             {/* Protected dashboard routes */}
-            <Route path="/dashboard" element={
-              <AuthLayout requireAuth>
-                <DashboardLayout>
-                  <Dashboard />
-                </DashboardLayout>
-              </AuthLayout>
-            } />
-            <Route path="/dashboard/generate" element={
-              <AuthLayout requireAuth>
-                <DashboardLayout>
-                  <Generate />
-                </DashboardLayout>
-              </AuthLayout>
-            } />
-            <Route path="/dashboard/enhance" element={
-              <AuthLayout requireAuth>
-                <DashboardLayout>
-                  <Enhance />
-                </DashboardLayout>
-              </AuthLayout>
-            } />
-            <Route path="/dashboard/batch" element={
-              <AuthLayout requireAuth>
-                <DashboardLayout>
-                  <BatchQueue />
-                </DashboardLayout>
-              </AuthLayout>
-            } />
-            <Route path="/dashboard/videos" element={
-              <AuthLayout requireAuth>
-                <DashboardLayout>
-                  <Videos />
-                </DashboardLayout>
-              </AuthLayout>
-            } />
-            <Route path="/dashboard/stats" element={
-              <AuthLayout requireAuth>
-                <DashboardLayout>
-                  <Stats />
-                </DashboardLayout>
-              </AuthLayout>
-            } />
-            <Route path="/dashboard/settings" element={
-              <AuthLayout requireAuth>
-                <DashboardLayout>
-                  <Settings />
-                </DashboardLayout>
-              </AuthLayout>
-            } />
-            <Route path="/checkout" element={
-              <AuthLayout requireAuth>
-                <Checkout />
-              </AuthLayout>
-            } />
+            <Route
+              path="/dashboard"
+              element={
+                <AuthLayout requireAuth>
+                  <DashboardLayout>
+                    <Dashboard />
+                  </DashboardLayout>
+                </AuthLayout>
+              }
+            />
+            <Route
+              path="/dashboard/generate"
+              element={
+                <AuthLayout requireAuth>
+                  <DashboardLayout>
+                    <Generate />
+                  </DashboardLayout>
+                </AuthLayout>
+              }
+            />
+            <Route
+              path="/dashboard/enhance"
+              element={
+                <AuthLayout requireAuth>
+                  <DashboardLayout>
+                    <Enhance />
+                  </DashboardLayout>
+                </AuthLayout>
+              }
+            />
+            <Route
+              path="/dashboard/batch"
+              element={
+                <AuthLayout requireAuth>
+                  <DashboardLayout>
+                    <BatchQueue />
+                  </DashboardLayout>
+                </AuthLayout>
+              }
+            />
+            <Route
+              path="/dashboard/videos"
+              element={
+                <AuthLayout requireAuth>
+                  <DashboardLayout>
+                    <Videos />
+                  </DashboardLayout>
+                </AuthLayout>
+              }
+            />
+            <Route
+              path="/dashboard/stats"
+              element={
+                <AuthLayout requireAuth>
+                  <DashboardLayout>
+                    <Stats />
+                  </DashboardLayout>
+                </AuthLayout>
+              }
+            />
+            <Route
+              path="/dashboard/settings"
+              element={
+                <AuthLayout requireAuth>
+                  <DashboardLayout>
+                    <Settings />
+                  </DashboardLayout>
+                </AuthLayout>
+              }
+            />
+            <Route
+              path="/checkout"
+              element={
+                <AuthLayout requireAuth>
+                  <Checkout />
+                </AuthLayout>
+              }
+            />
 
             {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />

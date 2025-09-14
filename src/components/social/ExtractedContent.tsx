@@ -1,25 +1,28 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
 interface ExtractedContentProps {
   sections: string[];
 }
 
-export const ExtractedContent: React.FC<ExtractedContentProps> = ({ sections }) => {
-  const [editingSectionIndex, setEditingSectionIndex] = useState<number | null>(null);
+export const ExtractedContent: React.FC<ExtractedContentProps> = ({
+  sections,
+}) => {
+  const [editingSectionIndex, setEditingSectionIndex] = useState<number | null>(
+    null,
+  );
   const [editedText, setEditedText] = useState<string>("");
   const [displaySections, setDisplaySections] = useState<string[]>(sections);
-  
+
   const handleStartEditing = (index: number) => {
     setEditingSectionIndex(index);
     setEditedText(displaySections[index]);
   };
-  
+
   const handleSaveEdit = () => {
     if (editingSectionIndex !== null) {
       const updatedSections = [...displaySections];
@@ -28,11 +31,11 @@ export const ExtractedContent: React.FC<ExtractedContentProps> = ({ sections }) 
       setEditingSectionIndex(null);
     }
   };
-  
+
   const handleCancelEdit = () => {
     setEditingSectionIndex(null);
   };
-  
+
   const handleDeleteSection = (index: number) => {
     const updatedSections = [...displaySections];
     updatedSections.splice(index, 1);
@@ -43,15 +46,17 @@ export const ExtractedContent: React.FC<ExtractedContentProps> = ({ sections }) 
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium">Extracted Content</h3>
-        <div className="text-sm text-gray-400">{displaySections.length} sections available</div>
+        <div className="text-sm text-gray-400">
+          {displaySections.length} sections available
+        </div>
       </div>
-      
+
       <Tabs defaultValue="sections">
         <TabsList className="grid grid-cols-2 w-48">
           <TabsTrigger value="sections">Sections</TabsTrigger>
           <TabsTrigger value="preview">Preview</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="sections" className="space-y-4 pt-4">
           {displaySections.map((section, index) => (
             <Card key={index} className="overflow-hidden border-gray-700">
@@ -65,7 +70,11 @@ export const ExtractedContent: React.FC<ExtractedContentProps> = ({ sections }) 
                       className="w-full"
                     />
                     <div className="flex justify-end space-x-2">
-                      <Button variant="outline" size="sm" onClick={handleCancelEdit}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleCancelEdit}
+                      >
                         Cancel
                       </Button>
                       <Button size="sm" onClick={handleSaveEdit}>
@@ -77,16 +86,16 @@ export const ExtractedContent: React.FC<ExtractedContentProps> = ({ sections }) 
                   <div className="p-4">
                     <p className="text-sm text-gray-200">{section}</p>
                     <div className="flex justify-end space-x-2 mt-2">
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={() => handleStartEditing(index)}
                       >
                         <Edit className="h-4 w-4 mr-1" />
                         Edit
                       </Button>
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         size="sm"
                         onClick={() => handleDeleteSection(index)}
                       >
@@ -100,7 +109,7 @@ export const ExtractedContent: React.FC<ExtractedContentProps> = ({ sections }) 
             </Card>
           ))}
         </TabsContent>
-        
+
         <TabsContent value="preview" className="pt-4">
           <Card>
             <CardContent className="p-4">

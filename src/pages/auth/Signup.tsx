@@ -1,13 +1,17 @@
-
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { AuthHeader } from '@/components/auth/AuthHeader';
-import { SignupForm } from '@/components/auth/SignupForm';
-import { SignupSuccessMessage } from '@/components/auth/SignupSuccessMessage';
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { AuthHeader } from "@/components/auth/AuthHeader";
+import { SignupForm } from "@/components/auth/SignupForm";
+import { SignupSuccessMessage } from "@/components/auth/SignupSuccessMessage";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -20,7 +24,7 @@ const Signup = () => {
     const checkSession = async () => {
       const { data } = await supabase.auth.getSession();
       if (data.session) {
-        navigate('/dashboard');
+        navigate("/dashboard");
       } else {
         setIsAuthenticated(false);
       }
@@ -43,7 +47,7 @@ const Signup = () => {
       <div className="flex flex-1 items-center justify-center p-6">
         <AnimatePresence mode="wait">
           <motion.div
-            key={signupComplete ? 'complete' : 'signup'}
+            key={signupComplete ? "complete" : "signup"}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -52,19 +56,24 @@ const Signup = () => {
           >
             <Card className="glass-panel border-aurora-blue/30 shadow-lg shadow-aurora-blue/10">
               <CardHeader className="space-y-1">
-                <AuthHeader 
-                  title={signupComplete ? 'Welcome to Aurora' : 'Create an Account'} 
-                  description={signupComplete 
-                    ? 'Your account has been created successfully' 
-                    : 'Fill out the form below to create your Aurora account'
-                  } 
+                <AuthHeader
+                  title={
+                    signupComplete ? "Welcome to Aurora" : "Create an Account"
+                  }
+                  description={
+                    signupComplete
+                      ? "Your account has been created successfully"
+                      : "Fill out the form below to create your Aurora account"
+                  }
                 />
               </CardHeader>
               <CardContent>
                 {signupComplete ? (
-                  <SignupSuccessMessage onBackToSignup={() => setSignupComplete(false)} />
+                  <SignupSuccessMessage
+                    onBackToSignup={() => setSignupComplete(false)}
+                  />
                 ) : (
-                  <SignupForm 
+                  <SignupForm
                     onSignupComplete={() => setSignupComplete(true)}
                     isLoading={isLoading}
                     setIsLoading={setIsLoading}

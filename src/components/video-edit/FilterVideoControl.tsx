@@ -1,7 +1,12 @@
-
-import React from 'react';
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { WandIcon } from "lucide-react";
 
 interface FilterVideoControlProps {
@@ -11,11 +16,11 @@ interface FilterVideoControlProps {
 }
 
 const filterOptions = [
-  { id: 'none', label: 'No Filter' },
-  { id: 'cinematic', label: 'Cinematic' },
-  { id: 'vintage', label: 'Vintage' },
-  { id: 'anime', label: 'Anime Style' },
-  { id: 'noir', label: 'Film Noir' },
+  { id: "none", label: "No Filter" },
+  { id: "cinematic", label: "Cinematic" },
+  { id: "vintage", label: "Vintage" },
+  { id: "anime", label: "Anime Style" },
+  { id: "noir", label: "Film Noir" },
 ];
 
 const FilterVideoControl = ({
@@ -44,7 +49,7 @@ const FilterVideoControl = ({
 
       <Button
         onClick={() => onChange(currentFilter)}
-        disabled={isProcessing || currentFilter === 'none'}
+        disabled={isProcessing || currentFilter === "none"}
         className="w-full bg-gradient-to-r from-aurora-purple to-aurora-blue hover:from-aurora-blue hover:to-aurora-purple"
       >
         {isProcessing ? (

@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
-import { ClockIcon, PlayIcon, AlertCircle, PlusCircle, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { formatDistanceToNow } from 'date-fns';
-import { Video } from '@/hooks/video/types';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import {
+  ClockIcon,
+  PlayIcon,
+  AlertCircle,
+  PlusCircle,
+  ChevronRight,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { formatDistanceToNow } from "date-fns";
+import { Video } from "@/hooks/video/types";
+import { Link } from "react-router-dom";
 
 interface RecentVideosListProps {
   title?: string;
@@ -15,11 +21,11 @@ interface RecentVideosListProps {
   minHeight?: number;
 }
 
-const RecentVideosList: React.FC<RecentVideosListProps> = ({ 
-  title = "Recent Videos", 
-  limit = 4, 
+const RecentVideosList: React.FC<RecentVideosListProps> = ({
+  title = "Recent Videos",
+  limit = 4,
   showSeeAll = true,
-  minHeight 
+  minHeight,
 }) => {
   const navigate = useNavigate();
   const [videos, setVideos] = useState<Video[]>([]);
@@ -31,32 +37,34 @@ const RecentVideosList: React.FC<RecentVideosListProps> = ({
     const fetchVideos = async () => {
       try {
         setIsLoading(true);
-        const { data: { session } } = await supabase.auth.getSession();
-        
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
         if (!session) {
           setIsError(true);
           setIsLoading(false);
           return;
         }
-        
+
         const { data, error } = await supabase
-          .from('video_jobs')
-          .select('*')
-          .eq('user_id', session.user.id)
-          .order('created_at', { ascending: false })
+          .from("video_jobs")
+          .select("*")
+          .eq("user_id", session.user.id)
+          .order("created_at", { ascending: false })
           .limit(limit);
-          
+
         if (error) throw error;
-        
+
         setVideos(data as Video[]);
       } catch (err) {
-        console.error('Error fetching videos:', err);
+        console.error("Error fetching videos:", err);
         setIsError(true);
       } finally {
         setIsLoading(false);
       }
     };
-    
+
     fetchVideos();
   }, [limit]);
 
@@ -70,25 +78,30 @@ const RecentVideosList: React.FC<RecentVideosListProps> = ({
       </div>
     );
   }
-  
+
   return (
-    <div className={`glass-panel p-4 rounded-lg space-y-4 ${minHeight ? `min-h-[${minHeight}px]` : ''}`}>
+    <div
+      className={`glass-panel p-4 rounded-lg space-y-4 ${minHeight ? `min-h-[${minHeight}px]` : ""}`}
+    >
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold text-white">{title}</h2>
         {showSeeAll && videos && videos.length > 0 && (
-          <Link 
-            to="/dashboard/videos" 
+          <Link
+            to="/dashboard/videos"
             className="text-sm text-aurora-blue hover:text-aurora-purple transition-colors flex items-center gap-1"
           >
             See all <ChevronRight className="h-4 w-4" />
           </Link>
         )}
       </div>
-      
+
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[...Array(limit)].map((_, i) => (
-            <div key={i} className="h-[120px] rounded-md animate-pulse bg-white/5"></div>
+            <div
+              key={i}
+              className="h-[120px] rounded-md animate-pulse bg-white/5"
+            ></div>
           ))}
         </div>
       ) : videos && videos.length > 0 ? (
@@ -96,9 +109,9 @@ const RecentVideosList: React.FC<RecentVideosListProps> = ({
           {videos.slice(0, limit).map((video) => (
             <Link key={video.id} to={`/dashboard/videos/${video.id}`}>
               <div className="group relative rounded-md overflow-hidden h-[120px] hover:ring-2 hover:ring-aurora-blue transition-all">
-                <img 
+                <img
                   src={video.output_url || fallbackThumbnail}
-                  alt={video.prompt || "Video thumbnail"} 
+                  alt={video.prompt || "Video thumbnail"}
                   className="object-cover w-full h-full"
                   onError={(e) => {
                     e.currentTarget.src = fallbackThumbnail;
@@ -109,7 +122,9 @@ const RecentVideosList: React.FC<RecentVideosListProps> = ({
                     {video.prompt || "Untitled Video"}
                   </h3>
                   <p className="text-xs text-gray-400">
-                    {new Date(video.created_at || Date.now()).toLocaleDateString()}
+                    {new Date(
+                      video.created_at || Date.now(),
+                    ).toLocaleDateString()}
                   </p>
                 </div>
               </div>
@@ -124,7 +139,7 @@ const RecentVideosList: React.FC<RecentVideosListProps> = ({
             <Button
               variant="outline"
               className="text-aurora-blue border-aurora-blue hover:bg-aurora-blue/10"
-              onClick={() => navigate('/dashboard/generate')}
+              onClick={() => navigate("/dashboard/generate")}
             >
               Generate Your First Video
             </Button>

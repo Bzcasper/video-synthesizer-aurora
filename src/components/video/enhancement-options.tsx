@@ -1,6 +1,5 @@
-
-import { Video, Film, Sparkles, Clock, Text, Mic } from 'lucide-react';
-import type { Enhancement } from '@/hooks/use-video-enhancements';
+import { Video, Film, Sparkles, Clock, Text, Mic } from "lucide-react";
+import type { Enhancement } from "@/hooks/use-video-enhancements";
 
 export const enhancements: Enhancement[] = [
   {

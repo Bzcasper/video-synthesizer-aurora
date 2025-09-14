@@ -1,6 +1,5 @@
-
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useCallback, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import GenerateForm from "@/components/generate/GenerateForm";
@@ -22,15 +21,15 @@ interface Scene {
 
 const Generate = () => {
   // State for video generation
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState("");
   const [duration, setDuration] = useState(5);
-  const [style, setStyle] = useState('cinematic');
+  const [style, setStyle] = useState("cinematic");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedVideos, setGeneratedVideos] = useState<Video[]>([]);
   const [scenes, setScenes] = useState<Scene[]>([]);
-  const [activeTab, setActiveTab] = useState('generate');
+  const [activeTab, setActiveTab] = useState("generate");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
-  
+
   // Prevent multiple submissions
   const isSubmitting = useRef(false);
 
@@ -43,17 +42,17 @@ const Generate = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Prevent multiple submissions
     if (isSubmitting.current || isGenerating) return;
     isSubmitting.current = true;
     setIsGenerating(true);
 
     try {
-      const response = await fetch('/api/video/generate', {
-        method: 'POST',
+      const response = await fetch("/api/video/generate", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           prompt,
@@ -70,29 +69,35 @@ const Generate = () => {
       }
 
       const data = await response.json();
-      
+
       toast({
         title: "Video Generation Started",
-        description: "Your video is being generated. You'll be notified when it's ready.",
+        description:
+          "Your video is being generated. You'll be notified when it's ready.",
       });
 
-      setGeneratedVideos(prev => [...prev, {
-        id: data.id,
-        prompt,
-        created_at: new Date().toISOString(),
-        output_url: null,
-        status: 'pending'
-      }]);
+      setGeneratedVideos((prev) => [
+        ...prev,
+        {
+          id: data.id,
+          prompt,
+          created_at: new Date().toISOString(),
+          output_url: null,
+          status: "pending",
+        },
+      ]);
 
       // Reset form after successful submission
-      setPrompt('');
-
+      setPrompt("");
     } catch (error) {
-      console.error('Video generation error:', error);
+      console.error("Video generation error:", error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to start video generation. Please try again.",
-        variant: "destructive"
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to start video generation. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setIsGenerating(false);
@@ -104,9 +109,9 @@ const Generate = () => {
     <div className="min-h-screen bg-aurora-black flex">
       {/* Collapsible Sidebar with optimized animation */}
       <motion.aside
-        initial={{ width: '64px' }}
-        animate={{ width: isSidebarCollapsed ? '64px' : '240px' }}
-        transition={{ duration: 0.2, ease: 'easeInOut' }}
+        initial={{ width: "64px" }}
+        animate={{ width: isSidebarCollapsed ? "64px" : "240px" }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
         className="border-r border-white/10 bg-black/20 backdrop-blur-xl flex flex-col overflow-hidden"
       >
         {/* Logo and Toggle Button */}
@@ -116,7 +121,9 @@ const Generate = () => {
             className="relative"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
-            aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-label={
+              isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"
+            }
           >
             <img
               src="/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png"
@@ -135,7 +142,7 @@ const Generate = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
           >
             <h1 className="text-4xl font-orbitron font-bold text-gradient bg-gradient-glow mb-8">
               Generate Your Imagination
@@ -157,7 +164,7 @@ const Generate = () => {
                 />
               </div>
             </Card>
-            
+
             {generatedVideos.length > 0 && (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -169,11 +176,14 @@ const Generate = () => {
                   Recently Generated Videos
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {generatedVideos.map(video => (
+                  {generatedVideos.map((video) => (
                     <Card key={video.id} className="glass-panel p-4">
                       <div className="font-medium mb-2">{video.prompt}</div>
                       <div className="text-sm text-gray-400">
-                        Status: {video.status === 'pending' ? 'Processing...' : video.status}
+                        Status:{" "}
+                        {video.status === "pending"
+                          ? "Processing..."
+                          : video.status}
                       </div>
                     </Card>
                   ))}

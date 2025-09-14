@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { Sliders, Play, Download, Share2 } from 'lucide-react';
+import React from "react";
+import { Sliders, Play, Download, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 
@@ -25,9 +24,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     <div className="space-y-6">
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-200">
-            Duration
-          </label>
+          <label className="text-sm font-medium text-gray-200">Duration</label>
           <span className="text-sm text-gray-400">{duration}s</span>
         </div>
         <Slider

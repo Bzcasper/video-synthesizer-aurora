@@ -1,13 +1,12 @@
-
-import React from 'react';
+import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ProgressBar } from "@/components/video/common/ProgressBar";
 import { TimeRemaining } from "@/components/video/common/TimeRemaining";
-import { StatusBadge } from '@/components/video/StatusBadge';
-import { Cog, X } from 'lucide-react';
-import { type VideoJobStatus } from '@/hooks/video/types';
-import { EnhancementJob } from './EnhancementProcessingPanel';
+import { StatusBadge } from "@/components/video/StatusBadge";
+import { Cog, X } from "lucide-react";
+import { type VideoJobStatus } from "@/hooks/video/types";
+import { EnhancementJob } from "./EnhancementProcessingPanel";
 
 interface EnhancementJobCardProps {
   job: EnhancementJob;
@@ -18,10 +17,10 @@ interface EnhancementJobCardProps {
 export const EnhancementJobCard: React.FC<EnhancementJobCardProps> = ({
   job,
   onCancel,
-  onSettings
+  onSettings,
 }) => {
   const handleCancel = () => {
-    if (job.status === 'processing' || job.status === 'pending') {
+    if (job.status === "processing" || job.status === "pending") {
       onCancel(job.id);
     }
   };
@@ -34,26 +33,23 @@ export const EnhancementJobCard: React.FC<EnhancementJobCardProps> = ({
     <Card className="w-full glass-panel hover-glow">
       <CardContent className="p-4">
         <div className="flex items-start justify-between mb-2">
-          <h3 className="font-medium text-sm sm:text-base truncate mr-4">{job.title}</h3>
+          <h3 className="font-medium text-sm sm:text-base truncate mr-4">
+            {job.title}
+          </h3>
           <StatusBadge status={job.status} />
         </div>
-        
-        {job.status === 'processing' && (
+
+        {job.status === "processing" && (
           <>
-            <ProgressBar 
-              progress={job.progress} 
-              status="processing" 
-            />
-            <TimeRemaining 
-              timeRemaining={job.remainingTime} 
-            />
+            <ProgressBar progress={job.progress} status="processing" />
+            <TimeRemaining timeRemaining={job.remainingTime} />
           </>
         )}
-        
+
         <div className="flex justify-end gap-2 mt-3">
-          {(job.status === 'processing' || job.status === 'pending') && (
-            <Button 
-              variant="ghost" 
+          {(job.status === "processing" || job.status === "pending") && (
+            <Button
+              variant="ghost"
               size="sm"
               onClick={handleCancel}
               aria-label="Cancel enhancement"
@@ -62,8 +58,8 @@ export const EnhancementJobCard: React.FC<EnhancementJobCardProps> = ({
               <span className="text-xs">Cancel</span>
             </Button>
           )}
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             size="sm"
             onClick={handleSettings}
             aria-label="Enhancement settings"

@@ -1,10 +1,9 @@
-
-import React from 'react';
+import React from "react";
 import { Button } from "@/components/ui/button";
 
 interface VideoJob {
   id: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: "pending" | "processing" | "completed" | "failed";
   output_url: string | null;
   created_at: string;
   error_message?: string;
@@ -20,8 +19,8 @@ const VideoJobsList = ({ jobs }: VideoJobsListProps) => {
       <h2 className="text-lg font-semibold">Your Videos</h2>
       <div className="space-y-2">
         {jobs?.map((job) => (
-          <div 
-            key={job.id} 
+          <div
+            key={job.id}
             className="p-4 rounded-lg bg-card border flex items-center justify-between"
           >
             <div>
@@ -32,7 +31,11 @@ const VideoJobsList = ({ jobs }: VideoJobsListProps) => {
             </div>
             {job.output_url && (
               <Button variant="outline" size="sm" asChild>
-                <a href={job.output_url} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={job.output_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   View Video
                 </a>
               </Button>

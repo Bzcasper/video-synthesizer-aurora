@@ -1,34 +1,39 @@
+/** @format */
 
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from "react";
 import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/hooks/use-toast";
 import { AnimatePresence } from "framer-motion";
-import VideoDescriptionInput from './VideoDescriptionInput';
-import { Scene, VideoGenerationFormValues, videoGenerationSchema } from './scene/types';
-import FormActions from './form/FormActions';
-import AdvancedSettings from './form/AdvancedSettings';
+import VideoDescriptionInput from "./VideoDescriptionInput";
+import {
+  Scene,
+  VideoGenerationFormValues,
+  videoGenerationSchema,
+} from "./scene/types";
+import FormActions from "./form/FormActions";
+import AdvancedSettings from "./form/AdvancedSettings";
 
 export const videoStyles = [
   {
-    id: 'cinematic',
-    label: 'Cinematic',
-    description: 'Professional movie-like quality with dramatic shots',
+    id: "cinematic",
+    label: "Cinematic",
+    description: "Professional movie-like quality with dramatic shots",
   },
   {
-    id: 'anime',
-    label: 'Anime',
-    description: 'Japanese animation style with vibrant colors',
+    id: "anime",
+    label: "Anime",
+    description: "Japanese animation style with vibrant colors",
   },
   {
-    id: 'realistic',
-    label: 'Realistic',
-    description: 'True-to-life footage with natural lighting',
+    id: "realistic",
+    label: "Realistic",
+    description: "True-to-life footage with natural lighting",
   },
   {
-    id: 'artistic',
-    label: 'Artistic',
-    description: 'Creative and experimental visual effects',
+    id: "artistic",
+    label: "Artistic",
+    description: "Creative and experimental visual effects",
   },
 ];
 
@@ -59,7 +64,7 @@ const GenerateForm = ({
 }: GenerateFormProps) => {
   // Advanced settings visibility
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
-  
+
   // Validation and form state
   const methods = useForm<VideoGenerationFormValues>({
     resolver: zodResolver(videoGenerationSchema),
@@ -94,14 +99,16 @@ const GenerateForm = ({
   }, [methods, setPrompt, setDuration, setStyle, setScenes]);
 
   // Form submission with validation
-  const handleSubmitWithValidation: SubmitHandler<VideoGenerationFormValues> = (data) => {
+  const handleSubmitWithValidation: SubmitHandler<VideoGenerationFormValues> = (
+    data
+  ) => {
     // Pass event to parent onSubmit
-    onSubmit(new Event('submit') as unknown as React.FormEvent);
+    onSubmit(new Event("submit") as unknown as React.FormEvent);
   };
-  
+
   // Toggle advanced settings visibility
   const toggleAdvancedSettings = useCallback(() => {
-    setShowAdvancedSettings(prev => !prev);
+    setShowAdvancedSettings((prev) => !prev);
   }, []);
 
   // Check if form is valid
@@ -109,29 +116,29 @@ const GenerateForm = ({
 
   return (
     <FormProvider {...methods}>
-      <form 
-        className="space-y-6" 
+      <form
+        className="space-y-4 md:space-y-6"
         onSubmit={methods.handleSubmit(handleSubmitWithValidation)}
-        aria-label="Video generation form"
-      >
-        <VideoDescriptionInput 
-          value={prompt} 
+        aria-label="Video generation form">
+        <VideoDescriptionInput
+          value={prompt}
           onChange={(val) => {
             setPrompt(val);
-            methods.setValue('prompt', val, { shouldValidate: true });
+            methods.setValue("prompt", val, { shouldValidate: true });
           }}
-          disabled={isGenerating} 
+          disabled={isGenerating}
         />
 
-        <FormActions 
-          isGenerating={isGenerating} 
+        <FormActions
+          isGenerating={isGenerating}
           isFormValid={isFormValid}
           onAdvancedToggle={toggleAdvancedSettings}
           showingDetails={showAdvancedSettings}
           onEnhance={() => {
             toast({
               title: "AI Enhancement",
-              description: "AI is analyzing your prompt to suggest improvements.",
+              description:
+                "AI is analyzing your prompt to suggest improvements.",
             });
           }}
         />
@@ -142,17 +149,17 @@ const GenerateForm = ({
               duration={duration}
               setDuration={(val) => {
                 setDuration(val);
-                methods.setValue('duration', val, { shouldValidate: true });
+                methods.setValue("duration", val, { shouldValidate: true });
               }}
               style={style}
               setStyle={(id) => {
                 setStyle(id);
-                methods.setValue('style', id, { shouldValidate: true });
+                methods.setValue("style", id, { shouldValidate: true });
               }}
               scenes={scenes}
               setScenes={(newScenes) => {
                 setScenes(newScenes);
-                methods.setValue('scenes', newScenes, { shouldValidate: true });
+                methods.setValue("scenes", newScenes, { shouldValidate: true });
               }}
             />
           )}

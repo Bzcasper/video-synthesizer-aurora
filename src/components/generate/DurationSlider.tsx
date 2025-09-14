@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import { Slider } from "@/components/ui/slider";
 
 interface DurationSliderProps {
@@ -7,10 +6,15 @@ interface DurationSliderProps {
   onDurationChange: (duration: number) => void;
 }
 
-const DurationSlider = ({ duration, onDurationChange }: DurationSliderProps) => {
+const DurationSlider = ({
+  duration,
+  onDurationChange,
+}: DurationSliderProps) => {
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium text-gray-200">Duration (seconds)</label>
+      <label className="text-sm font-medium text-gray-200">
+        Duration (seconds)
+      </label>
       <div className="pt-2">
         <Slider
           value={[duration]}

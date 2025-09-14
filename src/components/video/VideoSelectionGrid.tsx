@@ -1,8 +1,7 @@
-
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
-import type { Video } from '@/hooks/use-video-enhancements';
+import type { Video } from "@/hooks/use-video-enhancements";
 
 interface VideoSelectionGridProps {
   videos: Video[];
@@ -10,7 +9,11 @@ interface VideoSelectionGridProps {
   onSelectVideo: (id: string) => void;
 }
 
-export const VideoSelectionGrid = ({ videos, selectedVideo, onSelectVideo }: VideoSelectionGridProps) => {
+export const VideoSelectionGrid = ({
+  videos,
+  selectedVideo,
+  onSelectVideo,
+}: VideoSelectionGridProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {videos?.map((video) => (
@@ -21,9 +24,9 @@ export const VideoSelectionGrid = ({ videos, selectedVideo, onSelectVideo }: Vid
         >
           <Card
             className={`cursor-pointer p-4 transition-all duration-300 ${
-              selectedVideo === video.id 
-                ? 'bg-gradient-to-r from-aurora-purple to-aurora-blue border-none shadow-neon' 
-                : 'bg-white/5 border border-white/10 hover:border-aurora-blue/50'
+              selectedVideo === video.id
+                ? "bg-gradient-to-r from-aurora-purple to-aurora-blue border-none shadow-neon"
+                : "bg-white/5 border border-white/10 hover:border-aurora-blue/50"
             }`}
             onClick={() => onSelectVideo(video.id)}
           >

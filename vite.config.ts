@@ -1,4 +1,3 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -10,11 +9,9 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  plugins: [
-    react(),
-    mode === 'development' &&
-    componentTagger(),
-  ].filter(Boolean),
+  plugins: [react(), mode === "development" && componentTagger()].filter(
+    Boolean,
+  ),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -24,21 +21,21 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
+          vendor: ["react", "react-dom", "react-router-dom"],
           ui: [
-            '@/components/ui/toaster.tsx',
-            '@/components/ui/button.tsx', 
-            '@/components/ui/card.tsx'
-          ]
+            "@/components/ui/toaster.tsx",
+            "@/components/ui/button.tsx",
+            "@/components/ui/card.tsx",
+          ],
         },
       },
     },
     cssCodeSplit: true,
     chunkSizeWarningLimit: 1000,
     sourcemap: false,
-    minify: 'esbuild', // Changed from 'terser' to 'esbuild' which is built-in
+    minify: "esbuild", // Changed from 'terser' to 'esbuild' which is built-in
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
+    include: ["react", "react-dom", "react-router-dom"],
   },
 }));

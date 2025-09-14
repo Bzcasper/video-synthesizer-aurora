@@ -1,8 +1,8 @@
 // supabase/functions/generate-video/utils/webhooks.ts
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4';
-import { WEBHOOK_EVENTS } from '../config/constants';
-import { logger } from './logging';
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.4";
+import { WEBHOOK_EVENTS } from "../config/constants";
+import { logger } from "./logging";
 
 /**
  * Interface for webhook payload
@@ -36,16 +36,16 @@ export class WebhookHandler {
   async sendWebhook(
     jobId: string,
     event: string,
-    payload: Partial<WebhookPayload>
+    payload: Partial<WebhookPayload>,
   ): Promise<boolean> {
     try {
       // Get job details to check if there's a callback URL
       const { data: job, error } = await this.supabase
-        .from('video_jobs')
-        .select('id, user_id, callback_url')
-        .eq('id', jobId)
+        .from("video_jobs")
+        .select("id, user_id, callback_url")
+        .eq("id", jobId)
         .single();
-      
+
       if (error || !job || !job.callback_url) {
         return false; // No callback URL or error fetching job
       }
@@ -56,20 +56,22 @@ export class WebhookHandler {
         jobId,
         userId: job.user_id,
         timestamp: new Date().toISOString(),
-        ...payload
+        ...payload,
       };
 
       // Send webhook
       const response = await fetch(job.callback_url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(webhookPayload),
       });
 
       if (!response.ok) {
-        logger.warn(`Webhook delivery failed for job ${jobId}, status: ${response.status}`);
+        logger.warn(
+          `Webhook delivery failed for job ${jobId}, status: ${response.status}`,
+        );
         return false;
       }
 
@@ -102,12 +104,12 @@ export class WebhookHandler {
     jobId: string,
     progress: number,
     stage: string,
-    message: string
+    message: string,
   ): Promise<boolean> {
     return this.sendWebhook(jobId, WEBHOOK_EVENTS.JOB_PROGRESS, {
       progress,
       stage,
-      message
+      message,
     });
   }
 
@@ -117,11 +119,11 @@ export class WebhookHandler {
   async sendJobCompletedWebhook(
     jobId: string,
     videoUrl: string,
-    thumbnailUrl: string
+    thumbnailUrl: string,
   ): Promise<boolean> {
     return this.sendWebhook(jobId, WEBHOOK_EVENTS.JOB_COMPLETED, {
       videoUrl,
-      thumbnailUrl
+      thumbnailUrl,
     });
   }
 

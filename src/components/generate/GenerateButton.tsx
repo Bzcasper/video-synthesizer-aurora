@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2, Video } from "lucide-react";
 import { motion } from "framer-motion";
@@ -10,7 +9,11 @@ interface GenerateButtonProps {
   onClick?: () => void;
 }
 
-const GenerateButton = ({ isGenerating, disabled, onClick }: GenerateButtonProps) => {
+const GenerateButton = ({
+  isGenerating,
+  disabled,
+  onClick,
+}: GenerateButtonProps) => {
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}

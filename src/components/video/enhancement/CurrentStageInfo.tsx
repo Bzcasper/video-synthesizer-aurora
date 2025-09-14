@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 
 interface CurrentStageInfoProps {
   stageName: string;
@@ -7,10 +6,10 @@ interface CurrentStageInfoProps {
   totalFrames?: number;
 }
 
-export const CurrentStageInfo: React.FC<CurrentStageInfoProps> = ({ 
+export const CurrentStageInfo: React.FC<CurrentStageInfoProps> = ({
   stageName,
   currentFrame,
-  totalFrames 
+  totalFrames,
 }) => {
   return (
     <div className="flex flex-col sm:flex-row justify-between p-3 bg-black/30 rounded-lg">
@@ -18,7 +17,7 @@ export const CurrentStageInfo: React.FC<CurrentStageInfoProps> = ({
         <div className="h-3 w-3 rounded-full bg-aurora-blue animate-pulse" />
         <span className="text-aurora-white">Current Stage: {stageName}</span>
       </div>
-      
+
       {currentFrame !== undefined && totalFrames !== undefined && (
         <div className="text-gray-400 text-sm mt-2 sm:mt-0">
           Processing frame {currentFrame}/{totalFrames}

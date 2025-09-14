@@ -1,24 +1,41 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import React, { useState } from "react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { Copy, Eye, EyeOff, KeyRound, RefreshCw, User, Bell, Wallet, Settings as SettingsIcon, Zap } from "lucide-react";
+import {
+  Copy,
+  Eye,
+  EyeOff,
+  KeyRound,
+  RefreshCw,
+  User,
+  Bell,
+  Wallet,
+  Settings as SettingsIcon,
+  Zap,
+} from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const SettingsPage = () => {
   const [showApiKey, setShowApiKey] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [settings, setSettings] = useState({
-    username: 'johndoe',
-    email: 'john@example.com',
+    username: "johndoe",
+    email: "john@example.com",
     betaFeatures: false,
     developerMode: false,
     enhancedLogging: false,
     emailNotifications: true,
-    apiKey: 'sk_live_xxxxxxxxxxxxxxxxxxxxx'
+    apiKey: "sk_live_xxxxxxxxxxxxxxxxxxxxx",
   });
 
   const handleCopyApiKey = () => {
@@ -33,7 +50,7 @@ const SettingsPage = () => {
     setIsLoading(true);
     try {
       // API call to regenerate key would go here
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulated API call
       toast({
         title: "API Key Regenerated",
         description: "Your new API key has been generated successfully.",
@@ -54,7 +71,7 @@ const SettingsPage = () => {
     setIsLoading(true);
     try {
       // API call to update profile would go here
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulated API call
       toast({
         title: "Profile Updated",
         description: "Your profile has been updated successfully.",
@@ -73,7 +90,9 @@ const SettingsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-orbitron font-bold text-white">Settings</h1>
+        <h1 className="text-4xl font-orbitron font-bold text-white">
+          Settings
+        </h1>
       </div>
 
       <Tabs defaultValue="account" className="space-y-6">
@@ -100,7 +119,8 @@ const SettingsPage = () => {
             <CardHeader>
               <CardTitle>Profile Information</CardTitle>
               <CardDescription>
-                Update your account settings and change your profile information.
+                Update your account settings and change your profile
+                information.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -110,7 +130,9 @@ const SettingsPage = () => {
                   <Input
                     id="username"
                     value={settings.username}
-                    onChange={(e) => setSettings({...settings, username: e.target.value})}
+                    onChange={(e) =>
+                      setSettings({ ...settings, username: e.target.value })
+                    }
                     className="bg-white/5 border-white/10 text-white"
                   />
                 </div>
@@ -120,12 +142,14 @@ const SettingsPage = () => {
                     id="email"
                     type="email"
                     value={settings.email}
-                    onChange={(e) => setSettings({...settings, email: e.target.value})}
+                    onChange={(e) =>
+                      setSettings({ ...settings, email: e.target.value })
+                    }
                     className="bg-white/5 border-white/10 text-white"
                   />
                 </div>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="bg-gradient-to-r from-aurora-purple to-aurora-blue hover:from-aurora-blue hover:to-aurora-purple"
                   disabled={isLoading}
                 >
@@ -161,7 +185,11 @@ const SettingsPage = () => {
                       onClick={() => setShowApiKey(!showApiKey)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
                     >
-                      {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showApiKey ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
                     </button>
                   </div>
                   <Button
@@ -177,20 +205,26 @@ const SettingsPage = () => {
                     disabled={isLoading}
                     className="hover:bg-aurora-blue/10"
                   >
-                    <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                    <RefreshCw
+                      className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
+                    />
                   </Button>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 <h4 className="text-sm font-medium">Rate Limits</h4>
                 <div className="grid gap-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-400">Requests per minute</span>
+                    <span className="text-sm text-gray-400">
+                      Requests per minute
+                    </span>
                     <span className="text-sm font-medium">60</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-400">Requests per day</span>
+                    <span className="text-sm text-gray-400">
+                      Requests per day
+                    </span>
                     <span className="text-sm font-medium">10,000</span>
                   </div>
                 </div>
@@ -211,31 +245,43 @@ const SettingsPage = () => {
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label>Beta Features</Label>
-                  <p className="text-sm text-gray-400">Access experimental features and updates</p>
+                  <p className="text-sm text-gray-400">
+                    Access experimental features and updates
+                  </p>
                 </div>
                 <Switch
                   checked={settings.betaFeatures}
-                  onCheckedChange={(checked) => setSettings({...settings, betaFeatures: checked})}
+                  onCheckedChange={(checked) =>
+                    setSettings({ ...settings, betaFeatures: checked })
+                  }
                 />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label>Developer Mode</Label>
-                  <p className="text-sm text-gray-400">Enable advanced debugging tools</p>
+                  <p className="text-sm text-gray-400">
+                    Enable advanced debugging tools
+                  </p>
                 </div>
                 <Switch
                   checked={settings.developerMode}
-                  onCheckedChange={(checked) => setSettings({...settings, developerMode: checked})}
+                  onCheckedChange={(checked) =>
+                    setSettings({ ...settings, developerMode: checked })
+                  }
                 />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label>Enhanced Logging</Label>
-                  <p className="text-sm text-gray-400">Enable detailed activity logging</p>
+                  <p className="text-sm text-gray-400">
+                    Enable detailed activity logging
+                  </p>
                 </div>
                 <Switch
                   checked={settings.enhancedLogging}
-                  onCheckedChange={(checked) => setSettings({...settings, enhancedLogging: checked})}
+                  onCheckedChange={(checked) =>
+                    setSettings({ ...settings, enhancedLogging: checked })
+                  }
                 />
               </div>
             </CardContent>
@@ -275,11 +321,15 @@ const SettingsPage = () => {
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label>Email Notifications</Label>
-                  <p className="text-sm text-gray-400">Receive updates via email</p>
+                  <p className="text-sm text-gray-400">
+                    Receive updates via email
+                  </p>
                 </div>
                 <Switch
                   checked={settings.emailNotifications}
-                  onCheckedChange={(checked) => setSettings({...settings, emailNotifications: checked})}
+                  onCheckedChange={(checked) =>
+                    setSettings({ ...settings, emailNotifications: checked })
+                  }
                 />
               </div>
             </CardContent>

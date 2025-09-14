@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { Clock, BarChart, Users } from 'lucide-react';
+import React from "react";
+import { Clock, BarChart, Users } from "lucide-react";
 
 interface VideoStatsProps {
   processingTime: number;

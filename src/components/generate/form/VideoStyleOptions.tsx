@@ -1,6 +1,5 @@
-
-import React from 'react';
-import VideoStyleOption from '@/components/generate/VideoStyleOption';
+import React from "react";
+import VideoStyleOption from "@/components/generate/VideoStyleOption";
 
 interface VideoStyle {
   id: string;
@@ -14,10 +13,10 @@ interface VideoStyleOptionsProps {
   onStyleSelect: (id: string) => void;
 }
 
-const VideoStyleOptions: React.FC<VideoStyleOptionsProps> = ({ 
-  videoStyles, 
-  selectedStyle, 
-  onStyleSelect 
+const VideoStyleOptions: React.FC<VideoStyleOptionsProps> = ({
+  videoStyles,
+  selectedStyle,
+  onStyleSelect,
 }) => {
   return (
     <div className="space-y-3">

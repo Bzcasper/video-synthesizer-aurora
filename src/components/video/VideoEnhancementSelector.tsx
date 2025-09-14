@@ -1,13 +1,12 @@
-
-import React from 'react';
+import React from "react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { useVideoEnhancements } from '@/hooks/use-video-enhancements';
-import { VideoSelectionGrid } from './selection/VideoSelectionGrid';
-import { EnhancementOptionsGrid } from './enhancement/EnhancementOptionsGrid';
-import { EnhancementProgressCard } from './enhancement/EnhancementProgressCard';
-import { EnhancementControls } from './EnhancementControls';
-import { enhancements } from './enhancement-options';
-import CustomIcon from '@/components/ui/custom-icon';
+import { useVideoEnhancements } from "@/hooks/use-video-enhancements";
+import { VideoSelectionGrid } from "./selection/VideoSelectionGrid";
+import { EnhancementOptionsGrid } from "./enhancement/EnhancementOptionsGrid";
+import { EnhancementProgressCard } from "./enhancement/EnhancementProgressCard";
+import { EnhancementControls } from "./EnhancementControls";
+import { enhancements } from "./enhancement-options";
+import CustomIcon from "@/components/ui/custom-icon";
 
 export const VideoEnhancementSelector = () => {
   const {
@@ -23,7 +22,7 @@ export const VideoEnhancementSelector = () => {
     enhancementProgress,
     videos,
     isLoading,
-    handleSubmitEnhancement
+    handleSubmitEnhancement,
   } = useVideoEnhancements();
 
   if (isLoading) {
@@ -39,7 +38,10 @@ export const VideoEnhancementSelector = () => {
     <div className="space-y-8">
       <div className="space-y-4">
         <h2 className="text-2xl font-orbitron font-bold text-gradient bg-gradient-glow flex items-center">
-          <CustomIcon name="enhance" className="mr-3 h-6 w-6 text-aurora-blue" />
+          <CustomIcon
+            name="enhance"
+            className="mr-3 h-6 w-6 text-aurora-blue"
+          />
           Select Video to Enhance
         </h2>
         <VideoSelectionGrid
@@ -52,7 +54,10 @@ export const VideoEnhancementSelector = () => {
       {selectedVideo && (
         <div className="space-y-6">
           <h2 className="text-2xl font-orbitron font-bold text-gradient bg-gradient-glow flex items-center">
-            <CustomIcon name="advanced" className="mr-3 h-6 w-6 text-aurora-purple" />
+            <CustomIcon
+              name="advanced"
+              className="mr-3 h-6 w-6 text-aurora-purple"
+            />
             Choose Enhancement
           </h2>
           <EnhancementOptionsGrid

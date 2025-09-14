@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import { motion } from "framer-motion";
 
 interface VideoStyleOptionProps {
@@ -10,7 +9,13 @@ interface VideoStyleOptionProps {
   onSelect: (id: string) => void;
 }
 
-const VideoStyleOption = ({ id, label, description, isSelected, onSelect }: VideoStyleOptionProps) => {
+const VideoStyleOption = ({
+  id,
+  label,
+  description,
+  isSelected,
+  onSelect,
+}: VideoStyleOptionProps) => {
   return (
     <motion.button
       type="button"
@@ -18,9 +23,9 @@ const VideoStyleOption = ({ id, label, description, isSelected, onSelect }: Vide
       whileTap={{ scale: 0.98 }}
       onClick={() => onSelect(id)}
       className={`p-4 rounded-lg text-left transition-all ${
-        isSelected 
-          ? 'bg-gradient-to-r from-aurora-purple to-aurora-blue border-none shadow-neon' 
-          : 'bg-white/5 border border-white/10 hover:border-aurora-blue/50'
+        isSelected
+          ? "bg-gradient-to-r from-aurora-purple to-aurora-blue border-none shadow-neon"
+          : "bg-white/5 border border-white/10 hover:border-aurora-blue/50"
       }`}
     >
       <div className="font-medium">{label}</div>

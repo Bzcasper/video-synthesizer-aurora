@@ -1,7 +1,6 @@
-
-import React from 'react';
-import NavigationBar from './NavigationBar';
-import StickyCTA from './StickyCTA';
+import React from "react";
+import NavigationBar from "./NavigationBar";
+import StickyCTA from "./StickyCTA";
 
 interface MainContentWrapperProps {
   children: React.ReactNode;

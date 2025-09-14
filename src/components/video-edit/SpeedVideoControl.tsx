@@ -1,9 +1,8 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Timer, Loader2 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
-import { SpeedControls } from '../video/enhancement/SpeedControls';
+import { SpeedControls } from "../video/enhancement/SpeedControls";
 
 interface SpeedVideoControlProps {
   videoId: string;
@@ -11,15 +10,16 @@ interface SpeedVideoControlProps {
   isProcessing?: boolean;
 }
 
-const SpeedVideoControl = ({ videoId, onSubmit, isProcessing = false }: SpeedVideoControlProps) => {
+const SpeedVideoControl = ({
+  videoId,
+  onSubmit,
+  isProcessing = false,
+}: SpeedVideoControlProps) => {
   const [speed, setSpeed] = useState(1);
 
   return (
     <div className="space-y-6">
-      <SpeedControls 
-        speedFactor={speed}
-        setSpeedFactor={setSpeed}
-      />
+      <SpeedControls speedFactor={speed} setSpeedFactor={setSpeed} />
 
       <div className="space-y-2">
         <div className="flex justify-between text-sm text-gray-400">

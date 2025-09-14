@@ -1,8 +1,7 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Play, Pause, SkipBack } from 'lucide-react';
+import { Play, Pause, SkipBack } from "lucide-react";
 
 const VideoPreview = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -15,11 +14,7 @@ const VideoPreview = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setProgress([0])}
-        >
+        <Button variant="ghost" size="icon" onClick={() => setProgress([0])}>
           <SkipBack className="w-4 h-4" />
         </Button>
 
@@ -28,10 +23,11 @@ const VideoPreview = () => {
           size="icon"
           onClick={() => setIsPlaying(!isPlaying)}
         >
-          {isPlaying ? 
-            <Pause className="w-4 h-4" /> : 
+          {isPlaying ? (
+            <Pause className="w-4 h-4" />
+          ) : (
             <Play className="w-4 h-4" />
-          }
+          )}
         </Button>
 
         <div className="flex-1">

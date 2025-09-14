@@ -1,4 +1,3 @@
-
 export interface VideoJob {
   id: string;
   userId: string;
@@ -10,7 +9,7 @@ export interface VideoJob {
     style: string;
   };
   createdAt: Date;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: "pending" | "processing" | "completed" | "failed";
   progress: number;
   error?: string;
   outputUrl?: string;

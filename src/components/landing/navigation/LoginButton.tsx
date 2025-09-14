@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
@@ -14,8 +13,8 @@ const LoginButton: React.FC = () => {
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.2 }}
     >
-      <Button 
-        onClick={() => navigate('/login')}
+      <Button
+        onClick={() => navigate("/login")}
         className="bg-gradient-to-r from-aurora-purple to-aurora-blue
                  hover:from-aurora-blue hover:to-aurora-purple
                  shadow-lg hover:shadow-aurora-blue/50

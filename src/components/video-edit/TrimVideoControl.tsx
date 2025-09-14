@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -29,13 +28,15 @@ const TrimVideoControl = ({
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <label className="text-sm text-gray-400">Start Time: {formatTime(startTime)}</label>
+        <label className="text-sm text-gray-400">
+          Start Time: {formatTime(startTime)}
+        </label>
         <Slider
           value={[startTime]}
           min={0}
@@ -47,7 +48,9 @@ const TrimVideoControl = ({
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm text-gray-400">End Time: {formatTime(endTime)}</label>
+        <label className="text-sm text-gray-400">
+          End Time: {formatTime(endTime)}
+        </label>
         <Slider
           value={[endTime]}
           min={startTime}

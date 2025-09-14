@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Type, Upload, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
@@ -11,18 +10,22 @@ interface SubtitleVideoControlProps {
   isProcessing?: boolean;
 }
 
-const SubtitleVideoControl = ({ videoId, onSubmit, isProcessing = false }: SubtitleVideoControlProps) => {
+const SubtitleVideoControl = ({
+  videoId,
+  onSubmit,
+  isProcessing = false,
+}: SubtitleVideoControlProps) => {
   const [file, setFile] = useState<File | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
-    if (selectedFile && selectedFile.name.endsWith('.srt')) {
+    if (selectedFile && selectedFile.name.endsWith(".srt")) {
       setFile(selectedFile);
     } else {
       toast({
         title: "Invalid file",
         description: "Please upload a .srt subtitle file",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -31,17 +34,16 @@ const SubtitleVideoControl = ({ videoId, onSubmit, isProcessing = false }: Subti
     if (!file) return;
 
     const { data, error } = await supabase.storage
-      .from('subtitles')
+      .from("subtitles")
       .upload(`${videoId}-${Date.now()}-${file.name}`, file);
 
     if (error) {
-      console.error('Error uploading subtitle:', error);
+      console.error("Error uploading subtitle:", error);
       return;
     }
 
-    const publicURL = supabase.storage
-      .from('subtitles')
-      .getPublicUrl(data.path).data.publicUrl;
+    const publicURL = supabase.storage.from("subtitles").getPublicUrl(data.path)
+      .data.publicUrl;
 
     onSubmit({ subtitleUrl: publicURL });
     setFile(null);
@@ -57,7 +59,8 @@ const SubtitleVideoControl = ({ videoId, onSubmit, isProcessing = false }: Subti
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
             <Upload className="w-8 h-8 mb-3 text-gray-400" />
             <p className="mb-2 text-sm text-gray-400">
-              <span className="font-semibold">Click to upload</span> or drag and drop
+              <span className="font-semibold">Click to upload</span> or drag and
+              drop
             </p>
             <p className="text-xs text-gray-400">.srt files only</p>
           </div>
@@ -72,9 +75,7 @@ const SubtitleVideoControl = ({ videoId, onSubmit, isProcessing = false }: Subti
       </div>
 
       {file && (
-        <div className="text-sm text-gray-400">
-          Selected file: {file.name}
-        </div>
+        <div className="text-sm text-gray-400">Selected file: {file.name}</div>
       )}
 
       <Button

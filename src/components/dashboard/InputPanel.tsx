@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { Camera, Upload, ImageIcon, Film } from 'lucide-react';
+import React from "react";
+import { Camera, Upload, ImageIcon, Film } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -38,7 +37,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({
         <Button
           variant="outline"
           className="w-full bg-black/50 border-white/10 text-white hover:bg-white/5"
-          onClick={() => document.getElementById('imageUpload')?.click()}
+          onClick={() => document.getElementById("imageUpload")?.click()}
         >
           <Upload className="w-4 h-4 mr-2" />
           Upload Image

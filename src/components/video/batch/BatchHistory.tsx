@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import { Card } from "@/components/ui/card";
 import CustomIcon from "@/components/ui/custom-icon";
 import { BatchHistoryItem } from "./BatchHistoryItem";
@@ -13,19 +12,19 @@ export const BatchHistory: React.FC = () => {
           Job History
         </h2>
       </div>
-      
+
       <div className="space-y-3">
         <BatchHistoryItem
           title="Cinematic mountain landscape"
           status="completed"
           timestamp="02/24/2025 10:30 AM"
-          onAction={() => console.log('View completed job')}
+          onAction={() => console.log("View completed job")}
         />
         <BatchHistoryItem
           title="Futuristic cityscape with neon"
           status="failed"
           timestamp="02/24/2025 5:45 PM"
-          onAction={() => console.log('Retry failed job')}
+          onAction={() => console.log("Retry failed job")}
         />
       </div>
     </Card>

@@ -1,12 +1,11 @@
-
-import React from 'react';
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowUpCircle, ArrowDownCircle, MinusCircle } from 'lucide-react';
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
-  TooltipTrigger 
+import { ArrowUpCircle, ArrowDownCircle, MinusCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
 
 interface SceneControlsProps {
@@ -22,15 +21,15 @@ export const SceneControls: React.FC<SceneControlsProps> = ({
   totalScenes,
   onMoveUp,
   onMoveDown,
-  onRemove
+  onRemove,
 }) => {
   return (
     <div className="flex flex-col gap-2">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
               onClick={onMoveUp}
               disabled={index === 0}
@@ -44,11 +43,11 @@ export const SceneControls: React.FC<SceneControlsProps> = ({
             <p>Move scene earlier in sequence</p>
           </TooltipContent>
         </Tooltip>
-      
+
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
               onClick={onMoveDown}
               disabled={index === totalScenes - 1}
@@ -62,11 +61,11 @@ export const SceneControls: React.FC<SceneControlsProps> = ({
             <p>Move scene later in sequence</p>
           </TooltipContent>
         </Tooltip>
-      
+
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
               onClick={onRemove}
               aria-label={`Remove scene ${index + 1}`}

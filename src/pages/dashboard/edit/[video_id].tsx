@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+/** @format */
+
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import VideoPreviewPanel from "@/components/video-edit/VideoPreviewPanel";
@@ -12,7 +14,7 @@ const VideoEditPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
-  const [filter, setFilter] = useState('none');
+  const [filter, setFilter] = useState("none");
   const [isProcessingTrim, setIsProcessingTrim] = useState(false);
   const [isProcessingFilter, setIsProcessingFilter] = useState(false);
 
@@ -20,9 +22,9 @@ const VideoEditPage = () => {
     const fetchVideo = async () => {
       try {
         const { data, error } = await supabase
-          .from('video_jobs')
-          .select('*')
-          .eq('id', video_id)
+          .from("video_jobs")
+          .select("*")
+          .eq("id", video_id!)
           .single();
 
         if (error) throw error;
@@ -32,7 +34,7 @@ const VideoEditPage = () => {
           setEndTime(data.duration);
         }
       } catch (error) {
-        console.error('Error fetching video:', error);
+        console.error("Error fetching video:", error);
         toast({
           title: "Error",
           description: "Failed to load video details",
@@ -48,23 +50,29 @@ const VideoEditPage = () => {
     }
   }, [video_id]);
 
-  const handleApplyTrim = async ({ startTime, endTime }: { startTime: number; endTime: number }) => {
+  const handleApplyTrim = async ({
+    startTime,
+    endTime,
+  }: {
+    startTime: number;
+    endTime: number;
+  }) => {
     if (!video) return;
 
     setIsProcessingTrim(true);
     try {
       const { data, error } = await supabase
-        .from('video_edits')
+        .from("video_edits")
         .insert([
           {
             original_video_id: video.id,
-            operation: 'trim',
+            operation: "trim",
             parameters: {
               start_time: startTime,
-              end_time: endTime
+              end_time: endTime,
             },
-            user_id: video.user_id
-          }
+            user_id: video.user_id,
+          },
         ])
         .select()
         .single();
@@ -75,9 +83,8 @@ const VideoEditPage = () => {
         title: "Success",
         description: "Trim operation started",
       });
-
     } catch (error) {
-      console.error('Error applying trim:', error);
+      console.error("Error applying trim:", error);
       toast({
         title: "Error",
         description: "Failed to apply trim edit",
@@ -89,21 +96,21 @@ const VideoEditPage = () => {
   };
 
   const handleFilterChange = async (selectedFilter: string) => {
-    if (!video || selectedFilter === 'none') return;
+    if (!video || selectedFilter === "none") return;
 
     setIsProcessingFilter(true);
     try {
       const { data, error } = await supabase
-        .from('video_edits')
+        .from("video_edits")
         .insert([
           {
             original_video_id: video.id,
-            operation: 'filter',
+            operation: "filter",
             parameters: {
-              filter: selectedFilter
+              filter: selectedFilter,
             },
-            user_id: video.user_id
-          }
+            user_id: video.user_id,
+          },
         ])
         .select()
         .single();
@@ -115,9 +122,8 @@ const VideoEditPage = () => {
         title: "Success",
         description: "Filter applied successfully",
       });
-
     } catch (error) {
-      console.error('Error applying filter:', error);
+      console.error("Error applying filter:", error);
       toast({
         title: "Error",
         description: "Failed to apply filter",

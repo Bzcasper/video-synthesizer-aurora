@@ -1,11 +1,10 @@
-
-import React from 'react';
-import VideoPreview from '@/components/VideoPreview';
-import VideoJobsList from '@/components/VideoJobsList';
+import React from "react";
+import VideoPreview from "@/components/VideoPreview";
+import VideoJobsList from "@/components/VideoJobsList";
 
 interface VideoJob {
   id: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: "pending" | "processing" | "completed" | "failed";
   output_url: string | null;
   created_at: string;
   error_message?: string;

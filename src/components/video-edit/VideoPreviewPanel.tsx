@@ -1,5 +1,4 @@
-
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 
 interface VideoPreviewPanelProps {
@@ -10,12 +9,12 @@ interface VideoPreviewPanelProps {
   filter?: string;
 }
 
-const VideoPreviewPanel = ({ 
-  videoUrl, 
-  startTime = 0, 
+const VideoPreviewPanel = ({
+  videoUrl,
+  startTime = 0,
   endTime,
   playbackSpeed = 1,
-  filter
+  filter,
 }: VideoPreviewPanelProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [duration, setDuration] = useState<number>(0);
@@ -31,10 +30,10 @@ const VideoPreviewPanel = ({
       }
     };
 
-    video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    
+    video.addEventListener("loadedmetadata", handleLoadedMetadata);
+
     return () => {
-      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
     };
   }, [videoUrl, endTime, startTime]);
 
@@ -47,20 +46,20 @@ const VideoPreviewPanel = ({
 
   useEffect(() => {
     if (!videoRef.current) return;
-    
+
     videoRef.current.currentTime = startTime;
   }, [startTime]);
 
   const getFilterClass = () => {
     switch (filter) {
-      case 'vintage':
-        return 'sepia brightness-90 contrast-110';
-      case 'cinematic':
-        return 'contrast-125 saturate-150';
-      case 'anime':
-        return 'saturate-200 brightness-110';
+      case "vintage":
+        return "sepia brightness-90 contrast-110";
+      case "cinematic":
+        return "contrast-125 saturate-150";
+      case "anime":
+        return "saturate-200 brightness-110";
       default:
-        return '';
+        return "";
     }
   };
 
@@ -75,7 +74,7 @@ const VideoPreviewPanel = ({
           onTimeUpdate={() => {
             const video = videoRef.current;
             if (!video) return;
-            
+
             if (endTime && video.currentTime >= endTime) {
               video.currentTime = startTime;
             }

@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
@@ -12,7 +11,13 @@ interface FileUploadProps {
   className?: string;
 }
 
-const FileUpload = ({ label, accept, icon, onChange, className }: FileUploadProps) => {
+const FileUpload = ({
+  label,
+  accept,
+  icon,
+  onChange,
+  className,
+}: FileUploadProps) => {
   return (
     <div className={cn("space-y-2", className)}>
       <Label>{label}</Label>

@@ -1,5 +1,4 @@
-
-import { useState, useRef } from 'react';
+import { useState, useRef } from "react";
 import { toast } from "@/hooks/use-toast";
 import { type Database } from "@/integrations/supabase/types";
 
@@ -28,8 +27,8 @@ export const useVideoGeneration = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationProgress, setGenerationProgress] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(0);
-  const [currentStage, setCurrentStage] = useState('Initializing...');
-  
+  const [currentStage, setCurrentStage] = useState("Initializing...");
+
   const isSubmitting = useRef(false);
   const progressInterval = useRef<number | null>(null);
 
@@ -45,23 +44,23 @@ export const useVideoGeneration = () => {
   const simulateProgress = () => {
     setGenerationProgress(0);
     setTimeRemaining(60); // Start with 60 seconds estimate
-    
+
     const stages = [
-      'Analyzing prompt...',
-      'Generating frames...',
-      'Applying style effects...',
-      'Rendering video...',
-      'Finalizing output...'
+      "Analyzing prompt...",
+      "Generating frames...",
+      "Applying style effects...",
+      "Rendering video...",
+      "Finalizing output...",
     ];
-    
+
     let stageIndex = 0;
     setCurrentStage(stages[stageIndex]);
-    
+
     // Update progress every second
     progressInterval.current = window.setInterval(() => {
-      setGenerationProgress(prev => {
-        const newProgress = prev + (Math.random() * 2);
-        
+      setGenerationProgress((prev) => {
+        const newProgress = prev + Math.random() * 2;
+
         // Move to next stage at certain thresholds
         if (newProgress > 20 && stageIndex === 0) {
           stageIndex = 1;
@@ -76,13 +75,13 @@ export const useVideoGeneration = () => {
           stageIndex = 4;
           setCurrentStage(stages[stageIndex]);
         }
-        
+
         // Ensure we don't exceed 99% until actual completion
         return Math.min(newProgress, 99);
       });
-      
+
       // Update remaining time estimation
-      setTimeRemaining(prev => Math.max(0, prev - 1));
+      setTimeRemaining((prev) => Math.max(0, prev - 1));
     }, 1000);
   };
 
@@ -91,15 +90,15 @@ export const useVideoGeneration = () => {
     if (isSubmitting.current || isGenerating) return;
     isSubmitting.current = true;
     setIsGenerating(true);
-    
+
     try {
       // Start progress simulation
       simulateProgress();
-      
-      const response = await fetch('/api/video/generate', {
-        method: 'POST',
+
+      const response = await fetch("/api/video/generate", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           prompt: params.prompt,
@@ -116,27 +115,31 @@ export const useVideoGeneration = () => {
       }
 
       const data = await response.json();
-      
+
       // Complete progress
       setGenerationProgress(100);
       setTimeRemaining(0);
-      setCurrentStage('Complete!');
-      
+      setCurrentStage("Complete!");
+
       // Notify user
       toast({
         title: "Video Generation Started",
-        description: "Your video is being generated. You'll be notified when it's ready.",
+        description:
+          "Your video is being generated. You'll be notified when it's ready.",
       });
 
       return data;
     } catch (error) {
-      console.error('Video generation error:', error);
+      console.error("Video generation error:", error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to start video generation. Please try again.",
-        variant: "destructive"
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to start video generation. Please try again.",
+        variant: "destructive",
       });
-      
+
       return null;
     } finally {
       // Clean up and reset state after a delay

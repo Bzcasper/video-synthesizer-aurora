@@ -1,10 +1,9 @@
-
-import React, { useRef } from 'react';
+import React, { useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import UserMenu from './UserMenu';
-import NavLinks from './NavLinks';
+import UserMenu from "./UserMenu";
+import NavLinks from "./NavLinks";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -14,12 +13,12 @@ interface MobileMenuProps {
   onClose: () => void;
 }
 
-const MobileMenu: React.FC<MobileMenuProps> = ({ 
-  isOpen, 
-  navLinks, 
-  session, 
-  userEmail, 
-  onClose 
+const MobileMenu: React.FC<MobileMenuProps> = ({
+  isOpen,
+  navLinks,
+  session,
+  userEmail,
+  onClose,
 }) => {
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
@@ -36,14 +35,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
           className="md:hidden overflow-hidden bg-aurora-black/90 backdrop-blur-xl border-t border-white/10 rounded-b-lg shadow-lg"
         >
           <NavLinks links={navLinks} isMobile onClick={onClose} />
-          
+
           {session ? (
             <UserMenu userEmail={userEmail} isMobile onAction={onClose} />
           ) : (
             <div className="px-4 pt-2 pb-4">
-              <Button 
-                onClick={() => { 
-                  navigate('/login');
+              <Button
+                onClick={() => {
+                  navigate("/login");
                   onClose();
                 }}
                 className="w-full bg-gradient-to-r from-aurora-purple to-aurora-blue

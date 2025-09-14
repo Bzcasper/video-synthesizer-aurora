@@ -1,8 +1,8 @@
 // supabase/functions/generate-video/utils/rate-limiter.ts
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4';
-import { QUOTA } from '../config/constants';
-import { logger } from './logging';
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.4";
+import { QUOTA } from "../config/constants";
+import { logger } from "./logging";
 
 /**
  * Interface for rate limit check result
@@ -29,34 +29,35 @@ export class RateLimiter {
    */
   async checkRateLimit(
     userId: string,
-    userTier: 'free' | 'pro' = 'free'
+    userTier: "free" | "pro" = "free",
   ): Promise<RateLimitCheckResult> {
     try {
       // Determine rate limit based on user tier
-      const rateLimit = userTier === 'pro'
-        ? QUOTA.RATE_LIMIT.PRO_TIER
-        : QUOTA.RATE_LIMIT.FREE_TIER;
-      
+      const rateLimit =
+        userTier === "pro"
+          ? QUOTA.RATE_LIMIT.PRO_TIER
+          : QUOTA.RATE_LIMIT.FREE_TIER;
+
       // Get current timestamp
       const now = new Date();
-      
+
       // Calculate rate limit window (1 minute)
       const windowStart = new Date(now);
       windowStart.setMinutes(windowStart.getMinutes() - 1);
-      
+
       // Calculate next reset time (start of next minute)
       const resetAt = new Date(now);
       resetAt.setMinutes(resetAt.getMinutes() + 1);
       resetAt.setSeconds(0);
       resetAt.setMilliseconds(0);
-      
+
       // Count requests in the current window
       const { count, error } = await this.supabase
-        .from('video_jobs')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', userId)
-        .gte('created_at', windowStart.toISOString());
-      
+        .from("video_jobs")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", userId)
+        .gte("created_at", windowStart.toISOString());
+
       if (error) {
         logger.error(`Error checking rate limit for user ${userId}:`, error);
         // Allow the request in case of error to avoid blocking legitimate requests
@@ -67,11 +68,11 @@ export class RateLimiter {
           resetAt,
         };
       }
-      
+
       const requestCount = count || 0;
       const remaining = Math.max(0, rateLimit - requestCount);
       const allowed = requestCount < rateLimit;
-      
+
       return {
         allowed,
         limit: rateLimit,
@@ -83,8 +84,14 @@ export class RateLimiter {
       // Allow the request in case of error
       return {
         allowed: true,
-        limit: userTier === 'pro' ? QUOTA.RATE_LIMIT.PRO_TIER : QUOTA.RATE_LIMIT.FREE_TIER,
-        remaining: userTier === 'pro' ? QUOTA.RATE_LIMIT.PRO_TIER : QUOTA.RATE_LIMIT.FREE_TIER,
+        limit:
+          userTier === "pro"
+            ? QUOTA.RATE_LIMIT.PRO_TIER
+            : QUOTA.RATE_LIMIT.FREE_TIER,
+        remaining:
+          userTier === "pro"
+            ? QUOTA.RATE_LIMIT.PRO_TIER
+            : QUOTA.RATE_LIMIT.FREE_TIER,
         resetAt: new Date(new Date().getTime() + 60000), // 1 minute from now
       };
     }
@@ -95,7 +102,7 @@ export class RateLimiter {
    */
   async checkMonthlyQuota(
     userId: string,
-    userTier: 'free' | 'pro' = 'free'
+    userTier: "free" | "pro" = "free",
   ): Promise<{
     allowed: boolean;
     limit: number;
@@ -104,25 +111,27 @@ export class RateLimiter {
   }> {
     try {
       // Determine monthly limit based on user tier
-      const monthlyLimit = userTier === 'pro'
-        ? QUOTA.PRO_TIER.MAX_VIDEOS
-        : QUOTA.FREE_TIER.MAX_VIDEOS;
-      
+      const monthlyLimit =
+        userTier === "pro"
+          ? QUOTA.PRO_TIER.MAX_VIDEOS
+          : QUOTA.FREE_TIER.MAX_VIDEOS;
+
       // Get current year and month
       const now = new Date();
       const year = now.getFullYear();
       const month = now.getMonth() + 1; // JavaScript months are 0-indexed
-      
+
       // Check if we have a record for this month
       const { data, error } = await this.supabase
-        .from('monthly_usage')
-        .select('jobs_count')
-        .eq('user_id', userId)
-        .eq('year', year)
-        .eq('month', month)
+        .from("monthly_usage")
+        .select("jobs_count")
+        .eq("user_id", userId)
+        .eq("year", year)
+        .eq("month", month)
         .single();
-      
-      if (error && error.code !== 'PGRST116') { // PGRST116 is "Not found" error
+
+      if (error && error.code !== "PGRST116") {
+        // PGRST116 is "Not found" error
         logger.error(`Error checking monthly quota for user ${userId}:`, error);
         // Allow the request in case of error
         return {
@@ -132,11 +141,11 @@ export class RateLimiter {
           remaining: monthlyLimit,
         };
       }
-      
+
       const usedCount = data?.jobs_count || 0;
       const remaining = Math.max(0, monthlyLimit - usedCount);
       const allowed = usedCount < monthlyLimit;
-      
+
       return {
         allowed,
         limit: monthlyLimit,
@@ -148,9 +157,15 @@ export class RateLimiter {
       // Allow the request in case of error
       return {
         allowed: true,
-        limit: userTier === 'pro' ? QUOTA.PRO_TIER.MAX_VIDEOS : QUOTA.FREE_TIER.MAX_VIDEOS,
+        limit:
+          userTier === "pro"
+            ? QUOTA.PRO_TIER.MAX_VIDEOS
+            : QUOTA.FREE_TIER.MAX_VIDEOS,
         used: 0,
-        remaining: userTier === 'pro' ? QUOTA.PRO_TIER.MAX_VIDEOS : QUOTA.FREE_TIER.MAX_VIDEOS,
+        remaining:
+          userTier === "pro"
+            ? QUOTA.PRO_TIER.MAX_VIDEOS
+            : QUOTA.FREE_TIER.MAX_VIDEOS,
       };
     }
   }
@@ -160,31 +175,33 @@ export class RateLimiter {
    */
   async incrementMonthlyUsage(
     userId: string,
-    videoDurationSeconds: number
+    videoDurationSeconds: number,
   ): Promise<boolean> {
     try {
       // Get current year and month
       const now = new Date();
       const year = now.getFullYear();
       const month = now.getMonth() + 1; // JavaScript months are 0-indexed
-      
+
       // Try to update an existing record first
       const { data, error } = await this.supabase
-        .from('monthly_usage')
+        .from("monthly_usage")
         .update({
-          jobs_count: this.supabase.rpc('increment', { count: 1 }),
-          total_seconds: this.supabase.rpc('increment', { count: videoDurationSeconds }),
+          jobs_count: this.supabase.rpc("increment", { count: 1 }),
+          total_seconds: this.supabase.rpc("increment", {
+            count: videoDurationSeconds,
+          }),
           updated_at: now.toISOString(),
         })
-        .eq('user_id', userId)
-        .eq('year', year)
-        .eq('month', month)
+        .eq("user_id", userId)
+        .eq("year", year)
+        .eq("month", month)
         .select();
-      
+
       if (error || !data || data.length === 0) {
         // No existing record, create a new one
         const { error: insertError } = await this.supabase
-          .from('monthly_usage')
+          .from("monthly_usage")
           .insert({
             user_id: userId,
             year,
@@ -193,15 +210,18 @@ export class RateLimiter {
             total_seconds: videoDurationSeconds,
             updated_at: now.toISOString(),
           });
-        
+
         if (insertError) {
           throw insertError;
         }
       }
-      
+
       return true;
     } catch (error) {
-      logger.error(`Error incrementing monthly usage for user ${userId}:`, error);
+      logger.error(
+        `Error incrementing monthly usage for user ${userId}:`,
+        error,
+      );
       return false;
     }
   }

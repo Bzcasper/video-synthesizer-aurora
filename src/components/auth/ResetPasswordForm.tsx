@@ -1,11 +1,10 @@
-
-import { useState } from 'react';
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Mail } from 'lucide-react';
+import { Mail } from "lucide-react";
 
 interface ResetPasswordFormProps {
   email: string;
@@ -13,7 +12,11 @@ interface ResetPasswordFormProps {
   onSuccess: () => void;
 }
 
-export const ResetPasswordForm = ({ email, setEmail, onSuccess }: ResetPasswordFormProps) => {
+export const ResetPasswordForm = ({
+  email,
+  setEmail,
+  onSuccess,
+}: ResetPasswordFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,7 +39,7 @@ export const ResetPasswordForm = ({ email, setEmail, onSuccess }: ResetPasswordF
       toast({
         title: "Error",
         description: error.message,
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -48,7 +51,10 @@ export const ResetPasswordForm = ({ email, setEmail, onSuccess }: ResetPasswordF
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+          <Mail
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={16}
+          />
           <Input
             id="email"
             type="email"

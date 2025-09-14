@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Video, RefreshCw, HardDrive, Cpu } from "lucide-react";
@@ -15,19 +14,22 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({
   totalVideos,
   processingVideos,
   completedVideos,
-  favoriteVideos
+  favoriteVideos,
 }) => {
   // Calculate percentages for the progress bars
-  const processingPercentage = totalVideos > 0 ? (processingVideos / totalVideos) * 100 : 0;
-  const completedPercentage = totalVideos > 0 ? (completedVideos / totalVideos) * 100 : 0;
-  const favoritesPercentage = totalVideos > 0 ? (favoriteVideos / totalVideos) * 100 : 0;
-  
+  const processingPercentage =
+    totalVideos > 0 ? (processingVideos / totalVideos) * 100 : 0;
+  const completedPercentage =
+    totalVideos > 0 ? (completedVideos / totalVideos) * 100 : 0;
+  const favoritesPercentage =
+    totalVideos > 0 ? (favoriteVideos / totalVideos) * 100 : 0;
+
   // Simulate storage usage (would be replaced with actual data in production)
   const storageUsage = Math.min(75, Math.max(5, totalVideos * 5)); // 5% per video, min 5%, max 75%
-  
+
   // Simulate API usage based on processing videos
   const apiUsage = Math.min(85, Math.max(10, processingVideos * 25)); // 25% per processing video, min 10%, max 85%
-  
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
       {/* Total Videos */}
@@ -57,12 +59,14 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({
           </div>
         </CardContent>
       </Card>
-      
+
       {/* Processing Videos */}
       <Card className="bg-gradient-to-br from-aurora-black to-black/80 border border-white/10 hover:border-aurora-blue/30 transition-all duration-300">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-gray-400">Processing Videos</h3>
+            <h3 className="text-sm font-medium text-gray-400">
+              Processing Videos
+            </h3>
             <div className="p-2 bg-aurora-purple/20 rounded-full">
               <RefreshCw className="h-4 w-4 text-aurora-purple" />
             </div>
@@ -85,7 +89,7 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({
           </div>
         </CardContent>
       </Card>
-      
+
       {/* Storage Usage */}
       <Card className="bg-gradient-to-br from-aurora-black to-black/80 border border-white/10 hover:border-aurora-blue/30 transition-all duration-300">
         <CardContent className="p-6">
@@ -113,7 +117,7 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({
           </div>
         </CardContent>
       </Card>
-      
+
       {/* API Usage */}
       <Card className="bg-gradient-to-br from-aurora-black to-black/80 border border-white/10 hover:border-aurora-blue/30 transition-all duration-300">
         <CardContent className="p-6">

@@ -1,7 +1,6 @@
-
-import React from 'react';
-import { motion } from 'framer-motion';
-import { CustomIcon } from '@/components/ui/icons';
+import React from "react";
+import { motion } from "framer-motion";
+import { CustomIcon } from "@/components/ui/icons";
 
 interface FormHeaderProps {
   title: string;
@@ -9,10 +8,10 @@ interface FormHeaderProps {
   icon?: string;
 }
 
-const FormHeader: React.FC<FormHeaderProps> = ({ 
-  title, 
+const FormHeader: React.FC<FormHeaderProps> = ({
+  title,
   subtitle,
-  icon = "generate"
+  icon = "generate",
 }) => {
   return (
     <motion.div
@@ -26,9 +25,7 @@ const FormHeader: React.FC<FormHeaderProps> = ({
         </div>
         <h2 className="text-2xl font-bold text-gradient">{title}</h2>
       </div>
-      {subtitle && (
-        <p className="text-gray-400 ml-10">{subtitle}</p>
-      )}
+      {subtitle && <p className="text-gray-400 ml-10">{subtitle}</p>}
     </motion.div>
   );
 };

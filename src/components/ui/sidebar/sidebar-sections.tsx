@@ -1,8 +1,7 @@
-
-import * as React from "react"
-import { cn } from "@/lib/utils"
-import { Separator } from "@/components/ui/separator"
-import { SidebarLogoutButton } from "./sidebar-utilities"
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
+import { SidebarLogoutButton } from "./sidebar-utilities";
 
 export const SidebarHeader = React.forwardRef<
   HTMLDivElement,
@@ -15,14 +14,14 @@ export const SidebarHeader = React.forwardRef<
       className={cn("flex flex-col gap-2 p-2", className)}
       {...props}
     />
-  )
-})
-SidebarHeader.displayName = "SidebarHeader"
+  );
+});
+SidebarHeader.displayName = "SidebarHeader";
 
 export const SidebarFooter = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
-    showLogout?: boolean
+    showLogout?: boolean;
   }
 >(({ className, showLogout = true, ...props }, ref) => {
   return (
@@ -41,9 +40,9 @@ export const SidebarFooter = React.forwardRef<
         </>
       )}
     </div>
-  )
-})
-SidebarFooter.displayName = "SidebarFooter"
+  );
+});
+SidebarFooter.displayName = "SidebarFooter";
 
 export const SidebarSeparator = React.forwardRef<
   React.ElementRef<typeof Separator>,
@@ -56,9 +55,9 @@ export const SidebarSeparator = React.forwardRef<
       className={cn("mx-2 w-auto bg-sidebar-border", className)}
       {...props}
     />
-  )
-})
-SidebarSeparator.displayName = "SidebarSeparator"
+  );
+});
+SidebarSeparator.displayName = "SidebarSeparator";
 
 export const SidebarContent = React.forwardRef<
   HTMLDivElement,
@@ -70,13 +69,13 @@ export const SidebarContent = React.forwardRef<
       data-sidebar="content"
       className={cn(
         "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
-        className
+        className,
       )}
       {...props}
     />
-  )
-})
-SidebarContent.displayName = "SidebarContent"
+  );
+});
+SidebarContent.displayName = "SidebarContent";
 
 export const SidebarInset = React.forwardRef<
   HTMLDivElement,
@@ -88,10 +87,10 @@ export const SidebarInset = React.forwardRef<
       className={cn(
         "relative flex min-h-svh flex-1 flex-col bg-background",
         "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
-        className
+        className,
       )}
       {...props}
     />
-  )
-})
-SidebarInset.displayName = "SidebarInset"
+  );
+});
+SidebarInset.displayName = "SidebarInset";

@@ -1,6 +1,11 @@
-
-import React from 'react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import React from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 
@@ -11,19 +16,26 @@ interface SpeedControlsProps {
 
 export const SpeedControls: React.FC<SpeedControlsProps> = ({
   speedFactor,
-  setSpeedFactor
+  setSpeedFactor,
 }) => {
   return (
     <div className="space-y-4">
       <div>
-        <Label htmlFor="speed-factor" className="block text-sm font-medium mb-2">
+        <Label
+          htmlFor="speed-factor"
+          className="block text-sm font-medium mb-2"
+        >
           Speed Factor
         </Label>
         <Select
           value={speedFactor.toString()}
           onValueChange={(value) => setSpeedFactor(parseFloat(value))}
         >
-          <SelectTrigger id="speed-factor" name="speed-factor" className="w-full max-w-xs">
+          <SelectTrigger
+            id="speed-factor"
+            name="speed-factor"
+            className="w-full max-w-xs"
+          >
             <SelectValue placeholder="Select speed factor" />
           </SelectTrigger>
           <SelectContent>
@@ -34,7 +46,7 @@ export const SpeedControls: React.FC<SpeedControlsProps> = ({
           </SelectContent>
         </Select>
       </div>
-      
+
       {/* Optionally, we could add a slider for more precise control */}
       {/* <div className="pt-2">
         <Slider

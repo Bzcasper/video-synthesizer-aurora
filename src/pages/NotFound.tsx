@@ -1,4 +1,3 @@
-
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,7 @@ const NotFound = () => {
   useEffect(() => {
     console.error(
       "404 Error: User attempted to access non-existent route:",
-      location.pathname
+      location.pathname,
     );
   }, [location.pathname]);
 
@@ -19,9 +18,9 @@ const NotFound = () => {
       <div className="text-center w-full max-w-md px-4">
         <h1 className="text-4xl font-bold mb-4 text-aurora-blue">404</h1>
         <p className="text-xl text-gray-400 mb-8">Oops! Page not found</p>
-        <Button 
+        <Button
           className="bg-aurora-blue hover:bg-aurora-purple transition-colors"
-          onClick={() => window.location.href = "/"}
+          onClick={() => (window.location.href = "/")}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Return to Home

@@ -1,12 +1,11 @@
-
-import { createClient } from '@supabase/supabase-js';
-import { ErrorHandler } from './errorhandler';
-import { ProgressTracker } from './progresstracker';
-import { FrameGenerator } from './frame-generator';
-import { FrameEnhancer } from './frame-enhancer';
-import { VideoAssembler } from './video-assembler';
-import { VideoJob, VideoGenerationResult } from './types';
-import { logger } from '../utils/logging';
+import { createClient } from "@supabase/supabase-js";
+import { ErrorHandler } from "./errorhandler";
+import { ProgressTracker } from "./progresstracker";
+import { FrameGenerator } from "./frame-generator";
+import { FrameEnhancer } from "./frame-enhancer";
+import { VideoAssembler } from "./video-assembler";
+import { VideoJob, VideoGenerationResult } from "./types";
+import { logger } from "../utils/logging";
 
 export class VideoGenerator {
   private supabase: ReturnType<typeof createClient>;
@@ -19,7 +18,7 @@ export class VideoGenerator {
   constructor(
     supabaseClient: ReturnType<typeof createClient>,
     errorHandler: ErrorHandler,
-    progressTracker: ProgressTracker
+    progressTracker: ProgressTracker,
   ) {
     this.supabase = supabaseClient;
     this.errorHandler = errorHandler;
@@ -31,27 +30,38 @@ export class VideoGenerator {
 
   async generateVideo(job: VideoJob): Promise<VideoGenerationResult> {
     logger.info(`Starting video generation for job ${job.id}`);
-    
+
     try {
       // Update progress to indicate we're starting
-      await this.progressTracker.updateProgress(job.id, 5, 'Initializing video generation');
+      await this.progressTracker.updateProgress(
+        job.id,
+        5,
+        "Initializing video generation",
+      );
 
       // Generate frames using Stable Video Diffusion
       const frames = await this.frameGenerator.generateFrames(job);
-      await this.progressTracker.updateProgress(job.id, 40, 'Frames generated');
+      await this.progressTracker.updateProgress(job.id, 40, "Frames generated");
 
       // Process and enhance frames
-      const enhancedFrames = await this.frameEnhancer.enhanceFrames(frames, job.id);
-      await this.progressTracker.updateProgress(job.id, 70, 'Frames enhanced');
+      const enhancedFrames = await this.frameEnhancer.enhanceFrames(
+        frames,
+        job.id,
+      );
+      await this.progressTracker.updateProgress(job.id, 70, "Frames enhanced");
 
       // Combine frames into video and upload
-      const { videoUrl, thumbnailUrl } = await this.videoAssembler.assembleVideo(enhancedFrames, job);
-      await this.progressTracker.updateProgress(job.id, 100, 'Video ready');
+      const { videoUrl, thumbnailUrl } =
+        await this.videoAssembler.assembleVideo(enhancedFrames, job);
+      await this.progressTracker.updateProgress(job.id, 100, "Video ready");
 
       return { videoUrl, thumbnailUrl };
     } catch (error) {
       logger.error(`Error generating video for job ${job.id}:`, error);
-      throw this.errorHandler.wrapError(error, `Failed to generate video for job ${job.id}`);
+      throw this.errorHandler.wrapError(
+        error,
+        `Failed to generate video for job ${job.id}`,
+      );
     }
   }
 }

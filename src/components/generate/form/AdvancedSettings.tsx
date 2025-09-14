@@ -1,14 +1,13 @@
-
-import React from 'react';
+import React from "react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
-import { SceneEditor } from '@/components/generate/SceneEditor';
-import DurationSlider from '@/components/generate/DurationSlider';
-import VideoStyleOptions from './VideoStyleOptions';
-import { videoStyles } from '@/components/generate/GenerateForm';
-import { Scene } from '../scene/types';
+import { SceneEditor } from "@/components/generate/SceneEditor";
+import DurationSlider from "@/components/generate/DurationSlider";
+import VideoStyleOptions from "./VideoStyleOptions";
+import { videoStyles } from "@/components/generate/GenerateForm";
+import { Scene } from "../scene/types";
 import { Separator } from "@/components/ui/separator";
-import { CustomIcon } from '@/components/ui/icons';
+import { CustomIcon } from "@/components/ui/icons";
 
 interface AdvancedSettingsProps {
   duration: number;
@@ -41,7 +40,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
             <CustomIcon name="template" className="h-5 w-5 text-aurora-blue" />
             <h3 className="text-lg font-medium">Video Style</h3>
           </div>
-          <VideoStyleOptions 
+          <VideoStyleOptions
             videoStyles={videoStyles}
             selectedStyle={style}
             onStyleSelect={setStyle}
@@ -56,10 +55,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
             <CustomIcon name="clock" className="h-5 w-5 text-aurora-blue" />
             <h3 className="text-lg font-medium">Video Duration</h3>
           </div>
-          <DurationSlider 
-            duration={duration} 
-            onDurationChange={setDuration} 
-          />
+          <DurationSlider duration={duration} onDurationChange={setDuration} />
         </div>
 
         <Separator className="bg-white/10" />
@@ -70,10 +66,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
             <CustomIcon name="videos" className="h-5 w-5 text-aurora-blue" />
             <h3 className="text-lg font-medium">Scene Customization</h3>
           </div>
-          <SceneEditor 
-            scenes={scenes} 
-            setScenes={setScenes} 
-          />
+          <SceneEditor scenes={scenes} setScenes={setScenes} />
         </div>
       </Card>
     </motion.div>

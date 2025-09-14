@@ -1,8 +1,8 @@
-
 import type { Database } from "@/integrations/supabase/types";
 
 export type VideoJobStatus = Database["public"]["Enums"]["video_job_status"];
-export type EnhancementType = Database["public"]["Enums"]["video_enhancement_type"];
+export type EnhancementType =
+  Database["public"]["Enums"]["video_enhancement_type"];
 export type FilterType = Database["public"]["Enums"]["video_filter_type"];
 
 export interface Video {

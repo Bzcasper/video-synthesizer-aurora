@@ -1,10 +1,11 @@
+/** @format */
 
-import React, { useState } from 'react';
-import { Mail, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { toast } from '@/components/ui/use-toast';
+import React, { useState } from "react";
+import { Mail, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ForgotPasswordProps {
@@ -13,43 +14,46 @@ interface ForgotPasswordProps {
   onBack: () => void;
 }
 
-export const ForgotPassword: React.FC<ForgotPasswordProps> = ({ 
-  email, 
-  setEmail, 
-  onBack
+export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
+  email,
+  setEmail,
+  onBack,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [resetSent, setResetSent] = useState(false);
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email) {
       toast({
-        description: 'Please enter your email address',
-        variant: 'destructive',
+        description: "Please enter your email address",
+        variant: "destructive",
       });
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
       });
-      
+
       if (error) throw error;
-      
+
       setResetSent(true);
       toast({
-        description: 'Password reset instructions sent to your email',
-        variant: 'default',
+        description: "Password reset instructions sent to your email",
+        variant: "default",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
-        description: error.message || 'Error sending reset instructions',
-        variant: 'destructive',
+        description:
+          error instanceof Error
+            ? error.message
+            : "Error sending reset instructions",
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -62,22 +66,23 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
         <div className="mb-4 p-3 bg-green-500/20 text-green-400 rounded-lg">
           Password reset instructions have been sent to your email.
         </div>
-        
+
         <p className="text-gray-400">
-          Please check your inbox and follow the instructions to reset your password.
+          Please check your inbox and follow the instructions to reset your
+          password.
         </p>
-        
-        <button
+
+        <Button
           type="button"
+          variant="ghost"
           onClick={() => {
             onBack();
             setResetSent(false);
           }}
-          className="w-full flex items-center justify-center text-sm text-gray-400 hover:text-white"
-        >
+          className="w-full text-gray-400 hover:text-white">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to login
-        </button>
+        </Button>
       </div>
     );
   }
@@ -87,7 +92,10 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
       <div className="space-y-2">
         <Label htmlFor="reset-email">Email</Label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+          <Mail
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={16}
+          />
           <Input
             id="reset-email"
             type="email"
@@ -100,23 +108,19 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
           />
         </div>
       </div>
-      
-      <Button 
-        type="submit" 
-        className="w-full"
-        disabled={isLoading}
-      >
-        {isLoading ? 'Sending...' : 'Send Reset Instructions'}
+
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? "Sending..." : "Send Reset Instructions"}
       </Button>
-      
-      <button
+
+      <Button
         type="button"
+        variant="ghost"
         onClick={onBack}
-        className="w-full flex items-center justify-center text-sm text-gray-400 hover:text-white"
-      >
+        className="w-full text-gray-400 hover:text-white">
         <ArrowLeft className="mr-2 h-4 w-4" />
         Back to login
-      </button>
+      </Button>
     </form>
   );
 };

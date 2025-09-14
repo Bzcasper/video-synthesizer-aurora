@@ -1,9 +1,8 @@
-
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
-import type { Video } from '@/hooks/use-video-enhancements';
-import { CustomIcon } from '@/components/ui/icons';
+import type { Video } from "@/hooks/use-video-enhancements";
+import { CustomIcon } from "@/components/ui/icons";
 
 interface VideoCardProps {
   video: Video;
@@ -11,21 +10,18 @@ interface VideoCardProps {
   onSelect: () => void;
 }
 
-export const VideoCard: React.FC<VideoCardProps> = ({ 
-  video, 
-  isSelected, 
-  onSelect 
+export const VideoCard: React.FC<VideoCardProps> = ({
+  video,
+  isSelected,
+  onSelect,
 }) => {
   return (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-    >
+    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
       <Card
         className={`cursor-pointer p-4 transition-all duration-300 ${
-          isSelected 
-            ? 'bg-gradient-to-r from-aurora-purple to-aurora-blue border-none shadow-neon' 
-            : 'bg-white/5 border border-white/10 hover:border-aurora-blue/50'
+          isSelected
+            ? "bg-gradient-to-r from-aurora-purple to-aurora-blue border-none shadow-neon"
+            : "bg-white/5 border border-white/10 hover:border-aurora-blue/50"
         }`}
         onClick={onSelect}
       >
@@ -41,7 +37,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({
               <span className="text-sm text-gray-400">No preview</span>
             </div>
           )}
-          
+
           {isSelected && (
             <div className="absolute top-2 right-2 bg-aurora-blue/90 rounded-full p-1">
               <CustomIcon name="play" className="h-4 w-4 text-white" />

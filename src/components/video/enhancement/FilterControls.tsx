@@ -1,6 +1,11 @@
-
-import React from 'react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import React from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -13,7 +18,7 @@ interface FilterControlsProps {
 
 export const FilterControls: React.FC<FilterControlsProps> = ({
   selectedFilter,
-  setSelectedFilter
+  setSelectedFilter,
 }) => {
   return (
     <div>
@@ -24,7 +29,11 @@ export const FilterControls: React.FC<FilterControlsProps> = ({
         value={selectedFilter}
         onValueChange={(value: FilterType) => setSelectedFilter(value)}
       >
-        <SelectTrigger id="filter-style" name="filter-style" className="w-full max-w-xs">
+        <SelectTrigger
+          id="filter-style"
+          name="filter-style"
+          className="w-full max-w-xs"
+        >
           <SelectValue placeholder="Choose a filter style" />
         </SelectTrigger>
         <SelectContent>

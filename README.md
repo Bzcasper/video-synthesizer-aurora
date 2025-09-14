@@ -1,4 +1,3 @@
-
 # Aurora Video Synthesizer 🎬✨
 
 ![Aurora Video Synthesizer](public/lovable-uploads/90dade48-0a3d-4761-bf1d-ff00f22a3a23.png)
@@ -14,7 +13,7 @@ Aurora Video Synthesizer is a powerful web application that uses advanced AI tec
 ✅ **Batch Processing**: Queue multiple video generation tasks  
 ✅ **Responsive Design**: Perfect UI experience on any device from mobile to desktop  
 ✅ **Real-time Status**: Track the progress of your video generation in real-time  
-✅ **User Dashboard**: Manage all your generated videos in one place  
+✅ **User Dashboard**: Manage all your generated videos in one place
 
 ## Tech Stack
 
@@ -29,18 +28,20 @@ Aurora Video Synthesizer is a powerful web application that uses advanced AI tec
 
 ### Prerequisites
 
-- Node.js 16+ 
+- Node.js 16+
 - npm or yarn
 
 ### Installation
 
 1. Clone the repository
+
    ```bash
    git clone https://github.com/yourusername/aurora-video-synthesizer.git
    cd aurora-video-synthesizer
    ```
 
 2. Install dependencies
+
    ```bash
    npm install
    # or
@@ -48,6 +49,7 @@ Aurora Video Synthesizer is a powerful web application that uses advanced AI tec
    ```
 
 3. Start the development server
+
    ```bash
    npm run dev
    # or

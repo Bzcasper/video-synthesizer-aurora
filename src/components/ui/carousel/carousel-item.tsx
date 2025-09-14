@@ -1,13 +1,12 @@
-
-import * as React from "react"
-import { cn } from "@/lib/utils"
-import { useCarousel } from "@/hooks/use-carousel"
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import { useCarousel } from "@/hooks/use-carousel";
 
 const CarouselItem = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const { orientation } = useCarousel()
+  const { orientation } = useCarousel();
 
   return (
     <div
@@ -17,12 +16,12 @@ const CarouselItem = React.forwardRef<
       className={cn(
         "min-w-0 shrink-0 grow-0 basis-full",
         orientation === "horizontal" ? "pl-4" : "pt-4",
-        className
+        className,
       )}
       {...props}
     />
-  )
-})
-CarouselItem.displayName = "CarouselItem"
+  );
+});
+CarouselItem.displayName = "CarouselItem";
 
-export { CarouselItem }
+export { CarouselItem };

@@ -1,20 +1,19 @@
-
-import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { 
-  Home, 
-  Video, 
-  Wand2, 
-  SquareStack, 
-  Film, 
-  BarChart2, 
-  Settings, 
-  LogOut, 
-  X 
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import {
+  Home,
+  Video,
+  Wand2,
+  SquareStack,
+  Film,
+  BarChart2,
+  Settings,
+  LogOut,
+  X,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 
@@ -25,23 +24,51 @@ interface DashboardSidebarProps {
   setIsTransitioning: (isTransitioning: boolean) => void;
 }
 
-const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ 
-  isSidebarOpen, 
-  setSidebarOpen, 
+const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
+  isSidebarOpen,
+  setSidebarOpen,
   isTransitioning,
-  setIsTransitioning
+  setIsTransitioning,
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const navItems = [
-    { icon: <Home className="h-5 w-5" />, label: 'Dashboard', path: '/dashboard' },
-    { icon: <Video className="h-5 w-5" />, label: 'Generate Video', path: '/dashboard/generate' },
-    { icon: <Wand2 className="h-5 w-5" />, label: 'Enhance Video', path: '/dashboard/enhance' },
-    { icon: <SquareStack className="h-5 w-5" />, label: 'Batch Queue', path: '/dashboard/batch' },
-    { icon: <Film className="h-5 w-5" />, label: 'My Videos', path: '/dashboard/videos' },
-    { icon: <BarChart2 className="h-5 w-5" />, label: 'Stats', path: '/dashboard/stats' },
-    { icon: <Settings className="h-5 w-5" />, label: 'Settings', path: '/dashboard/settings' },
+    {
+      icon: <Home className="h-5 w-5" />,
+      label: "Dashboard",
+      path: "/dashboard",
+    },
+    {
+      icon: <Video className="h-5 w-5" />,
+      label: "Generate Video",
+      path: "/dashboard/generate",
+    },
+    {
+      icon: <Wand2 className="h-5 w-5" />,
+      label: "Enhance Video",
+      path: "/dashboard/enhance",
+    },
+    {
+      icon: <SquareStack className="h-5 w-5" />,
+      label: "Batch Queue",
+      path: "/dashboard/batch",
+    },
+    {
+      icon: <Film className="h-5 w-5" />,
+      label: "My Videos",
+      path: "/dashboard/videos",
+    },
+    {
+      icon: <BarChart2 className="h-5 w-5" />,
+      label: "Stats",
+      path: "/dashboard/stats",
+    },
+    {
+      icon: <Settings className="h-5 w-5" />,
+      label: "Settings",
+      path: "/dashboard/settings",
+    },
   ];
 
   const isActivePath = (path: string) => location.pathname === path;
@@ -54,7 +81,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
         title: "Logged out successfully",
         description: "You have been logged out of your account",
       });
-      setTimeout(() => navigate('/login'), 300);
+      setTimeout(() => navigate("/login"), 300);
     } catch (error) {
       console.error("Logout error:", error);
       toast({
@@ -84,7 +111,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 
       {/* Backdrop for mobile */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-30 md:hidden"
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
@@ -92,10 +119,10 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       )}
 
       {/* Sidebar */}
-      <motion.aside 
+      <motion.aside
         initial={{ x: -280 }}
         animate={{ x: isSidebarOpen ? 0 : -280 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
         className="fixed md:relative w-64 h-screen z-40 md:translate-x-0 flex flex-col bg-black/90 backdrop-blur-lg border-r border-white/10"
       >
         <div className="p-6 border-b border-white/10">
@@ -107,11 +134,15 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                 alt="Aurora"
                 className="h-8 w-8 transition-all duration-golden group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green opacity-50 blur-lg -z-10 
-                            group-hover:opacity-75 transition-opacity duration-golden" />
+              <div
+                className="absolute inset-0 bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green opacity-50 blur-lg -z-10 
+                            group-hover:opacity-75 transition-opacity duration-golden"
+              />
             </div>
-            <span className="text-xl font-orbitron font-bold bg-clip-text text-transparent 
-                           bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green">
+            <span
+              className="text-xl font-orbitron font-bold bg-clip-text text-transparent 
+                           bg-gradient-to-r from-aurora-purple via-aurora-blue to-aurora-green"
+            >
               Aurora
             </span>
           </Link>
@@ -133,18 +164,20 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                       to={item.path}
                       className={cn(
                         "flex items-center px-4 py-3 rounded-md text-sm font-medium relative transition-all duration-300",
-                        isActive 
-                          ? "text-aurora-blue bg-aurora-blue/10" 
-                          : "text-gray-200 hover:bg-white/5 hover:text-aurora-blue hover:shadow-[0_0_10px_rgba(0,166,255,0.3)]"
+                        isActive
+                          ? "text-aurora-blue bg-aurora-blue/10"
+                          : "text-gray-200 hover:bg-white/5 hover:text-aurora-blue hover:shadow-[0_0_10px_rgba(0,166,255,0.3)]",
                       )}
-                      aria-current={isActive ? 'page' : undefined}
+                      aria-current={isActive ? "page" : undefined}
                     >
-                      <div className={cn(
-                        "mr-3 flex items-center justify-center w-8 h-8 rounded-md transition-all duration-300",
-                        isActive 
-                          ? "bg-aurora-blue/20 shadow-[0_0_10px_rgba(0,166,255,0.2)]" 
-                          : "bg-black/20 group-hover:bg-aurora-blue/10 group-hover:shadow-[0_0_8px_rgba(0,166,255,0.15)]"
-                      )}>
+                      <div
+                        className={cn(
+                          "mr-3 flex items-center justify-center w-8 h-8 rounded-md transition-all duration-300",
+                          isActive
+                            ? "bg-aurora-blue/20 shadow-[0_0_10px_rgba(0,166,255,0.2)]"
+                            : "bg-black/20 group-hover:bg-aurora-blue/10 group-hover:shadow-[0_0_8px_rgba(0,166,255,0.15)]",
+                        )}
+                      >
                         {item.icon}
                       </div>
                       <span>{item.label}</span>

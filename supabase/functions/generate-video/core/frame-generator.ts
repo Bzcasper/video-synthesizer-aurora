@@ -1,13 +1,12 @@
-
-import { logger } from '../utils/logging';
-import { VideoJob } from './types';
+import { logger } from "../utils/logging";
+import { VideoJob } from "./types";
 
 export class FrameGenerator {
   constructor() {}
 
   async generateFrames(job: VideoJob): Promise<Uint8Array[]> {
     logger.info(`Generating frames for job ${job.id}`);
-    
+
     try {
       const frameCount = Math.ceil(job.settings.duration * job.settings.fps);
       const frames: Uint8Array[] = [];
@@ -24,8 +23,8 @@ export class FrameGenerator {
           {
             width: job.settings.resolution[0],
             height: job.settings.resolution[1],
-            style: job.settings.style
-          }
+            style: job.settings.style,
+          },
         );
 
         frames.push(...batchFrames);
@@ -38,13 +37,17 @@ export class FrameGenerator {
     }
   }
 
-  private async initializeStableVideoDiffusion(settings: VideoJob['settings']) {
-    logger.info('Initializing Stable Video Diffusion model');
+  private async initializeStableVideoDiffusion(settings: VideoJob["settings"]) {
+    logger.info("Initializing Stable Video Diffusion model");
     return {
-      generateFrameBatch: async (prompt: string, frameCount: number, options: any) => {
+      generateFrameBatch: async (
+        prompt: string,
+        frameCount: number,
+        options: any,
+      ) => {
         // Placeholder for actual frame generation
         return Array(frameCount).fill(new Uint8Array(1024));
-      }
+      },
     };
   }
 }

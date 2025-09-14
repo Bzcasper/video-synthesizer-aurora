@@ -1,36 +1,40 @@
-
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { LoginForm } from '@/components/auth/LoginForm';
-import { ForgotPassword } from '@/components/auth/ForgotPassword';
-import { AuthHeader } from '@/components/auth/AuthHeader';
-import { LoginSuccessMessage } from '@/components/auth/LoginSuccessMessage';
-import { toast } from '@/components/ui/use-toast';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { LoginForm } from "@/components/auth/LoginForm";
+import { ForgotPassword } from "@/components/auth/ForgotPassword";
+import { AuthHeader } from "@/components/auth/AuthHeader";
+import { LoginSuccessMessage } from "@/components/auth/LoginSuccessMessage";
+import { toast } from "@/components/ui/use-toast";
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [forgotPassword, setForgotPassword] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
-  
+
   // Redirect destination - default to dashboard, but use previous location if available
-  const redirectTo = location.state?.from || '/dashboard';
+  const redirectTo = location.state?.from || "/dashboard";
 
   // Check if user is already logged in
   useEffect(() => {
     const checkSession = async () => {
       try {
         const { data, error } = await supabase.auth.getSession();
-        
+
         if (error) throw error;
-        
+
         if (data.session) {
           setIsAuthenticated(true);
           navigate(redirectTo);
@@ -41,22 +45,22 @@ const Login = () => {
           setIsAuthenticated(false);
         }
       } catch (error: any) {
-        console.error('Session check error:', error.message);
+        console.error("Session check error:", error.message);
         setIsAuthenticated(false);
       }
     };
 
     checkSession();
-    
+
     // Subscribe to auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-          navigate(redirectTo);
-        }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session) {
+        navigate(redirectTo);
       }
-    );
-    
+    });
+
     // Cleanup the subscription
     return () => {
       subscription.unsubscribe();
@@ -66,7 +70,7 @@ const Login = () => {
   const handleLoginSuccess = () => {
     setIsLoggingIn(true);
     setLoginSuccess(true);
-    
+
     // Show success message briefly before redirecting
     setTimeout(() => {
       navigate(redirectTo);
@@ -86,19 +90,19 @@ const Login = () => {
   const getHeaderContent = () => {
     if (loginSuccess) {
       return {
-        title: 'Login Successful',
-        description: 'Redirecting you to your dashboard'
+        title: "Login Successful",
+        description: "Redirecting you to your dashboard",
       };
     }
     if (forgotPassword) {
       return {
-        title: 'Reset Password',
-        description: 'Enter your email to receive reset instructions'
+        title: "Reset Password",
+        description: "Enter your email to receive reset instructions",
       };
     }
     return {
-      title: 'Welcome Back',
-      description: 'Enter your credentials to access your account'
+      title: "Welcome Back",
+      description: "Enter your credentials to access your account",
     };
   };
 
@@ -109,7 +113,7 @@ const Login = () => {
       <div className="flex flex-1 items-center justify-center p-6">
         <AnimatePresence mode="wait">
           <motion.div
-            key={loginSuccess ? 'success' : forgotPassword ? 'reset' : 'login'}
+            key={loginSuccess ? "success" : forgotPassword ? "reset" : "login"}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -124,13 +128,13 @@ const Login = () => {
                 {loginSuccess ? (
                   <LoginSuccessMessage />
                 ) : forgotPassword ? (
-                  <ForgotPassword 
+                  <ForgotPassword
                     email={email}
                     setEmail={setEmail}
                     onBack={() => setForgotPassword(false)}
                   />
                 ) : (
-                  <LoginForm 
+                  <LoginForm
                     email={email}
                     setEmail={setEmail}
                     onForgotPassword={() => setForgotPassword(true)}

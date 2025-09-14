@@ -1,10 +1,9 @@
-
-import React from 'react';
-import { IconProps } from './icon-utils';
+import React from "react";
+import { IconProps } from "./icon-utils";
 
 export const DefaultIcon: React.FC<IconProps> = ({ className = "h-5 w-5" }) => {
   return (
-    <svg 
+    <svg
       className={className}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"

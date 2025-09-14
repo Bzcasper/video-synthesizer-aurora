@@ -1,7 +1,6 @@
-
-import React from 'react';
-import type { Video } from '@/hooks/use-video-enhancements';
-import { VideoCard } from './VideoCard';
+import React from "react";
+import type { Video } from "@/hooks/use-video-enhancements";
+import { VideoCard } from "./VideoCard";
 
 interface VideoSelectionGridProps {
   videos: Video[];
@@ -9,10 +8,10 @@ interface VideoSelectionGridProps {
   onSelectVideo: (id: string) => void;
 }
 
-export const VideoSelectionGrid = ({ 
-  videos, 
-  selectedVideo, 
-  onSelectVideo 
+export const VideoSelectionGrid = ({
+  videos,
+  selectedVideo,
+  onSelectVideo,
 }: VideoSelectionGridProps) => {
   if (!videos?.length) {
     return (

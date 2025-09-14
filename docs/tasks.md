@@ -12,7 +12,7 @@ Documentation & Metadata Setup
 Each step includes a prompt (suitable for Lovable.dev or general usage), followed by a detailed explanation of how to implement the changes.
 
 1. Video Generation Form Improvement
-Prompt:
+   Prompt:
 
 Refine the Video Generation Form
 
@@ -28,8 +28,7 @@ Sections: Separate crucial parts (title, description/prompt, duration, style) so
 Validation: For example, if using React Hook Form + Zod Resolver, define a Zod schema (z.object({...})) specifying required fields and data types.
 UI: Integrate shadcn-ui form components to maintain consistency. Show error messages below each field in red.
 Loading State: Disable the “Generate Video” button after click, swap its text to “Generating…” or a spinner.
-Tooltips/Placeholder: Provide guidance for any complex or advanced fields.
-2. Video Preview & Player Enhancement
+Tooltips/Placeholder: Provide guidance for any complex or advanced fields. 2. Video Preview & Player Enhancement
 Prompt:
 
 Enhance the Video Preview and Player
@@ -44,8 +43,7 @@ File(s) to Update: Possibly src/pages/VideoPreview.tsx or src/components/VideoPl
 Custom Player: If using a library (e.g., react-player or a shadcn-based solution), style it with Tailwind utility classes.
 Loading State: Show a skeleton or spinner while the video buffer is loading.
 Error Handling: If the video source is invalid, display a fallback message like “Video not found” or “Couldn’t load video.”
-Controls: Provide play/pause, volume, progress bar, fullscreen button. On mobile, ensure the controls remain accessible.
-3. Video Processing Status Visualization
+Controls: Provide play/pause, volume, progress bar, fullscreen button. On mobile, ensure the controls remain accessible. 3. Video Processing Status Visualization
 Prompt:
 
 Implement Clear Video Processing Status
@@ -59,8 +57,7 @@ Implementation Details:
 UI: A modal or overlay with a spinner/progress bar can replace the form once submission begins.
 Realtime: If the backend supports it, use WebSockets or periodic polling to update progress.
 Steps: Show textual steps if percentage-based progress is not available (e.g., “Preparing frames”, “Assembling video”, “Finalizing”).
-Completion: Once done, automatically redirect the user to VideoPreview or the new video’s page with a success toast.
-4. Landing Page Optimization
+Completion: Once done, automatically redirect the user to VideoPreview or the new video’s page with a success toast. 4. Landing Page Optimization
 Prompt:
 
 Optimize the Landing Page
@@ -76,8 +73,7 @@ File(s) to Update: src/pages/LandingPage.tsx, meta tags in index.html or a Head/
 Hero Section: Large, full-width banner with a gradient or a background video snippet.
 Features: Use icons or small images for clarity. Keep text short, focusing on benefits.
 CTA: “Sign up now” or “Start generating videos” in a contrasting button color.
-Social & SEO: Add <meta> tags for og:title, og:description, og:image. Include a sensible <title> and <meta name='description'>.
-5. Mobile Responsiveness
+Social & SEO: Add <meta> tags for og:title, og:description, og:image. Include a sensible <title> and <meta name='description'>. 5. Mobile Responsiveness
 Prompt:
 
 Ensure Full Mobile Responsiveness
@@ -92,8 +88,7 @@ File(s) to Check: All layout components (NavigationBar, Dashboard, VideoForm, et
 Tailwind Responsive Classes: md:, lg:, xl: breaks. For example, grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 for a responsive grid.
 Nav: Hide the desktop nav links behind a hamburger icon using @media (max-width: ...) or Tailwind breakpoints.
 Check: Confirm no horizontal scrollbars or overflow. If found, adjust widths or use overflow-hidden.
-Testing: Emulate devices in browser dev tools and ensure all critical functionality remains accessible.
-6. Performance Optimization
+Testing: Emulate devices in browser dev tools and ensure all critical functionality remains accessible. 6. Performance Optimization
 Prompt:
 
 Optimize Performance and Build Size
@@ -109,8 +104,7 @@ Dynamic Import: For large components, const VideoPlayer = React.lazy(() => impor
 Lazy Loading: Only load media when visible (e.g., react-lazyload or Intersection Observer).
 Bundling: Use rollup-plugin-visualizer or Vite’s built-in stats to see what's large.
 Cleanup: Remove console.log statements or dev-only code.
-Testing: Use Lighthouse or Chrome dev tools Performance tab to measure improvement.
-7. Error Handling & User Feedback
+Testing: Use Lighthouse or Chrome dev tools Performance tab to measure improvement. 7. Error Handling & User Feedback
 Prompt:
 
 Enhance Error Handling and User Feedback
@@ -124,8 +118,7 @@ Implementation Details:
 Toast: Possibly the shadcn-ui toast. Provide a short description and an “X” close icon.
 Inline Validation: Use the validation from Step 1. For errors, highlight the field border in red.
 Server Errors: E.g., if /generate-video fails, show a toast “We couldn’t generate your video. Try again or come back later.”
-Error Boundary: Wrap top-level routes or components in an <ErrorBoundary> to handle uncaught exceptions. Display fallback UI instead of a blank screen.
-8. Documentation & Metadata Setup
+Error Boundary: Wrap top-level routes or components in an <ErrorBoundary> to handle uncaught exceptions. Display fallback UI instead of a blank screen. 8. Documentation & Metadata Setup
 Prompt:
 
 Add Comprehensive Documentation and Metadata

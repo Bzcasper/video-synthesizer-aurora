@@ -1,8 +1,9 @@
+/** @format */
 
-import React from 'react';
+import React from "react";
 import { motion } from "framer-motion";
-import GenerateButton from '@/components/generate/GenerateButton';
-import ActionButtons from '@/components/generate/ActionButtons';
+import GenerateButton from "@/components/generate/GenerateButton";
+import ActionButtons from "@/components/generate/ActionButtons";
 
 interface FormActionsProps {
   isGenerating: boolean;
@@ -27,16 +28,12 @@ const FormActions: React.FC<FormActionsProps> = ({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="w-full flex justify-center"
-      >
-        <GenerateButton 
-          isGenerating={isGenerating} 
-          disabled={!isFormValid} 
-        />
+        className="w-full flex justify-center">
+        <GenerateButton isGenerating={isGenerating} disabled={!isFormValid} />
       </motion.div>
-      
-      <div className="flex justify-center">
-        <ActionButtons 
+
+      <div className="flex flex-col sm:flex-row gap-3">
+        <ActionButtons
           disabled={isGenerating}
           onDetailsClick={onAdvancedToggle}
           showingDetails={showingDetails}
